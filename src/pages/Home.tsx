@@ -1,0 +1,138 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import classNames from "classnames";
+import { HiraganaTable } from "../components/HiraganaTable";
+import { hiraganaData, katakanaData } from "../data/kana";
+import {
+  getWeakestChars,
+  getKanaStats,
+  type KanaStat,
+} from "../utils/statsManager";
+import "./Home.css";
+
+type Tab = "hiragana" | "katakana";
+
+export const Home = () => {
+  const [selectedChars, setSelectedChars] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<Tab>("hiragana");
+  const [stats, setStats] = useState<Record<string, KanaStat>>({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setStats(getKanaStats());
+  }, []);
+
+  const currentData = activeTab === "hiragana" ? hiraganaData : katakanaData;
+
+  const handleToggleChar = (char: string) => {
+    setSelectedChars((prev) =>
+      prev.includes(char) ? prev.filter((c) => c !== char) : [...prev, char],
+    );
+  };
+
+  const handleToggleGroup = (chars: string[], shouldSelect: boolean) => {
+    setSelectedChars((prev) => {
+      const set = new Set(prev);
+      chars.forEach((c) => {
+        if (shouldSelect) set.add(c);
+        else set.delete(c);
+      });
+      return Array.from(set);
+    });
+  };
+
+  const handleSelectAll = () => {
+    // Select all from CURRENT tab, keeping existing selection from other tab
+    const currentChars = currentData.map((k) => k.char);
+    setSelectedChars((prev) => {
+      const set = new Set([...prev, ...currentChars]);
+      return Array.from(set);
+    });
+  };
+
+  const handleSelectWeakest = () => {
+    const weakest = getWeakestChars(10);
+    if (weakest.length > 0) {
+      setSelectedChars(weakest);
+    }
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedChars([]);
+  };
+
+  const handleStartQuiz = () => {
+    if (selectedChars.length < 3) return;
+    navigate("/quiz", { state: { selectedChars } });
+  };
+
+  return (
+    <div className="home-container container">
+      <header className="home-header">
+        <h1>Kana Practice</h1>
+        <p className="subtitle">Select characters to master</p>
+        <button
+          className="btn-text btn-stats"
+          onClick={() => navigate("/stats")}
+        >
+          📊 View Stats
+        </button>
+      </header>
+
+      <div className="tab-container">
+        <button
+          className={classNames("tab-btn", {
+            active: activeTab === "hiragana",
+          })}
+          onClick={() => setActiveTab("hiragana")}
+        >
+          Hiragana
+        </button>
+        <button
+          className={classNames("tab-btn", {
+            active: activeTab === "katakana",
+          })}
+          onClick={() => setActiveTab("katakana")}
+        >
+          Katakana
+        </button>
+      </div>
+
+      <div className="controls glass-panel">
+        <div className="selection-info">
+          <span className="count">{selectedChars.length} selected</span>
+        </div>
+        <div className="actions">
+          <button className="btn-text" onClick={handleSelectAll}>
+            All ({activeTab})
+          </button>
+          <button
+            className="btn-text"
+            onClick={handleSelectWeakest}
+            title="Select 10 characters you struggle with most"
+          >
+            Weakest 10
+          </button>
+          <button className="btn-text" onClick={handleDeselectAll}>
+            None
+          </button>
+          <button
+            className="btn-primary"
+            onClick={handleStartQuiz}
+            disabled={selectedChars.length < 3}
+          >
+            Start Quiz (select 3+)
+          </button>
+        </div>
+      </div>
+
+      <HiraganaTable
+        data={currentData}
+        selectedChars={selectedChars}
+        onToggleChar={handleToggleChar}
+        onToggleGroup={handleToggleGroup}
+        stats={stats}
+      />
+    </div>
+  );
+};

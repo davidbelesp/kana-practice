@@ -1,0 +1,94 @@
+.stats-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stats-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: var(--accent-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.text-success {
+  color: #10b981;
+}
+.text-danger {
+  color: #ef4444;
+}
+
+.top-streaks-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.streaks-list {
+  padding: 0.5rem;
+}
+
+.streak-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.streak-item:last-child {
+  border-bottom: none;
+}
+
+.rank {
+  color: var(--text-secondary);
+  font-weight: 600;
+  width: 2rem;
+}
+
+.char {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-right: auto;
+}
+
+.count {
+  font-weight: 700;
+  color: #3b82f6;
+  font-size: 1.25rem;
+}
+
+.no-data {
+  color: var(--text-secondary);
+  font-style: italic;
+}

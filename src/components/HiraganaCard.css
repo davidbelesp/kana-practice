@@ -1,0 +1,95 @@
+.hiragana-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  aspect-ratio: 1;
+}
+
+.hiragana-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.hiragana-card.is-selected {
+  background: var(--accent-gradient);
+  border-color: transparent;
+  box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.4);
+}
+
+.hiragana-card .kana-char {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  line-height: 1;
+}
+
+.hiragana-card .kana-romaji {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.hiragana-card.is-selected .kana-romaji {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hiragana-card.empty {
+  visibility: hidden;
+  pointer-events: none;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.kana-streak {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+@media (max-width: 640px) {
+  .hiragana-card {
+    padding: 0.25rem;
+    border-radius: 8px;
+  }
+
+  .hiragana-card .kana-char {
+    font-size: 1.25rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .hiragana-card .kana-romaji {
+    font-size: 0.7rem;
+  }
+
+  .kana-streak {
+    font-size: 0.6rem;
+    bottom: 2px;
+    left: 2px;
+  }
+}
