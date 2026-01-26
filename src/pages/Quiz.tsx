@@ -118,6 +118,19 @@ export const Quiz = () => {
     );
   }
 
+  const handleOverride = () => {
+    if (isCorrect === false && currentQuestion) {
+      setIsCorrect(true);
+      setScore((p) => p + 1);
+      // Register a success to balance out the failure in stats
+      if (currentQuestion.targets) {
+        currentQuestion.targets.forEach((char) => {
+          saveStatResult(char, true);
+        });
+      }
+    }
+  };
+
   if (!currentQuestion) return <div className="loading">Loading...</div>;
   return (
     <div className="quiz-container container">
@@ -139,6 +152,7 @@ export const Quiz = () => {
           isCorrect={isCorrect}
           onAnswer={setUserAnswer}
           onSubmit={handleSubmit}
+          onOverride={handleOverride}
         />
       </main>
     </div>

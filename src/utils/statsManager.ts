@@ -109,6 +109,13 @@ export const getTopStreaks = (limit: number = 5): KanaStat[] => {
     .filter((s) => s.streak > 0);
 };
 
+export const getMasteredKana = (): KanaStat[] => {
+  const stats = getKanaStats();
+  return Object.values(stats)
+    .filter((s) => s.streak >= 100)
+    .sort((a, b) => b.streak - a.streak);
+};
+
 export const getWeakestChars = (limit: number = 10): string[] => {
   const stats = getKanaStats();
   const allStats = Object.values(stats);

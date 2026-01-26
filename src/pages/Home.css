@@ -91,6 +91,12 @@
   transform: none;
 }
 
+.secondary-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
 @media (max-width: 640px) {
   .controls {
     flex-direction: column;

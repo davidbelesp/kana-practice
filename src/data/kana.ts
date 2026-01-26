@@ -7,4 +7,8 @@ export const getKanaByChar = (char: string) => {
   return allKanaData.find((k) => k.char === char);
 };
 
+export const getAllKanaChars = () => {
+  return allKanaData.map((k) => k.char);
+};
+
 export { hiraganaData, katakanaData };

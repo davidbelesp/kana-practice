@@ -1,22 +1,24 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Quiz } from "./pages/Quiz";
 import { Stats } from "./pages/Stats";
-import { ThemeSwitcher } from "./components/ThemeSwitcher";
+import { FreeCanvas } from "./pages/FreeCanvas";
 import "./App.css";
+import { ThemeSwitcher } from "./components/ThemeSwitcher";
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="app-layout">
-        <ThemeSwitcher />
+    <Router>
+      <div className="app-container">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/stats" element={<Stats />} />
+          <Route path="/canvas" element={<FreeCanvas />} />
         </Routes>
+        <ThemeSwitcher />
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 

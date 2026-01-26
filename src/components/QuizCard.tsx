@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import classNames from "classnames";
 import type { QuizQuestion } from "../types/QuizTypes";
+import { KanaCanvas, type KanaCanvasRef } from "./KanaCanvas";
 import "./QuizCard.css";
 
 interface QuizCardProps {
@@ -8,6 +10,7 @@ interface QuizCardProps {
   isCorrect: boolean | null;
   onAnswer: (val: string | string[]) => void;
   onSubmit: (val?: string | string[]) => void;
+  onOverride?: () => void;
 }
 
 export const QuizCard = ({
@@ -16,15 +19,19 @@ export const QuizCard = ({
   isCorrect,
   onAnswer,
   onSubmit,
+  onOverride,
 }: QuizCardProps) => {
   const isSequence = question.type === "sequence-order";
+  const isDrawing = question.type === "drawing-kana";
   const isSubmitted = isCorrect !== null;
+
+  const canvasRef = useRef<KanaCanvasRef>(null);
 
   const handleOptionClick = (option: string) => {
     if (isSubmitted) return;
     onAnswer(option);
     // Auto-submit for non-sequence types
-    if (!isSequence) {
+    if (!isSequence && !isDrawing) {
       onSubmit(option);
     }
   };
@@ -48,6 +55,19 @@ export const QuizCard = ({
     ) as string[];
     const newSequence = currentSequence.filter((_, i) => i !== index);
     onAnswer(newSequence);
+  };
+
+  const handleDrawingParams = (accuracy: number) => {
+    // 70% threshold
+    const passed = accuracy >= 70;
+    const result = passed ? (question.correctAnswer as string) : "FAILED_DRAW";
+    onSubmit(result);
+  };
+
+  const handleDrawingCheck = () => {
+    if (canvasRef.current) {
+      canvasRef.current.check();
+    }
   };
 
   const renderChoiceOptions = () => {
@@ -120,6 +140,17 @@ export const QuizCard = ({
     );
   };
 
+  const renderDrawingArea = () => {
+    return (
+      <KanaCanvas
+        ref={canvasRef}
+        targetChar={question.correctAnswer as string}
+        onVerify={handleDrawingParams}
+        isRevealed={isSubmitted}
+      />
+    );
+  };
+
   const getPromptLabel = () => {
     switch (question.type) {
       case "single-choice-romaji":
@@ -130,8 +161,19 @@ export const QuizCard = ({
         return "Arrange in Order";
       case "pair-match":
         return "Select matching Pair";
+      case "drawing-kana":
+        return "Draw the Character";
       default:
         return "Solve";
+    }
+  };
+
+  // Logic for submit button click
+  const onMainSubmit = () => {
+    if (isDrawing && !isSubmitted) {
+      handleDrawingCheck();
+    } else {
+      onSubmit();
     }
   };
 
@@ -147,36 +189,55 @@ export const QuizCard = ({
         <div className="main-char">{question.prompt}</div>
       </div>
 
-      {isSequence ? renderSequenceBuilder() : renderChoiceOptions()}
+      {isSequence
+        ? renderSequenceBuilder()
+        : isDrawing
+          ? renderDrawingArea()
+          : renderChoiceOptions()}
 
       <div className="quiz-actions">
         <button
           className="btn-primary submit-btn"
-          onClick={() => onSubmit()}
+          onClick={onMainSubmit}
           disabled={
             !isSubmitted &&
             (isSequence
               ? (userAnswer as string[]).length !==
                 (question.correctAnswer as string[]).length
-              : !userAnswer)
+              : isDrawing
+                ? false
+                : !userAnswer)
           }
         >
           {isCorrect === null ? "Check" : "Next"}
         </button>
       </div>
 
-      {isCorrect === false && (
-        <div className="feedback incorrect">
-          Correct answer:{" "}
-          <span className="answer">
-            {Array.isArray(question.correctAnswer)
-              ? question.correctAnswer.join("")
-              : question.correctAnswer}
-          </span>
-        </div>
-      )}
+      <div className="feedback-container">
+        {isCorrect === false && (
+          <div className="feedback incorrect">
+            <div className="feedback-content">
+              <span>Correct answer: </span>
+              <span className="answer">
+                {Array.isArray(question.correctAnswer)
+                  ? question.correctAnswer.join("")
+                  : question.correctAnswer}
+              </span>
+            </div>
+            {isDrawing && onOverride && (
+              <button
+                className="btn-secondary btn-sm override-btn"
+                onClick={onOverride}
+                style={{ marginTop: "0.5rem", marginLeft: "1rem" }}
+              >
+                Mark as Correct
+              </button>
+            )}
+          </div>
+        )}
 
-      {isCorrect === true && <div className="feedback correct">Correct!</div>}
+        {isCorrect === true && <div className="feedback correct">Correct!</div>}
+      </div>
     </div>
   );
 };

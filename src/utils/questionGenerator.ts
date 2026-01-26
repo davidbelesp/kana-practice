@@ -40,14 +40,14 @@ const getDistractors = (
 
 export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
   // Randomly select question type
-  // Uniform distribution logic for now, or weighted if preferred
   const rand = Math.random();
   let type: QuestionType = "single-choice-romaji";
 
-  if (rand < 0.25) type = "single-choice-romaji";
-  else if (rand < 0.5) type = "single-choice-kana";
-  else if (rand < 0.75) type = "sequence-order";
-  else type = "pair-match";
+  if (rand < 0.2) type = "single-choice-romaji";
+  else if (rand < 0.4) type = "single-choice-kana";
+  else if (rand < 0.6) type = "sequence-order";
+  else if (rand < 0.8) type = "pair-match";
+  else type = "drawing-kana";
 
   // Fallback if pool is too small for complex types
   if (pool.length < 3) {
@@ -95,9 +95,7 @@ export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
       const sequence: KanaChar[] = [];
       const usedIndices = new Set<number>();
 
-      // Safety break: if pool is small (should be handled by outer check but safe to be defensive)
       if (pool.length < length) {
-        // Fallback to allowing duplicates if pool is tiny
         for (let i = 0; i < length; i++) sequence.push(getRandomItem(pool));
       } else {
         while (sequence.length < length) {
@@ -112,9 +110,7 @@ export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
       const prompt = sequence.map((c) => c.romaji).join("");
       const correctAnswer = sequence.map((c) => c.char);
 
-      // Distractors must NOT match the sequence order
       const optionPool = [...sequence, ...getDistractors(pool, 3, sequence)];
-      // Ensure options are unique string representation just in case
       const uniqueOptions = Array.from(new Set(optionPool.map((c) => c.char)));
 
       const options = shuffleArray(uniqueOptions);
@@ -129,10 +125,8 @@ export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
     }
 
     case "pair-match": {
-      // Pick 2 UNIQUE random chars
       let c1 = getRandomItem(pool);
       let c2 = getRandomItem(pool);
-      // Ensure c1 != c2 if possible
       if (pool.length >= 2) {
         while (c1.char === c2.char) {
           c2 = getRandomItem(pool);
@@ -142,22 +136,17 @@ export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
       const targetStr = c1.char + c2.char;
       const targetRomaji = c1.romaji + c2.romaji;
 
-      // Generate distractors
       const distractors = new Set<string>();
-
-      // 1. Reversed pair (if different)
       if (c1.char !== c2.char) {
         distractors.add(c2.char + c1.char);
       }
 
-      // Fill remaining with random pairs
       let safety = 0;
       while (distractors.size < 3 && safety < 50) {
         safety++;
         const x = getRandomItem(pool);
         const y = getRandomItem(pool);
         const pair = x.char + y.char;
-
         if (pair !== targetStr) {
           distractors.add(pair);
         }
@@ -176,5 +165,26 @@ export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
         targets: [c1.char, c2.char],
       };
     }
+
+    case "drawing-kana": {
+      const target = getRandomItem(pool);
+      return {
+        type,
+        prompt: target.romaji,
+        correctAnswer: target.char,
+        options: [],
+        targets: [target.char],
+      };
+    }
   }
+
+  // Fallback default
+  const f = pool[0];
+  return {
+    type: "single-choice-romaji",
+    prompt: f.char,
+    correctAnswer: f.romaji,
+    options: [f.romaji],
+    targets: [f.char],
+  };
 };

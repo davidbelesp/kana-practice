@@ -8,6 +8,8 @@
   margin: 0 auto;
   text-align: center;
   transition: all 0.3s ease;
+  min-height: 600px;
+  justify-content: space-between;
 }
 
 .quiz-card.correct {
@@ -39,10 +41,9 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: var(--text-primary);
-  min-height: 1.2em; /* Prevent layout shift */
+  min-height: 1.2em;
 }
 
-/* Grid Options (Multiple Choice) */
 .options-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -63,7 +64,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1.5; /* Rectangular-ish */
+  aspect-ratio: 1.5;
 }
 
 .option-btn:hover:not(:disabled) {
@@ -165,12 +166,21 @@
   min-width: 120px;
 }
 
-.feedback {
+.feedback-container {
+  min-height: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-top: 1rem;
+}
+
+.feedback {
   font-size: 1.125rem;
   font-weight: 500;
   animation: fadeIn 0.3s ease;
-  min-height: 27px; /* Prevent layout shift */
+  width: 100%;
 }
 
 .feedback.correct {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import classNames from "classnames";
 import { HiraganaTable } from "../components/HiraganaTable";
 import { hiraganaData, katakanaData } from "../data/kana";
@@ -42,7 +42,6 @@ export const Home = () => {
   };
 
   const handleSelectAll = () => {
-    // Select all from CURRENT tab, keeping existing selection from other tab
     const currentChars = currentData.map((k) => k.char);
     setSelectedChars((prev) => {
       const set = new Set([...prev, ...currentChars]);
@@ -71,12 +70,14 @@ export const Home = () => {
       <header className="home-header">
         <h1>Kana Practice</h1>
         <p className="subtitle">Select characters to master</p>
-        <button
-          className="btn-text btn-stats"
-          onClick={() => navigate("/stats")}
-        >
-          📊 View Stats
-        </button>
+        <div className="secondary-actions">
+            <Link to="/stats" className="btn-secondary link-btn">
+              View Stats 📊
+            </Link>
+            <Link to="/canvas" className="btn-secondary link-btn">
+              Free Canvas 🖌️
+            </Link>
+          </div>
       </header>
 
       <div className="tab-container">
@@ -117,12 +118,14 @@ export const Home = () => {
             None
           </button>
           <button
-            className="btn-primary"
+            className="btn-primary start-btn"
             onClick={handleStartQuiz}
             disabled={selectedChars.length < 3}
           >
-            Start Quiz (select 3+)
+            Start Quiz {selectedChars.length > 0 && `(${selectedChars.length})`}
           </button>
+
+          
         </div>
       </div>
 
