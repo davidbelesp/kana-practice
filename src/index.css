@@ -42,6 +42,14 @@
   --accent-secondary-rgb: 234, 179, 8;
 }
 
+html,
+body {
+  background-color: var(--bg-gradient);
+  margin: 0;
+  padding: 0;
+  overscroll-behavior-y: none;
+}
+
 html {
   min-height: 100%;
   background: var(--bg-gradient);
