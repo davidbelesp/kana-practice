@@ -146,14 +146,32 @@ export const Quiz = () => {
         </div>
       </header>
       <main className="quiz-main">
-        <QuizCard
-          question={currentQuestion}
-          userAnswer={userAnswer}
-          isCorrect={isCorrect}
-          onAnswer={setUserAnswer}
-          onSubmit={handleSubmit}
-          onOverride={handleOverride}
-        />
+        <div className="quiz-content-wrapper">
+          <div className="quiz-progress-section">
+            <div className="progress-info">
+              <span>
+                Question {attempts + 1} / {maxQuestions}
+              </span>
+              <span>{maxQuestions - attempts} remaining</span>
+            </div>
+            <div className="progress-track">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${Math.min((attempts / maxQuestions) * 100, 100)}%`,
+                }}
+              />
+            </div>
+          </div>
+          <QuizCard
+            question={currentQuestion}
+            userAnswer={userAnswer}
+            isCorrect={isCorrect}
+            onAnswer={setUserAnswer}
+            onSubmit={handleSubmit}
+            onOverride={handleOverride}
+          />
+        </div>
       </main>
     </div>
   );
