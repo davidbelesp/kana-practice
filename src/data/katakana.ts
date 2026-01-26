@@ -56,9 +56,9 @@ export const katakanaData: KanaChar[] = [
   { char: "", romaji: "", type: "gojuon", isEmpty: true },
   { char: "ヲ", romaji: "wo", type: "gojuon" },
 
+  { char: "", romaji: "", type: "gojuon", isEmpty: true },
+  { char: "", romaji: "", type: "gojuon", isEmpty: true },
   { char: "ン", romaji: "n", type: "gojuon" },
-  { char: "", romaji: "", type: "gojuon", isEmpty: true },
-  { char: "", romaji: "", type: "gojuon", isEmpty: true },
   { char: "", romaji: "", type: "gojuon", isEmpty: true },
   { char: "", romaji: "", type: "gojuon", isEmpty: true },
 
