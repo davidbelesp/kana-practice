@@ -7,6 +7,7 @@ interface HiraganaCardProps {
   isSelected: boolean;
   onToggle: (char: string) => void;
   streak?: number;
+  isMastered?: boolean;
 }
 
 export const HiraganaCard = ({
@@ -14,12 +15,11 @@ export const HiraganaCard = ({
   isSelected,
   onToggle,
   streak,
+  isMastered,
 }: HiraganaCardProps) => {
   if (kana.isEmpty) {
     return <div className="hiragana-card empty" />;
   }
-
-  const isMastered = streak && streak >= 100;
 
   return (
     <button
@@ -34,8 +34,11 @@ export const HiraganaCard = ({
       <div className="kana-char">{kana.char}</div>
       <div className="kana-romaji">{kana.romaji}</div>
       {streak !== undefined && streak > 0 && (
-        <div className="kana-streak">
-          {isMastered ? "🏆" : "🔥"} {streak}
+        <div className="card-progress-track">
+          <div
+            className="card-progress-fill"
+            style={{ width: `${Math.min(streak, 100)}%` }}
+          />
         </div>
       )}
     </button>

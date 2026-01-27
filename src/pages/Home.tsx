@@ -6,6 +6,8 @@ import { hiraganaData, katakanaData } from "../data/kana";
 import {
   getWeakestChars,
   getKanaStats,
+  getMasteredStatus,
+  saveMasteredStatus,
   type KanaStat,
 } from "../utils/statsManager";
 import "./Home.css";
@@ -16,14 +18,28 @@ export const Home = () => {
   const [selectedChars, setSelectedChars] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>("hiragana");
   const [stats, setStats] = useState<Record<string, KanaStat>>({});
+  const [masteredKanas, setMasteredKanas] = useState<Record<string, boolean>>(
+    {},
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
-    setStats(getKanaStats());
+    const currentStats = getKanaStats();
+    setStats(currentStats);
+
+    // Backfill mastery for existing streaks
+    Object.values(currentStats).forEach((stat) => {
+      if (stat.streak >= 100) {
+        saveMasteredStatus(stat.char);
+      }
+    });
+
+    setMasteredKanas(getMasteredStatus());
   }, []);
 
   const currentData = activeTab === "hiragana" ? hiraganaData : katakanaData;
 
+  /* ... existing handlers ... */
   const handleToggleChar = (char: string) => {
     setSelectedChars((prev) =>
       prev.includes(char) ? prev.filter((c) => c !== char) : [...prev, char],
@@ -41,6 +57,7 @@ export const Home = () => {
     });
   };
 
+  /* ... existing handlers ... */
   const handleSelectAll = () => {
     const currentChars = currentData.map((k) => k.char);
     setSelectedChars((prev) => {
@@ -133,6 +150,7 @@ export const Home = () => {
         onToggleChar={handleToggleChar}
         onToggleGroup={handleToggleGroup}
         stats={stats}
+        masteredKanas={masteredKanas}
       />
     </div>
   );

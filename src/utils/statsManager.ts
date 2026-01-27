@@ -15,6 +15,7 @@ export interface QuizResult {
 
 const STORAGE_KEY = "kana_stats";
 const HISTORY_KEY = "quiz_history";
+const MASTERED_KEY = "kanas_mastered";
 
 export const getKanaStats = (): Record<string, KanaStat> => {
   const json = localStorage.getItem(STORAGE_KEY);
@@ -28,6 +29,24 @@ export const getKanaStats = (): Record<string, KanaStat> => {
 
 const saveStats = (stats: Record<string, KanaStat>) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+};
+
+export const getMasteredStatus = (): Record<string, boolean> => {
+  const json = localStorage.getItem(MASTERED_KEY);
+  if (!json) return {};
+  try {
+    return JSON.parse(json);
+  } catch {
+    return {};
+  }
+};
+
+export const saveMasteredStatus = (char: string) => {
+  const mastered = getMasteredStatus();
+  if (!mastered[char]) {
+    mastered[char] = true;
+    localStorage.setItem(MASTERED_KEY, JSON.stringify(mastered));
+  }
 };
 
 export const saveStatResult = (char: string, isCorrect: boolean) => {
@@ -48,6 +67,10 @@ export const saveStatResult = (char: string, isCorrect: boolean) => {
   }
 
   current.lastPlayed = Date.now();
+
+  if (current.streak >= 100) {
+    saveMasteredStatus(char);
+  }
 
   stats[char] = current;
   saveStats(stats);
@@ -111,8 +134,11 @@ export const getTopStreaks = (limit: number = 5): KanaStat[] => {
 
 export const getMasteredKana = (): KanaStat[] => {
   const stats = getKanaStats();
+  const masteredMap = getMasteredStatus();
+
+  // Return items that are EITHER mastered permanently OR have high streak
   return Object.values(stats)
-    .filter((s) => s.streak >= 100)
+    .filter((s) => s.streak >= 100 || masteredMap[s.char])
     .sort((a, b) => b.streak - a.streak);
 };
 

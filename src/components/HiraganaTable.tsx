@@ -9,6 +9,7 @@ interface HiraganaTableProps {
   onToggleChar: (char: string) => void;
   onToggleGroup: (chars: string[], shouldSelect: boolean) => void;
   stats: Record<string, KanaStat>;
+  masteredKanas: Record<string, boolean>;
 }
 
 export const HiraganaTable = ({
@@ -17,6 +18,7 @@ export const HiraganaTable = ({
   onToggleChar,
   onToggleGroup,
   stats,
+  masteredKanas,
 }: HiraganaTableProps) => {
   const gojuon = data.filter((k) => k.type === "gojuon");
   const dakuon = data.filter((k) => k.type === "dakuon");
@@ -75,6 +77,10 @@ export const HiraganaTable = ({
                       isSelected={selectedChars.includes(kana.char)}
                       onToggle={onToggleChar}
                       streak={stats[kana.char]?.streak || 0}
+                      isMastered={
+                        (stats[kana.char]?.streak || 0) >= 100 ||
+                        !!masteredKanas[kana.char]
+                      }
                     />
                   ))}
                 </div>

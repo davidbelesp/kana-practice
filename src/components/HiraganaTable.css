@@ -11,6 +11,7 @@
   padding-left: 0.5rem;
   border-left: 2px solid var(--accent-primary);
   opacity: 0.8;
+  user-select: none;
 }
 
 .hiragana-rows {
