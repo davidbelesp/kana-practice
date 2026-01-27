@@ -25,6 +25,9 @@
   --radius-md: 12px;
 
   --font-family: "Inter", system-ui, -apple-system, sans-serif;
+
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 [data-theme="blue"] {
@@ -44,7 +47,7 @@
 
 html,
 body {
-  background-color: var(--bg-gradient);
+  background-color: var(--bg-dark);
   margin: 0;
   padding: 0;
   overscroll-behavior-y: none;
@@ -52,12 +55,13 @@ body {
 
 html {
   min-height: 100%;
-  background: var(--bg-gradient);
+  background: var(--bg-dark);
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   font-family: var(--font-family);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
