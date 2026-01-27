@@ -3,11 +3,14 @@ import { KanaCanvas, type KanaCanvasRef } from "../components/KanaCanvas";
 import handwriting from "../utils/handwriting";
 import "./FreeCanvas.css";
 import { Link } from "react-router-dom";
+import { useNotification } from "../contexts/NotificationContext";
 
 export const FreeCanvas = () => {
   const canvasRef = useRef<KanaCanvasRef>(null);
   const [candidates, setCandidates] = useState<string[]>([]);
   const [isRecognizing, setIsRecognizing] = useState(false);
+
+  const { showNotification } = useNotification();
 
   const handleRecognize = async () => {
     if (!canvasRef.current) return;
@@ -50,13 +53,23 @@ export const FreeCanvas = () => {
     );
   };
 
+  const handleCopy = async (char: string) => {
+    try {
+      await navigator.clipboard.writeText(char);
+      showNotification("Copied to clipboard", "success");
+    } catch (err) {
+      console.error("Failed to copy:", err);
+      showNotification("Failed to copy", "error");
+    }
+  };
+
   return (
     <div className="free-canvas-container container">
       <header className="free-header">
         <Link to="/" className="btn-secondary back-btn">
           ← Home
         </Link>
-        <h2>Free Practice</h2>
+        <h2 className="title free-practice-title">Free Practice</h2>
       </header>
 
       <div className="canvas-area">
@@ -64,7 +77,7 @@ export const FreeCanvas = () => {
           ref={canvasRef}
           targetChar="" // No target
           isRevealed={false}
-          onVerify={() => {}} // Ignore internal scoring
+          onVerify={() => {}} // Score scoring ignored
         />
 
         <button
@@ -80,7 +93,12 @@ export const FreeCanvas = () => {
         {candidates.length > 0 ? (
           <div className="candidates-grid">
             {candidates.map((char, i) => (
-              <div key={i} className="candidate-card">
+              <div
+                key={i}
+                className="candidate-card"
+                onClick={() => handleCopy(char)}
+                title="Click to copy"
+              >
                 <span className="candidate-char">{char}</span>
                 <span className="candidate-rank">#{i + 1}</span>
               </div>

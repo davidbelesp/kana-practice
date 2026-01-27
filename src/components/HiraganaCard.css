@@ -63,7 +63,7 @@
   left: 0.5rem;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #3b82f6;
+  color: rgb(127, 193, 255);
   display: flex;
   align-items: center;
   gap: 2px;
@@ -96,8 +96,13 @@
   }
 
   .kana-streak {
-    font-size: 0.6rem;
+    color: rgb(127, 193, 255);
+    font-size: 0.55rem;
     bottom: 2px;
     left: 2px;
+  }
+
+  .selection-info {
+    text-align: center;
   }
 }

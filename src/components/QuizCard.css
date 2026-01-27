@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3rem;
+  padding: 2rem;
   width: 100%;
   max-width: 600px;
   text-align: center;
@@ -41,6 +41,7 @@
   background-clip: text;
   color: var(--text-primary);
   min-height: 1.2em;
+  user-select: none;
 }
 
 .options-grid {
@@ -116,6 +117,7 @@
   justify-content: center;
   font-size: 2rem;
   font-weight: bold;
+  user-select: none;
 }
 
 .seq-slot.filled {

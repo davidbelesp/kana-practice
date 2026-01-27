@@ -160,3 +160,37 @@
     transform: translateY(0);
   }
 }
+
+@media screen and (max-width: 678px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .quiz-main {
+    padding-bottom: 0;
+    flex: 0;
+  }
+
+  .quiz-card {
+    border-radius: 0;
+    padding: 0;
+    padding-top: 2rem;
+  }
+
+  .quiz-content-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .quiz-progress-section{
+    padding: 0 1rem;
+  }
+
+  .quiz-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .glass-panel {
+    padding: 1rem 0 !important;
+  }
+}

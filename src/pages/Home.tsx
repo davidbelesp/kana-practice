@@ -68,16 +68,16 @@ export const Home = () => {
   return (
     <div className="home-container container">
       <header className="home-header">
-        <h1>Kana Practice</h1>
+        <h1 className="title">Kana Practice</h1>
         <p className="subtitle">Select characters to master</p>
         <div className="secondary-actions">
-            <Link to="/stats" className="btn-secondary link-btn">
-              View Stats 📊
-            </Link>
-            <Link to="/canvas" className="btn-secondary link-btn">
-              Free Canvas 🖌️
-            </Link>
-          </div>
+          <Link to="/stats" className="btn-secondary link-btn">
+            View Stats 📊
+          </Link>
+          <Link to="/canvas" className="btn-secondary link-btn">
+            Free Canvas 🖌️
+          </Link>
+        </div>
       </header>
 
       <div className="tab-container">
@@ -124,8 +124,6 @@ export const Home = () => {
           >
             Start Quiz {selectedChars.length > 0 && `(${selectedChars.length})`}
           </button>
-
-          
         </div>
       </div>
 

@@ -5,19 +5,22 @@ import { Stats } from "./pages/Stats";
 import { FreeCanvas } from "./pages/FreeCanvas";
 import "./App.css";
 import { ThemeSwitcher } from "./components/ThemeSwitcher";
+import { NotificationProvider } from "./contexts/NotificationContext";
 
 function App() {
   return (
     <Router>
-      <div className="app-container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/stats" element={<Stats />} />
-          <Route path="/canvas" element={<FreeCanvas />} />
-        </Routes>
-        <ThemeSwitcher />
-      </div>
+      <NotificationProvider>
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/stats" element={<Stats />} />
+            <Route path="/canvas" element={<FreeCanvas />} />
+          </Routes>
+          <ThemeSwitcher />
+        </div>
+      </NotificationProvider>
     </Router>
   );
 }

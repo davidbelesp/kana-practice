@@ -9,7 +9,7 @@
   --accent-secondary: rgb(var(--accent-secondary-rgb));
 
   --accent-gradient: linear-gradient(
-    to right,
+    45deg,
     var(--accent-primary),
     var(--accent-secondary)
   );
@@ -74,6 +74,10 @@ body {
   flex-direction: column;
 }
 
+button {
+  user-select: none;
+}
+
 /* Utilities for Glassmorphism */
 .glass-panel {
   background: var(--glass-bg);
@@ -111,6 +115,7 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  user-select: none;
 }
 
 .btn-secondary:hover {
@@ -152,3 +157,12 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+@media screen and (max-width: 678px) {
+
+  .glass-panel{
+    padding: 0;
+  }
+  
+}
+
