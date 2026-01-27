@@ -183,7 +183,7 @@
   }
 
   .quiz-progress-section{
-    padding: 0 1rem;
+    padding: 0;
   }
 
   .quiz-header {
@@ -191,6 +191,7 @@
   }
 
   .glass-panel {
-    padding: 1rem 0 !important;
+    padding: 1rem .5rem !important;
+
   }
 }
