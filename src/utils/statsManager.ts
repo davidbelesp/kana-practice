@@ -63,7 +63,7 @@ export const saveStatResult = (char: string, isCorrect: boolean) => {
     current.streak++;
   } else {
     current.incorrect++;
-    current.streak = 0;
+    current.streak = Math.floor(current.streak * 0.9);
   }
 
   current.lastPlayed = Date.now();
