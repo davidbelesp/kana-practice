@@ -1,0 +1,228 @@
+.kanji-page-container {
+  padding-bottom: 4rem;
+}
+
+.kanji-controls {
+  margin: 2rem auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.kanji-mode-switch {
+  margin-bottom: 0;
+}
+
+.kanji-mode-switch .tab-slider {
+  transform: translateX(0);
+}
+
+.kanji-mode-switch .tab-slider.selection-mode {
+  transform: translateX(100%);
+}
+
+.mode-btn {
+  width: auto;
+  min-width: 150px;
+}
+
+.selection-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.kanji-levels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+}
+
+.kanji-level-section {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--glass-shadow);
+}
+
+.level-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.level-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.level-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.collapse-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  padding: 0.2rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collapse-btn:hover {
+  opacity: 1;
+}
+
+.collapse-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.collapse-icon.collapsed {
+  transform: rotate(180deg);
+}
+
+.level-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.level-actions .btn-text {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.level-actions .btn-text:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.level-title-section h2 {
+  font-size: 2rem;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.level-count {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 99px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.kanji-grid-wrapper {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+}
+
+.kanji-grid-wrapper.collapsed {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.kanji-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 0.75rem;
+  overflow: hidden;
+}
+
+.kanji-cell {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.kanji-cell:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.kanji-cell.selected {
+  background: var(--accent-gradient);
+  border-color: transparent;
+  box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.4);
+  color: white;
+}
+
+.kanji-cell.golden {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.4) 100%);
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+}
+
+.kanji-cell.golden:hover {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.5) 100%);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.kanji-cell.golden.selected {
+  border-color: #f59e0b;
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.kanji-streak {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.kanji-cell.golden .kanji-streak {
+  color: #fbbf24;
+}
+
+.kanji-cell {
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .kanji-grid {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 0.5rem;
+  }
+  
+  .kanji-cell {
+    font-size: 1.5rem;
+  }
+  
+  .kanji-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

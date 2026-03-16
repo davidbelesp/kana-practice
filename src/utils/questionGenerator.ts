@@ -188,3 +188,24 @@ export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
     targets: [f.char],
   };
 };
+
+export const generateQuizDeck = (pool: KanaChar[], maxCount: number): QuizQuestion[] => {
+  if (!pool.length || maxCount <= 0) return [];
+  
+  const deck: QuizQuestion[] = [];
+  const usedPrompts = new Set<string>();
+  
+  let failsafe = 0;
+  while (deck.length < maxCount && failsafe < 1000) {
+    const q = generateQuestion(pool);
+    if (!usedPrompts.has(q.prompt)) {
+      usedPrompts.add(q.prompt);
+      deck.push(q);
+      failsafe = 0;
+    } else {
+      failsafe++;
+    }
+  }
+  
+  return deck;
+};

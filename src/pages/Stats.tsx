@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getAggregates,
@@ -29,16 +29,10 @@ interface AggregateData {
 
 export const Stats = () => {
   const navigate = useNavigate();
-  const [aggregates, setAggregates] = useState<AggregateData | null>(null);
-  const [topStreaks, setTopStreaks] = useState<KanaStat[]>([]);
-  const [mastered, setMastered] = useState<KanaStat[]>([]);
-  const [history, setHistory] = useState<QuizResult[]>([]);
-
-  useEffect(() => {
-    setAggregates(getAggregates());
-    setTopStreaks(getTopStreaks(5));
-    setMastered(getMasteredKana());
-
+  const [aggregates] = useState<AggregateData | null>(getAggregates);
+  const [topStreaks] = useState<KanaStat[]>(() => getTopStreaks(5));
+  const [mastered] = useState<KanaStat[]>(getMasteredKana);
+  const [history] = useState<QuizResult[]>(() => {
     const rawHistory = getHistory();
 
     const dailyMap = new Map<string, QuizResult>();
@@ -63,9 +57,8 @@ export const Stats = () => {
     const aggregatedHistory = Array.from(dailyMap.values()).sort(
       (a, b) => a.timestamp - b.timestamp,
     );
-
-    setHistory(aggregatedHistory);
-  }, []);
+    return aggregatedHistory;
+  });
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString(undefined, {
@@ -79,7 +72,10 @@ export const Stats = () => {
   return (
     <div className="container stats-container">
       <header className="stats-header">
-        <button className="btn-text" onClick={() => navigate("/")}>
+        <button
+          className="btn-secondary back-btn"
+          onClick={() => navigate("/")}
+        >
           ← Back
         </button>
         <h1>Your Progress</h1>

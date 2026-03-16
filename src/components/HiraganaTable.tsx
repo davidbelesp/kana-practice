@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { KanaChar } from "../data/hiragana";
 import type { KanaStat } from "../utils/statsManager";
 import { HiraganaCard } from "./HiraganaCard";
@@ -24,6 +25,8 @@ export const HiraganaTable = ({
   const dakuon = data.filter((k) => k.type === "dakuon");
   const handakuon = data.filter((k) => k.type === "handakuon");
 
+  const selectedSet = useMemo(() => new Set(selectedChars), [selectedChars]);
+
   const chunkArray = (arr: KanaChar[], size: number) => {
     const chunks = [];
     for (let i = 0; i < arr.length; i += size) {
@@ -47,9 +50,9 @@ export const HiraganaTable = ({
             const charsInRow = row.filter((k) => !k.isEmpty).map((k) => k.char);
             const allSelected =
               charsInRow.length > 0 &&
-              charsInRow.every((c) => selectedChars.includes(c));
+              charsInRow.every((c) => selectedSet.has(c));
             const someSelected = charsInRow.some((c) =>
-              selectedChars.includes(c),
+              selectedSet.has(c),
             );
 
             return (
@@ -74,7 +77,7 @@ export const HiraganaTable = ({
                     <HiraganaCard
                       key={`${kana.char}-${rowIndex}-${idx}`}
                       kana={kana}
-                      isSelected={selectedChars.includes(kana.char)}
+                      isSelected={selectedSet.has(kana.char)}
                       onToggle={onToggleChar}
                       streak={stats[kana.char]?.streak || 0}
                       isMastered={

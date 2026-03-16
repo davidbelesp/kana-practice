@@ -126,10 +126,12 @@ export const getAggregates = () => {
 
 export const getTopStreaks = (limit: number = 5): KanaStat[] => {
   const stats = getKanaStats();
+  const masteredMap = getMasteredStatus();
+  
   return Object.values(stats)
+    .filter((s) => s.streak > 0 && s.streak < 100 && !masteredMap[s.char])
     .sort((a, b) => b.streak - a.streak)
-    .slice(0, limit)
-    .filter((s) => s.streak > 0);
+    .slice(0, limit);
 };
 
 export const getMasteredKana = (): KanaStat[] => {

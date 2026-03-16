@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import classNames from "classnames";
 import { HiraganaTable } from "../components/HiraganaTable";
@@ -40,13 +40,13 @@ export const Home = () => {
   const currentData = activeTab === "hiragana" ? hiraganaData : katakanaData;
 
   /* ... existing handlers ... */
-  const handleToggleChar = (char: string) => {
+  const handleToggleChar = useCallback((char: string) => {
     setSelectedChars((prev) =>
       prev.includes(char) ? prev.filter((c) => c !== char) : [...prev, char],
     );
-  };
+  }, []);
 
-  const handleToggleGroup = (chars: string[], shouldSelect: boolean) => {
+  const handleToggleGroup = useCallback((chars: string[], shouldSelect: boolean) => {
     setSelectedChars((prev) => {
       const set = new Set(prev);
       chars.forEach((c) => {
@@ -55,11 +55,13 @@ export const Home = () => {
       });
       return Array.from(set);
     });
-  };
+  }, []);
 
   /* ... existing handlers ... */
   const handleSelectAll = () => {
-    const currentChars = currentData.map((k) => k.char);
+    const currentChars = currentData
+      .filter((k) => !k.isEmpty)
+      .map((k) => k.char);
     setSelectedChars((prev) => {
       const set = new Set([...prev, ...currentChars]);
       return Array.from(set);
@@ -98,22 +100,25 @@ export const Home = () => {
       </header>
 
       <div className="tab-container">
-        <button
-          className={classNames("tab-btn", {
-            active: activeTab === "hiragana",
-          })}
-          onClick={() => setActiveTab("hiragana")}
-        >
-          Hiragana
-        </button>
-        <button
-          className={classNames("tab-btn", {
-            active: activeTab === "katakana",
-          })}
-          onClick={() => setActiveTab("katakana")}
-        >
-          Katakana
-        </button>
+        <div className="tab-switch">
+          <div className={classNames("tab-slider", activeTab)} />
+          <button
+            className={classNames("tab-btn", {
+              active: activeTab === "hiragana",
+            })}
+            onClick={() => setActiveTab("hiragana")}
+          >
+            Hiragana
+          </button>
+          <button
+            className={classNames("tab-btn", {
+              active: activeTab === "katakana",
+            })}
+            onClick={() => setActiveTab("katakana")}
+          >
+            Katakana
+          </button>
+        </div>
       </div>
 
       <div className="controls glass-panel">

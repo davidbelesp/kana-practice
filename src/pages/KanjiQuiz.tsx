@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { allKanaData } from "../data/kana";
+import { n5kanjiData, n4kanjiData, n3kanjiData, n2kanjiData } from "../data/kanji";
 import { QuizCard } from "../components/QuizCard";
-import { generateQuizDeck } from "../utils/questionGenerator";
+import { generateKanjiQuizDeck } from "../utils/kanjiQuestionGenerator";
 import { saveStatResult, saveQuizHistory } from "../utils/statsManager";
 import { type QuizQuestion } from "../types/QuizTypes";
 import "./Quiz.css";
@@ -11,7 +11,14 @@ interface QuizState {
   selectedChars: string[];
 }
 
-export const Quiz = () => {
+const allKanjiData = [
+    ...n5kanjiData,
+    ...n4kanjiData,
+    ...n3kanjiData,
+    ...n2kanjiData,
+];
+
+export const KanjiQuiz = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as QuizState;
@@ -20,8 +27,8 @@ export const Quiz = () => {
   const [userAnswer, setUserAnswer] = useState<string | string[]>("");
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [deck] = useState<QuizQuestion[]>(() => {
-    const p = allKanaData.filter((k) => state?.selectedChars?.includes(k.char));
-    return generateQuizDeck(p, Math.min(60, p.length * 3));
+    const p = allKanjiData.filter((k) => state?.selectedChars?.includes(k.char));
+    return generateKanjiQuizDeck(p, Math.min(60, p.length));
   });
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
@@ -29,11 +36,9 @@ export const Quiz = () => {
 
   useEffect(() => {
     if (!state?.selectedChars || state.selectedChars.length === 0) {
-      navigate("/");
+      navigate("/kanji");
     } else if (deck.length > 0) {
-      const next = deck[0];
-      setCurrentQuestion(next);
-      setUserAnswer(next.type === "sequence-order" ? [] : "");
+      setCurrentQuestion(deck[0]);
     } else {
       setIsFinished(true);
     }
@@ -48,9 +53,8 @@ export const Quiz = () => {
       return;
     }
 
-    const next = deck[attempts];
-    setCurrentQuestion(next);
-    setUserAnswer(next.type === "sequence-order" ? [] : "");
+    setCurrentQuestion(deck[attempts]);
+    setUserAnswer("");
     setIsCorrect(null);
   };
 
@@ -63,19 +67,7 @@ export const Quiz = () => {
     if (!currentQuestion) return;
     const answerToCheck = submission !== undefined ? submission : userAnswer;
 
-    let correct = false;
-    if (currentQuestion.type === "sequence-order") {
-      const expected = currentQuestion.correctAnswer as string[];
-      const actual = answerToCheck as string[];
-      if (
-        expected.length === actual.length &&
-        expected.every((v, i) => v === actual[i])
-      ) {
-        correct = true;
-      }
-    } else {
-      correct = answerToCheck === currentQuestion.correctAnswer;
-    }
+    let correct = answerToCheck === currentQuestion.correctAnswer;
 
     // Save Stats
     if (currentQuestion.targets) {
@@ -105,8 +97,8 @@ export const Quiz = () => {
             Accuracy: {attempts > 0 ? Math.round((score / attempts) * 100) : 0}%
           </p>
           <div className="actions">
-            <button className="btn-primary" onClick={() => navigate("/")}>
-              Back to Home
+            <button className="btn-primary" onClick={() => navigate("/kanji")}>
+              Back to Kanji
             </button>
             <button className="btn-text" onClick={() => navigate("/stats")}>
               View Stats
@@ -136,7 +128,7 @@ export const Quiz = () => {
       <header className="quiz-header">
         <button
           className="btn-secondary back-btn"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/kanji")}
         >
           ← Quit
         </button>
@@ -164,9 +156,9 @@ export const Quiz = () => {
           </div>
           <QuizCard
             question={currentQuestion}
-            userAnswer={userAnswer}
+            userAnswer={userAnswer as string} /* Cast to string, kanji quiz doesn't use sequence-order */
             isCorrect={isCorrect}
-            onAnswer={setUserAnswer}
+            onAnswer={(ans) => setUserAnswer(ans)}
             onSubmit={handleSubmit}
             onOverride={handleOverride}
           />

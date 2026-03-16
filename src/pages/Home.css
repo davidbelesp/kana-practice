@@ -29,32 +29,64 @@
 .tab-container {
   display: flex;
   justify-content: center;
-  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.tab-btn {
+.tab-switch {
+  position: relative;
+  display: flex;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--glass-border);
+  border-radius: 99px;
+  padding: 0.25rem;
+}
+
+.tab-slider {
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: calc(50% - 0.25rem);
+  background: var(--accent-primary);
+  border-radius: 99px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Fallback shadow if accent-primary-rgb doesn't exist, though it seems it did */
+.tab-slider {
+  box-shadow: 0 0 15px var(--accent-primary, #6366f1);
+}
+
+.tab-slider.hiragana {
+  transform: translateX(0);
+}
+
+.tab-slider.katakana {
+  transform: translateX(100%);
+}
+
+.tab-btn {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  border: none;
   padding: 0.75rem 2rem;
   border-radius: var(--radius-full);
   color: var(--text-secondary);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: color 0.3s;
   user-select: none;
+  width: 150px;
 }
 
-.tab-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
+.tab-btn:hover:not(.active) {
   color: var(--text-primary);
 }
 
 .tab-btn.active {
-  background: var(--accent-primary);
-  border-color: var(--accent-primary);
   color: white;
-  box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.3);
 }
 
 .controls {

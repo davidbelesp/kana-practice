@@ -1,3 +1,4 @@
+import React from "react";
 import classNames from "classnames";
 import type { KanaChar } from "../data/hiragana";
 import "./HiraganaCard.css";
@@ -10,7 +11,7 @@ interface HiraganaCardProps {
   isMastered?: boolean;
 }
 
-export const HiraganaCard = ({
+export const HiraganaCard = React.memo(({
   kana,
   isSelected,
   onToggle,
@@ -43,4 +44,4 @@ export const HiraganaCard = ({
       )}
     </button>
   );
-};
+});
