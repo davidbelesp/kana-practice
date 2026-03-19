@@ -55,6 +55,7 @@
       "general": "General"
     },
     "appearance": {
+      "title": "Appearance Settings",
       "accentColor": "Accent Colour",
       "standardThemes": "Standard Themes",
       "purple": "Purple (Default)",
@@ -65,7 +66,9 @@
       "primary": "Primary",
       "secondary": "Secondary",
       "animations": "Animations",
-      "animationsDesc": "Smooth transitions and card effects"
+      "animationsDesc": "Smooth transitions and card effects",
+      "accentColorDesc": "Choose a theme color for the entire application",
+      "customColors": "Custom Colors"
     },
     "quiz": {
       "title": "Quiz Settings",
@@ -99,8 +102,23 @@
       "resetTitle": "Factory Reset",
       "resetDesc": "Wipe all settings and progress",
       "resetButton": "Reset All Data",
-      "resetConfirm": "Are you sure you want to reset EVERYTHING? This will wipe all progress and settings."
+      "resetConfirm": "Are you sure you want to reset EVERYTHING? This will wipe all progress and settings.",
+      "practice": {
+        "title": "Practice Rules",
+        "masteryThreshold": "Mastery Threshold (XP)",
+        "masteryDesc": "How much XP a character needs to be considered 'Mastered'",
+        "weakestCount": "Weakest Character Count",
+        "weakestDesc": "How many characters to include when practicing 'Weakest' sets"
+      }
+    },
+    "practice": {
+      "title": "Practice Settings",
+      "masteryThreshold": "Mastery Threshold (XP)",
+      "masteryDesc": "How much XP a character needs to be considered 'Mastered'",
+      "weakestCount": "Weakest Character Count",
+      "weakestDesc": "How many characters to include when practicing 'Weakest' sets"
     }
+
   },
   "quiz": {
     "quit": "Quit",

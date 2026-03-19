@@ -55,6 +55,7 @@
       "general": "General"
     },
     "appearance": {
+      "title": "Ajustes de Apariencia",
       "accentColor": "Color de Acento",
       "standardThemes": "Temas Estándar",
       "purple": "Púrpura (Defecto)",
@@ -65,7 +66,9 @@
       "primary": "Primario",
       "secondary": "Secundario",
       "animations": "Animaciones",
-      "animationsDesc": "Transiciones suaves y efectos de cartas"
+      "animationsDesc": "Transiciones suaves y efectos de cartas",
+      "accentColorDesc": "Elige un color de tema para toda la aplicación",
+      "customColors": "Colores Personalizados"
     },
     "quiz": {
       "title": "Ajustes del Quiz",
@@ -99,7 +102,21 @@
       "resetTitle": "Restablecimiento de Fábrica",
       "resetDesc": "Borrar todos los ajustes y el progreso",
       "resetButton": "Restablecer todos los datos",
-      "resetConfirm": "¿Estás seguro de que quieres restablecer TODO? Esto borrará todo el progreso y los ajustes."
+      "resetConfirm": "¿Estás seguro de que quieres restablecer TODO? Esto borrará todo el progreso y los ajustes.",
+      "practice": {
+        "title": "Reglas de Práctica",
+        "masteryThreshold": "Umbral de Dominio (XP)",
+        "masteryDesc": "Cuánta XP necesita un carácter para considerarse 'Dominado'",
+        "weakestCount": "Cantidad de Caracteres Débiles",
+        "weakestDesc": "Cuántos caracteres incluir al practicar los 'Más Débiles'"
+      }
+    },
+    "practice": {
+      "title": "Ajustes de Práctica",
+      "masteryThreshold": "Umbral de Dominio (XP)",
+      "masteryDesc": "Cuánta XP necesita un carácter para considerarse 'Dominado'",
+      "weakestCount": "Cantidad de Caracteres Débiles",
+      "weakestDesc": "Cuántos caracteres incluir al practicar los 'Más Débiles'"
     }
   },
   "quiz": {
