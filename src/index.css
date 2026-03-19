@@ -158,7 +158,7 @@ a {
   color: inherit;
 }
 
-@media screen and (max-width: 678px) {
+@media screen and (max-width: 740px) {
 
   .glass-panel{
     padding: 0;
