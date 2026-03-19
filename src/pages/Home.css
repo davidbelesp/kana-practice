@@ -157,7 +157,7 @@
     /* Solid background for legibility without blur */
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: #0f0f14; 
+    background: var(--bg-dark); 
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     
@@ -198,7 +198,7 @@
   }
   .glass-panel{
     padding: 0;
-    background-color: #0f0f14 !important;
+    background-color: var(--bg-dark) !important;
   }
 
   .start-btn {
