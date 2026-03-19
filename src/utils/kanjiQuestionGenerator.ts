@@ -1,5 +1,5 @@
 import type { KanjiChar } from "../data/kanji";
-import type { QuizQuestion } from "../types/QuizTypes";
+import type { QuestionType, QuizQuestion } from "../types/QuizTypes";
 
 const getRandomItem = <T>(arr: T[]): T =>
   arr[Math.floor(Math.random() * arr.length)];
@@ -38,11 +38,16 @@ const getDistractors = (
 
 export const generateKanjiQuestion = (
   pool: KanjiChar[], 
-  translate: (k: KanjiChar) => string
+  translate: (k: KanjiChar) => string,
+  allowedTypes: QuestionType[] = ["single-choice-romaji", "listening-choice"]
 ): QuizQuestion => {
   const target = getRandomItem(pool);
   const distractors = getDistractors(pool, 3, [target]);
   
+  // Pick a random type from the allowed set (filtering for Kanji-compatible types)
+  const validTypes = allowedTypes.filter(t => t === "single-choice-romaji" || t === "listening-choice");
+  const type = validTypes.length > 0 ? getRandomItem(validTypes) : "single-choice-romaji";
+
   // Clean up meanings and use the first meaning (localized)
   const getLocalizedMeaning = (k: KanjiChar) => translate(k).split(",")[0].trim();
   
@@ -51,19 +56,26 @@ export const generateKanjiQuestion = (
     ...distractors.map(getLocalizedMeaning),
   ]);
 
+  const getHint = (k: KanjiChar) => {
+    const readings = [...(k.furigana?.kunyomi || []), ...(k.furigana?.onyomi || [])];
+    return readings.length > 0 ? readings.join(", ") : k.char;
+  };
+
   return {
-    type: "single-choice-romaji", // Reuse existing component logic
+    type, 
     prompt: target.char,
     correctAnswer: getLocalizedMeaning(target),
     options,
     targets: [target.char],
+    hint: getHint(target),
   };
 };
 
 export const generateKanjiQuizDeck = (
   pool: KanjiChar[], 
   maxCount: number,
-  translate: (k: KanjiChar) => string
+  translate: (k: KanjiChar) => string,
+  allowedTypes: QuestionType[] = ["single-choice-romaji", "listening-choice"]
 ): QuizQuestion[] => {
   if (!pool.length || maxCount <= 0) return [];
   
@@ -72,7 +84,7 @@ export const generateKanjiQuizDeck = (
   
   let failsafe = 0;
   while (deck.length < maxCount && failsafe < 1000) {
-    const q = generateKanjiQuestion(pool, translate);
+    const q = generateKanjiQuestion(pool, translate, allowedTypes);
     if (!usedPrompts.has(q.prompt)) {
       usedPrompts.add(q.prompt);
       deck.push(q);

@@ -1,8 +1,10 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
+import { Play, Eye, EyeOff } from "lucide-react";
 import type { QuizQuestion } from "../types/QuizTypes";
 import { KanaCanvas, type KanaCanvasRef } from "./KanaCanvas";
+import { speakJapanese } from "../utils/speechUtils";
 import "./QuizCard.css";
 
 interface QuizCardProps {
@@ -25,9 +27,20 @@ export const QuizCard = ({
   const { t } = useTranslation();
   const isSequence = question.type === "sequence-order";
   const isDrawing = question.type === "drawing-kana";
+  const isListening = question.type === "listening-choice";
   const isSubmitted = isCorrect !== null;
 
   const canvasRef = useRef<KanaCanvasRef>(null);
+  const [showHint, setShowHint] = useState(false);
+
+  // Auto-play audio for listening questions
+  useEffect(() => {
+    if (isListening && !isSubmitted) {
+      speakJapanese(question.prompt);
+    }
+    // Reset hint when question changes
+    setShowHint(false);
+  }, [question, isListening, isSubmitted]);
 
   const handleOptionClick = (option: string) => {
     if (isSubmitted) return;
@@ -153,6 +166,40 @@ export const QuizCard = ({
     );
   };
 
+  const renderListeningPrompt = () => {
+    return (
+      <div className="listening-area">
+        <div className="listening-controls">
+          <button 
+            className="play-btn-large" 
+            onClick={() => speakJapanese(question.prompt)}
+            aria-label="Play audio"
+          >
+            <div className="play-icon-container">
+              <Play size={32} fill="currentColor" />
+            </div>
+            <span className="play-label">{t("quiz.actions.playAudio")}</span>
+          </button>
+
+          <button 
+            className="btn-secondary hint-btn-side"
+            onClick={() => setShowHint(!showHint)}
+            title={showHint ? t("quiz.actions.hideHint") : t("quiz.actions.showHint")}
+            aria-label={showHint ? t("quiz.actions.hideHint") : t("quiz.actions.showHint")}
+          >
+            {showHint ? <EyeOff size={24} /> : <Eye size={24} />}
+          </button>
+        </div>
+
+        <div className="listening-hint-container">
+          <div className={classNames("listening-hint-text", { visible: showHint })}>
+            {question.hint || question.prompt}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const getPromptLabel = () => {
     switch (question.type) {
       case "single-choice-romaji":
@@ -165,6 +212,8 @@ export const QuizCard = ({
         return t("quiz.prompts.pair");
       case "drawing-kana":
         return t("quiz.prompts.drawing");
+      case "listening-choice":
+        return t("quiz.prompts.listening");
       default:
         return t("quiz.prompts.default");
     }
@@ -188,14 +237,19 @@ export const QuizCard = ({
     >
       <div className="quiz-question">
         <span className="question-type">{getPromptLabel()}</span>
-        <div className="main-char">{question.prompt}</div>
+        {!isListening && <div className="main-char">{question.prompt}</div>}
       </div>
 
       {isSequence
         ? renderSequenceBuilder()
         : isDrawing
           ? renderDrawingArea()
-          : renderChoiceOptions()}
+          : (
+            <>
+              {isListening && renderListeningPrompt()}
+              {renderChoiceOptions()}
+            </>
+          )}
 
       <div className="quiz-actions">
         <button

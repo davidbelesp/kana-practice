@@ -3,7 +3,8 @@ export type QuestionType =
   | "single-choice-kana" // Type 2: Romaji -> Kana
   | "sequence-order" // Type 3: Romaji word -> Order chars
   | "pair-match" // Type 4: Romaji word -> Select correct Kana pair
-  | "drawing-kana"; // Type 5: Romaji -> Draw Kana
+  | "drawing-kana" // Type 5: Romaji -> Draw Kana
+  | "listening-choice"; // Type 6: Audio -> Select Word
 
 export interface QuizQuestion {
   type: QuestionType;
@@ -11,4 +12,5 @@ export interface QuizQuestion {
   correctAnswer: string | string[]; // String for choices, array for sequence
   options: string[]; // Choices for Type 1, 2, 4. Pool of chars for Type 3.
   targets: string[]; // The actual kana characters being tested
+  hint?: string; // Optional visual hint (e.g., romaji or furigana)
 }

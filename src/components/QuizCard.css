@@ -197,6 +197,127 @@
   text-decoration: underline;
 }
 
+/* Listening Mode */
+.listening-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.play-btn-large {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  padding: 1rem;
+  width: 280px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: var(--accent-primary);
+}
+
+.play-btn-large:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--accent-primary);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 
+              0 0 20px rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.play-btn-large:active {
+  transform: scale(0.95);
+}
+
+.play-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
+              0 0 15px rgba(var(--accent-primary-rgb), 0.4);
+  transition: transform 0.3s ease;
+}
+
+.play-btn-large:hover .play-icon-container {
+  transform: scale(1.1);
+}
+
+.play-label {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.listening-controls {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.hint-btn-side {
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  padding: 0;
+  opacity: 0.7;
+  transition: all 0.2s;
+  background: var(--surface-2);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+}
+
+.hint-btn-side:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05); /* maintain centering */
+  background: var(--surface-3);
+  color: var(--text-primary);
+}
+
+.listening-hint-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 80px;
+  justify-content: center;
+}
+
+.listening-hint-text {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.listening-hint-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @keyframes popIn {
   from {
     transform: scale(0.5);

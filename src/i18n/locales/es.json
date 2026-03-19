@@ -79,14 +79,16 @@
         "kana": "Rōmaji → Kana",
         "sequence": "Orden de Secuencia",
         "pair": "Emparejar",
-        "drawing": "Dibujar Kana"
+        "drawing": "Dibujar Kana",
+        "listening": "Escuchar y seleccionar"
       },
       "typeDescs": {
         "romaji": "Mira un carácter kana, elige la lectura rōmaji correcta",
         "kana": "Mira una lectura rōmaji, elige el carácter kana correcto",
         "sequence": "Mira una palabra rōmaji, organiza los kana individuales en el orden correcto",
         "pair": "Mira un par de rōmaji, selecciona el par de kana correspondiente",
-        "drawing": "Mira un rōmaji, dibuja el carácter kana a mano alzada"
+        "drawing": "Mira un rōmaji, dibuja el carácter kana a mano alzada",
+        "listening": "Escucha la palabra y selecciona la correcta"
       },
       "hints": "Pistas de Rōmaji",
       "hintsDesc": "Mostrar lecturas en las cartas durante el quiz (modo clásico)"
@@ -115,10 +117,13 @@
     "actions": {
       "check": "Comprobar",
       "next": "Siguiente",
-      "override": "Marcar como correcto",
-      "verified": "Verificado",
-      "unsure": "Inseguro"
+      "override": "Estaba correcto",
+      "playAudio": "Reproducir Audio",
+      "showHint": "Mostrar pista",
+      "hideHint": "Ocultar pista"
     },
+    "verified": "Verificado",
+    "unsure": "Inseguro",
     "feedback": {
       "correct": "¡Correcto!",
       "incorrect": "Respuesta correcta: "

@@ -22,6 +22,7 @@ export const ALL_QUESTION_TYPES: QuestionType[] = [
   "sequence-order",
   "pair-match",
   "drawing-kana",
+  "listening-choice",
 ];
 
 export interface AppSettings {

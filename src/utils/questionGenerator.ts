@@ -43,21 +43,35 @@ export const generateQuestion = (
   allowedTypes?: QuestionType[],
 ): QuizQuestion => {
   // Determine the valid type pool
-  const validTypes: QuestionType[] = allowedTypes && allowedTypes.length > 0
-    ? allowedTypes
-    : ["single-choice-romaji", "single-choice-kana", "sequence-order", "pair-match", "drawing-kana"];
+  const validTypes: QuestionType[] =
+    allowedTypes && allowedTypes.length > 0
+      ? allowedTypes
+      : [
+          "single-choice-romaji",
+          "single-choice-kana",
+          "sequence-order",
+          "pair-match",
+          "drawing-kana",
+          "listening-choice",
+        ];
 
   // Pick a random type from the allowed set
-  let type: QuestionType = validTypes[Math.floor(Math.random() * validTypes.length)];
+  let type: QuestionType =
+    validTypes[Math.floor(Math.random() * validTypes.length)];
 
   // Fallback if pool is too small for complex types
   if (pool.length < 3) {
     const simpleTypes = validTypes.filter(
-      (t) => t === "single-choice-romaji" || t === "single-choice-kana" || t === "drawing-kana",
+      (t) =>
+        t === "single-choice-romaji" ||
+        t === "single-choice-kana" ||
+        t === "drawing-kana" ||
+        t === "listening-choice",
     );
-    type = simpleTypes.length > 0
-      ? simpleTypes[Math.floor(Math.random() * simpleTypes.length)]
-      : "single-choice-romaji";
+    type =
+      simpleTypes.length > 0
+        ? simpleTypes[Math.floor(Math.random() * simpleTypes.length)]
+        : "single-choice-romaji";
   }
 
   switch (type) {
@@ -182,6 +196,65 @@ export const generateQuestion = (
         targets: [target.char],
       };
     }
+
+    case "listening-choice": {
+      // Create a 3-character word from the pool
+      const length = 3;
+      const sequence: KanaChar[] = [];
+      const usedIndices = new Set<number>();
+
+      if (pool.length < length) {
+        for (let i = 0; i < length; i++) sequence.push(getRandomItem(pool));
+      } else {
+        while (sequence.length < length) {
+          const idx = Math.floor(Math.random() * pool.length);
+          if (!usedIndices.has(idx)) {
+            usedIndices.add(idx);
+            sequence.push(pool[idx]);
+          }
+        }
+      }
+
+      const correctWord = sequence.map((c) => c.char).join("");
+      const correctWordRomaji = sequence.map((c) => c.romaji).join("");
+      
+      const distractors = new Set<string>();
+      let safety = 0;
+      
+      // Try to create distractors by shuffling the chosen sequence
+      while (distractors.size < 3 && safety < 50) {
+        safety++;
+        const shuffled = shuffleArray([...sequence]).map((c) => c.char).join("");
+        if (shuffled !== correctWord) {
+          distractors.add(shuffled);
+        }
+      }
+
+      // Fallback if not enough unique permutations (e.g. AAB)
+      while (distractors.size < 3 && safety < 100) {
+        safety++;
+        const randomWordSeq = [];
+        for (let i = 0; i < length; i++) randomWordSeq.push(getRandomItem(pool).char);
+        const randomWord = randomWordSeq.join("");
+        if (randomWord !== correctWord && !distractors.has(randomWord)) {
+          distractors.add(randomWord);
+        }
+      }
+
+      const options = shuffleArray([
+        correctWord,
+        ...Array.from(distractors).slice(0, 3),
+      ]);
+
+      return {
+        type,
+        prompt: correctWord, // Used for TTS
+        correctAnswer: correctWord,
+        options,
+        targets: sequence.map((c) => c.char),
+        hint: correctWordRomaji,
+      };
+    }
   }
 
   // Fallback default
@@ -201,10 +274,10 @@ export const generateQuizDeck = (
   allowedTypes?: QuestionType[],
 ): QuizQuestion[] => {
   if (!pool.length || maxCount <= 0) return [];
-  
+
   const deck: QuizQuestion[] = [];
   const usedPrompts = new Set<string>();
-  
+
   let failsafe = 0;
   while (deck.length < maxCount && failsafe < 1000) {
     const q = generateQuestion(pool, allowedTypes);
@@ -216,6 +289,6 @@ export const generateQuizDeck = (
       failsafe++;
     }
   }
-  
+
   return deck;
 };

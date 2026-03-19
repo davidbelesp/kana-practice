@@ -68,6 +68,11 @@ export const Settings = () => {
       desc: t("settings.quiz.typeDescs.drawing"),
       emoji: "✏️",
     },
+    "listening-choice": {
+      label: t("settings.quiz.typeLabels.listening"),
+      desc: t("settings.quiz.typeDescs.listening"),
+      emoji: "🎧",
+    },
   };
 
   /* ── Question type helpers ── */

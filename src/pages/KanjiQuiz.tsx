@@ -6,6 +6,7 @@ import { QuizCard } from "../components/QuizCard";
 import { generateKanjiQuizDeck } from "../utils/kanjiQuestionGenerator";
 import { saveStatResult, saveQuizHistory } from "../utils/statsManager";
 import { type QuizQuestion } from "../types/QuizTypes";
+import { useSettings } from "../contexts/SettingsContext";
 import "./Quiz.css";
 
 interface QuizState {
@@ -24,6 +25,7 @@ export const KanjiQuiz = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as QuizState;
+  const { settings } = useSettings();
 
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [userAnswer, setUserAnswer] = useState<string | string[]>("");
@@ -36,7 +38,7 @@ export const KanjiQuiz = () => {
 
   const [deck] = useState<QuizQuestion[]>(() => {
     const p = allKanjiData.filter((k) => state?.selectedChars?.includes(k.char));
-    return generateKanjiQuizDeck(p, Math.min(60, p.length), translateKanji);
+    return generateKanjiQuizDeck(p, Math.min(60, p.length), translateKanji, settings.enabledQuestionTypes);
   });
 
   const [score, setScore] = useState(0);

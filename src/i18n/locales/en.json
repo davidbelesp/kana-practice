@@ -79,14 +79,16 @@
         "kana": "Rōmaji → Kana",
         "sequence": "Sequence Order",
         "pair": "Pair Match",
-        "drawing": "Draw Kana"
+        "drawing": "Draw Kana",
+        "listening": "Listen and select"
       },
       "typeDescs": {
         "romaji": "See a kana character, pick the correct rōmaji reading",
         "kana": "See a rōmaji reading, pick the correct kana character",
         "sequence": "See a rōmaji word, arrange individual kana in the right order",
         "pair": "See a rōmaji pair, select the matching kana pair",
-        "drawing": "See a rōmaji prompt, draw the kana character freehand"
+        "drawing": "See a rōmaji prompt, draw the kana character freehand",
+        "listening": "Listen to the word and select the correct one"
       },
       "hints": "Rōmaji Hints",
       "hintsDesc": "Show readings on cards during quiz (classic mode)"
@@ -110,12 +112,16 @@
       "sequence": "Arrange in Order",
       "pair": "Select matching Pair",
       "drawing": "Draw the Character",
+      "listening": "Listen and select",
       "default": "Solve"
     },
     "actions": {
-      "check": "Check",
-      "next": "Next",
-      "override": "Mark as Correct",
+      "check": "Check Answer",
+      "next": "Next Question",
+      "override": "I was correct",
+      "playAudio": "Play Audio",
+      "showHint": "Show Hint",
+      "hideHint": "Hide Hint",
       "verified": "Verified",
       "unsure": "Unsure"
     },
