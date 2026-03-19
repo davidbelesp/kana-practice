@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { n5kanjiData, n4kanjiData, n3kanjiData, n2kanjiData } from "../data/kanji";
+import { useTranslation } from "react-i18next";
+import { n5kanjiData, n4kanjiData, n3kanjiData, n2kanjiData, type KanjiChar } from "../data/kanji";
 import { QuizCard } from "../components/QuizCard";
 import { generateKanjiQuizDeck } from "../utils/kanjiQuestionGenerator";
 import { saveStatResult, saveQuizHistory } from "../utils/statsManager";
@@ -19,6 +20,7 @@ const allKanjiData = [
 ];
 
 export const KanjiQuiz = () => {
+  const { t } = useTranslation(["translation", "kanji_meanings"]);
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as QuizState;
@@ -26,10 +28,17 @@ export const KanjiQuiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [userAnswer, setUserAnswer] = useState<string | string[]>("");
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  
+  // Helper function to translate kanji meanings
+  const translateKanji = useCallback((k: KanjiChar) => {
+    return t(`kanji_meanings:${k.char}`, { defaultValue: k.meaning });
+  }, [t]);
+
   const [deck] = useState<QuizQuestion[]>(() => {
     const p = allKanjiData.filter((k) => state?.selectedChars?.includes(k.char));
-    return generateKanjiQuizDeck(p, Math.min(60, p.length));
+    return generateKanjiQuizDeck(p, Math.min(60, p.length), translateKanji);
   });
+
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
@@ -89,19 +98,19 @@ export const KanjiQuiz = () => {
     return (
       <div className="quiz-container container results-screen">
         <div className="glass-panel results-card">
-          <h2>Quiz Complete!</h2>
+          <h2>{t("quiz.results.title")}</h2>
           <div className="final-score">
             {score} / {attempts}
           </div>
           <p>
-            Accuracy: {attempts > 0 ? Math.round((score / attempts) * 100) : 0}%
+            {t("quiz.results.accuracy")}: {attempts > 0 ? Math.round((score / attempts) * 100) : 0}%
           </p>
           <div className="actions">
             <button className="btn-primary" onClick={() => navigate("/kanji")}>
-              Back to Kanji
+              {t("kanji.backToKanji")}
             </button>
             <button className="btn-text" onClick={() => navigate("/stats")}>
-              View Stats
+              {t("quiz.results.viewStats")}
             </button>
           </div>
         </div>
@@ -122,7 +131,7 @@ export const KanjiQuiz = () => {
     }
   };
 
-  if (!currentQuestion) return <div className="loading">Loading...</div>;
+  if (!currentQuestion) return <div className="loading">{t("common.loading")}</div>;
   return (
     <div className="quiz-container container">
       <header className="quiz-header">
@@ -130,10 +139,10 @@ export const KanjiQuiz = () => {
           className="btn-secondary back-btn"
           onClick={() => navigate("/kanji")}
         >
-          ← Quit
+          ← {t("quiz.quit")}
         </button>
         <div className="score-display">
-          Score: {score} / {attempts}
+          {t("quiz.results.score")}: {score} / {attempts}
         </div>
       </header>
       <main className="quiz-main">
@@ -141,9 +150,9 @@ export const KanjiQuiz = () => {
           <div className="quiz-progress-section">
             <div className="progress-info">
               <span>
-                Question {attempts + 1} / {maxQuestions}
+                {t("quiz.questionProgress", { current: attempts + 1, total: maxQuestions })}
               </span>
-              <span>{maxQuestions - attempts} remaining</span>
+              <span>{t("quiz.remaining", { count: maxQuestions - attempts })}</span>
             </div>
             <div className="progress-track">
               <div

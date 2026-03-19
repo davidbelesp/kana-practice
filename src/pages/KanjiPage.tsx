@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import {
   n5kanjiData,
@@ -49,6 +50,7 @@ const KanjiCell = React.memo(({ kanji, isSelected, isMastered, onClick }: KanjiC
 });
 
 export const KanjiPage: React.FC = () => {
+  const { t } = useTranslation();
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedChars, setSelectedChars] = useState<string[]>([]);
   const [collapsedLevels, setCollapsedLevels] = useState<Record<string, boolean>>({});
@@ -118,11 +120,11 @@ export const KanjiPage: React.FC = () => {
   return (
     <div className="container kanji-page-container">
       <header className="home-header">
-        <h1 className="title">Kanji Compendium</h1>
-        <p className="subtitle">Explore and select Kanjis for practice</p>
+        <h1 className="title">{t("kanji.title")}</h1>
+        <p className="subtitle">{t("kanji.subtitle")}</p>
         <div className="secondary-actions">
           <Link to="/" className="btn-secondary link-btn">
-            ← Home
+            ← {t("common.home") || "Home"}
           </Link>
         </div>
       </header>
@@ -137,28 +139,31 @@ export const KanjiPage: React.FC = () => {
               setSelectedChars([]);
             }}
           >
-            View Details
+            {t("kanji.modes.view")}
           </button>
           <button
             className={classNames("tab-btn mode-btn", { active: isSelectionMode })}
             onClick={() => setIsSelectionMode(true)}
           >
-            Select Kanjis
+            {t("kanji.modes.select")}
           </button>
         </div>
 
         {isSelectionMode && (
           <div className="selection-actions">
-            <span className="count">{selectedChars.length} selected</span>
+            <span className="count">
+               {t("home.controls.selected", { count: selectedChars.length })}
+            </span>
              <button className="btn-text" onClick={handleClearSelection}>
-                Clear
+                {t("common.clear")}
             </button>
             <button
               className="btn-primary start-btn kanji-start-btn"
               onClick={handleStartQuiz}
               disabled={selectedChars.length < 3}
             >
-              Start Quiz {selectedChars.length > 0 && `(${selectedChars.length})`}
+              {t("home.controls.startQuiz")}{" "}
+              {selectedChars.length > 0 && `(${selectedChars.length})`}
             </button>
           </div>
         )}
@@ -172,7 +177,9 @@ export const KanjiPage: React.FC = () => {
             <div className="level-header">
               <div className="level-title-section">
                 <h2>JLPT {level}</h2>
-                <span className="level-count">{data.length} Kanjis</span>
+                <span className="level-count">
+                  {t("kanji.levelCount", { count: data.length })}
+                </span>
               </div>
               <div className="level-controls-group">
                 {isSelectionMode && (
@@ -181,20 +188,20 @@ export const KanjiPage: React.FC = () => {
                         className="btn-text btn-small"
                         onClick={() => handleSelectLevel(data.map(k => k.char), true)}
                       >
-                        Select All
+                        {t("kanji.selectAll")}
                       </button>
                       <button 
                         className="btn-text btn-small"
                         onClick={() => handleSelectLevel(data.map(k => k.char), false)}
                       >
-                        Deselect
+                        {t("kanji.deselect")}
                       </button>
                   </div>
                 )}
                 <button 
                   className="btn-icon collapse-btn"
                   onClick={() => toggleLevelCollapse(level)}
-                  title={isCollapsed ? "Expand level" : "Collapse level"}
+                  title={isCollapsed ? t("kanji.expand") : t("kanji.collapse")}
                 >
                   <ChevronDown 
                     size={24} 
@@ -240,3 +247,4 @@ export const KanjiPage: React.FC = () => {
     </div>
   );
 };
+;

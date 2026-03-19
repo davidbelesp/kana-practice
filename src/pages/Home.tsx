@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { HiraganaTable } from "../components/HiraganaTable";
 import { hiraganaData, katakanaData } from "../data/kana";
@@ -15,6 +16,7 @@ import "./Home.css";
 type Tab = "hiragana" | "katakana";
 
 export const Home = () => {
+  const { t } = useTranslation();
   const [selectedChars, setSelectedChars] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>("hiragana");
   const [stats, setStats] = useState<Record<string, KanaStat>>({});
@@ -91,10 +93,12 @@ export const Home = () => {
     <div className="home-container container">
       <header className="home-header">
         <div className="home-header-top">
-          <button className="btn-secondary" onClick={() => navigate("/")}>← Back</button>
+          <button className="btn-secondary" onClick={() => navigate("/")}>
+            ← {t("common.back")}
+          </button>
         </div>
-        <h1 className="title">Kana Practice</h1>
-        <p className="subtitle">Select characters to master</p>
+        <h1 className="title">{t("home.title")}</h1>
+        <p className="subtitle">{t("home.subtitle")}</p>
       </header>
 
       <div className="tab-container">
@@ -106,7 +110,7 @@ export const Home = () => {
             })}
             onClick={() => setActiveTab("hiragana")}
           >
-            Hiragana
+            {t("home.tabs.hiragana")}
           </button>
           <button
             className={classNames("tab-btn", {
@@ -114,35 +118,37 @@ export const Home = () => {
             })}
             onClick={() => setActiveTab("katakana")}
           >
-            Katakana
+            {t("home.tabs.katakana")}
           </button>
         </div>
       </div>
 
       <div className="controls glass-panel">
         <div className="selection-info">
-          <span className="count">{selectedChars.length} selected</span>
+          <span className="count">
+            {t("home.controls.selected", { count: selectedChars.length })}
+          </span>
         </div>
         <div className="actions">
           <button className="btn-text" onClick={handleSelectAll}>
-            All ({activeTab})
+            {t("common.all")} ({t(`home.tabs.${activeTab}`)})
           </button>
           <button
-            className="btn-text"
+            className="btn-text weakest-btn"
             onClick={handleSelectWeakest}
-            title="Select 10 characters you struggle with most"
           >
-            Weakest 10
+            {t("home.controls.weakest10")}
           </button>
           <button className="btn-text" onClick={handleDeselectAll}>
-            None
+            {t("common.clear")}
           </button>
           <button
             className="btn-primary start-btn"
             onClick={handleStartQuiz}
             disabled={selectedChars.length < 3}
           >
-            Start Quiz {selectedChars.length > 0 && `(${selectedChars.length})`}
+            {t("home.controls.startQuiz")}{" "}
+            {selectedChars.length > 0 && `(${selectedChars.length})`}
           </button>
         </div>
       </div>

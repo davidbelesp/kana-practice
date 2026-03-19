@@ -36,28 +36,35 @@ const getDistractors = (
   return distractors;
 };
 
-export const generateKanjiQuestion = (pool: KanjiChar[]): QuizQuestion => {
+export const generateKanjiQuestion = (
+  pool: KanjiChar[], 
+  translate: (k: KanjiChar) => string
+): QuizQuestion => {
   const target = getRandomItem(pool);
   const distractors = getDistractors(pool, 3, [target]);
   
-  // Clean up meanings and use the first meaning
-  const getCleanMeaning = (k: KanjiChar) => k.meaning.split(",")[0].trim();
+  // Clean up meanings and use the first meaning (localized)
+  const getLocalizedMeaning = (k: KanjiChar) => translate(k).split(",")[0].trim();
   
   const options = shuffleArray([
-    getCleanMeaning(target),
-    ...distractors.map(getCleanMeaning),
+    getLocalizedMeaning(target),
+    ...distractors.map(getLocalizedMeaning),
   ]);
 
   return {
-    type: "single-choice-romaji", // Reuse existing component logic which expects string prompts/options
+    type: "single-choice-romaji", // Reuse existing component logic
     prompt: target.char,
-    correctAnswer: getCleanMeaning(target),
+    correctAnswer: getLocalizedMeaning(target),
     options,
     targets: [target.char],
   };
 };
 
-export const generateKanjiQuizDeck = (pool: KanjiChar[], maxCount: number): QuizQuestion[] => {
+export const generateKanjiQuizDeck = (
+  pool: KanjiChar[], 
+  maxCount: number,
+  translate: (k: KanjiChar) => string
+): QuizQuestion[] => {
   if (!pool.length || maxCount <= 0) return [];
   
   const deck: QuizQuestion[] = [];
@@ -65,7 +72,7 @@ export const generateKanjiQuizDeck = (pool: KanjiChar[], maxCount: number): Quiz
   
   let failsafe = 0;
   while (deck.length < maxCount && failsafe < 1000) {
-    const q = generateKanjiQuestion(pool);
+    const q = generateKanjiQuestion(pool, translate);
     if (!usedPrompts.has(q.prompt)) {
       usedPrompts.add(q.prompt);
       deck.push(q);

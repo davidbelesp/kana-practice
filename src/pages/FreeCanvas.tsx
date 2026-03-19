@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { KanaCanvas, type KanaCanvasRef } from "../components/KanaCanvas";
 import handwriting from "../utils/handwriting";
 import "./FreeCanvas.css";
@@ -6,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useNotification } from "../contexts/NotificationContext";
 
 export const FreeCanvas = () => {
+  const { t } = useTranslation();
   const canvasRef = useRef<KanaCanvasRef>(null);
   const [candidates, setCandidates] = useState<string[]>([]);
   const [isRecognizing, setIsRecognizing] = useState(false);
@@ -56,10 +58,10 @@ export const FreeCanvas = () => {
   const handleCopy = async (char: string) => {
     try {
       await navigator.clipboard.writeText(char);
-      showNotification("Copied to clipboard", "success");
+      showNotification(t("canvas.copySuccess"), "success");
     } catch (err) {
       console.error("Failed to copy:", err);
-      showNotification("Failed to copy", "error");
+      showNotification(t("canvas.copyError"), "error");
     }
   };
 
@@ -67,9 +69,9 @@ export const FreeCanvas = () => {
     <div className="free-canvas-container container">
       <header className="free-header">
         <Link to="/" className="btn-secondary back-btn">
-          ← Home
+          ← {t("common.home")}
         </Link>
-        <h2 className="title free-practice-title">Free Practice</h2>
+        <h2 className="title free-practice-title">{t("canvas.title")}</h2>
       </header>
 
       <div className="canvas-area">
@@ -85,7 +87,7 @@ export const FreeCanvas = () => {
           onClick={handleRecognize}
           disabled={isRecognizing}
         >
-          {isRecognizing ? "Thinking..." : "Recognize (AI)"}
+          {isRecognizing ? t("canvas.thinking") : t("canvas.recognize")}
         </button>
       </div>
 
@@ -97,7 +99,7 @@ export const FreeCanvas = () => {
                 key={i}
                 className="candidate-card"
                 onClick={() => handleCopy(char)}
-                title="Click to copy"
+                title={t("canvas.copyTitle")}
               >
                 <span className="candidate-char">{char}</span>
                 <span className="candidate-rank">#{i + 1}</span>
@@ -105,7 +107,7 @@ export const FreeCanvas = () => {
             ))}
           </div>
         ) : (
-          <div className="empty-state">Draw above and click Recognize</div>
+          <div className="empty-state">{t("canvas.emptyState")}</div>
         )}
       </div>
     </div>

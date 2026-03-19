@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { allKanaData } from "../data/kana";
 import { QuizCard } from "../components/QuizCard";
 import { generateQuizDeck } from "../utils/questionGenerator";
@@ -14,6 +15,7 @@ interface QuizState {
 }
 
 export const Quiz = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as QuizState;
@@ -101,19 +103,19 @@ export const Quiz = () => {
     return (
       <div className="quiz-container container results-screen">
         <div className="glass-panel results-card">
-          <h2>Quiz Complete!</h2>
+          <h2>{t("quiz.results.title")}</h2>
           <div className="final-score">
             {score} / {attempts}
           </div>
           <p>
-            Accuracy: {attempts > 0 ? Math.round((score / attempts) * 100) : 0}%
+            {t("quiz.results.accuracy")}: {attempts > 0 ? Math.round((score / attempts) * 100) : 0}%
           </p>
           <div className="actions">
             <button className="btn-primary" onClick={() => navigate(state?.from ?? "/")}>
-              Back
+              {t("common.back")}
             </button>
             <button className="btn-text" onClick={() => navigate("/stats")}>
-              View Stats
+              {t("quiz.results.viewStats")}
             </button>
           </div>
         </div>
@@ -134,7 +136,7 @@ export const Quiz = () => {
     }
   };
 
-  if (!currentQuestion) return <div className="loading">Loading...</div>;
+  if (!currentQuestion) return <div className="loading">{t("common.loading")}</div>;
   return (
     <div className="quiz-container container">
       <header className="quiz-header">
@@ -142,10 +144,10 @@ export const Quiz = () => {
           className="btn-secondary back-btn"
           onClick={() => navigate("/")}
         >
-          ← Quit
+          ← {t("quiz.quit")}
         </button>
         <div className="score-display">
-          Score: {score} / {attempts}
+          {t("quiz.results.score")}: {score} / {attempts}
         </div>
       </header>
       <main className="quiz-main">
@@ -153,9 +155,9 @@ export const Quiz = () => {
           <div className="quiz-progress-section">
             <div className="progress-info">
               <span>
-                Question {attempts + 1} / {maxQuestions}
+                {t("quiz.questionProgress", { current: attempts + 1, total: maxQuestions })}
               </span>
-              <span>{maxQuestions - attempts} remaining</span>
+              <span>{t("quiz.remaining", { count: maxQuestions - attempts })}</span>
             </div>
             <div className="progress-track">
               <div

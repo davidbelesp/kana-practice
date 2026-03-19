@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import type { QuizQuestion } from "../types/QuizTypes";
 import { KanaCanvas, type KanaCanvasRef } from "./KanaCanvas";
@@ -21,6 +22,7 @@ export const QuizCard = ({
   onSubmit,
   onOverride,
 }: QuizCardProps) => {
+  const { t } = useTranslation();
   const isSequence = question.type === "sequence-order";
   const isDrawing = question.type === "drawing-kana";
   const isSubmitted = isCorrect !== null;
@@ -154,17 +156,17 @@ export const QuizCard = ({
   const getPromptLabel = () => {
     switch (question.type) {
       case "single-choice-romaji":
-        return "Select correct Romaji";
+        return t("quiz.prompts.romaji");
       case "single-choice-kana":
-        return "Select correct Hiragana";
+        return t("quiz.prompts.kana");
       case "sequence-order":
-        return "Arrange in Order";
+        return t("quiz.prompts.sequence");
       case "pair-match":
-        return "Select matching Pair";
+        return t("quiz.prompts.pair");
       case "drawing-kana":
-        return "Draw the Character";
+        return t("quiz.prompts.drawing");
       default:
-        return "Solve";
+        return t("quiz.prompts.default");
     }
   };
 
@@ -209,7 +211,7 @@ export const QuizCard = ({
                 : !userAnswer)
           }
         >
-          {isCorrect === null ? "Check" : "Next"}
+          {isCorrect === null ? t("quiz.actions.check") : t("quiz.actions.next")}
         </button>
       </div>
 
@@ -217,7 +219,7 @@ export const QuizCard = ({
         {isCorrect === false && (
           <div className="feedback incorrect">
             <div className="feedback-content">
-              <span>Correct answer: </span>
+              <span>{t("quiz.feedback.incorrect")}</span>
               <span className="answer">
                 {Array.isArray(question.correctAnswer)
                   ? question.correctAnswer.join("")
@@ -230,13 +232,13 @@ export const QuizCard = ({
                 onClick={onOverride}
                 style={{ marginTop: "0.5rem", marginLeft: "1rem" }}
               >
-                Mark as Correct
+                {t("quiz.actions.override")}
               </button>
             )}
           </div>
         )}
 
-        {isCorrect === true && <div className="feedback correct">Correct!</div>}
+        {isCorrect === true && <div className="feedback correct">{t("quiz.feedback.correct")}</div>}
       </div>
     </div>
   );

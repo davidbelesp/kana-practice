@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   getAggregates,
   getTopStreaks,
@@ -28,6 +29,7 @@ interface AggregateData {
 }
 
 export const Stats = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [aggregates] = useState<AggregateData | null>(getAggregates);
   const [topStreaks] = useState<KanaStat[]>(() => getTopStreaks(5));
@@ -76,38 +78,38 @@ export const Stats = () => {
           className="btn-secondary back-btn"
           onClick={() => navigate("/")}
         >
-          ← Back
+          ← {t("common.back")}
         </button>
-        <h1>Your Progress</h1>
+        <h1>{t("stats.title")}</h1>
       </header>
 
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-label">Quizzes Finished</div>
+          <div className="stat-label">{t("stats.quizzesFinished")}</div>
           <div className="stat-value">{aggregates.totalQuizzes}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Accuracy</div>
+          <div className="stat-label">{t("stats.accuracy")}</div>
           <div className="stat-value">{aggregates.globalAccuracy}%</div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Total Correct</div>
+          <div className="stat-label">{t("stats.totalCorrect")}</div>
           <div className="stat-value text-success">
             {aggregates.totalCorrect}
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Total Wrong</div>
+          <div className="stat-label">{t("stats.totalWrong")}</div>
           <div className="stat-value text-danger">{aggregates.totalWrong}</div>
         </div>
       </div>
 
       {/* Mastered Kana Section */}
       <section className="stats-section">
-        <h2>🏆 Mastered Kana (100+ Streak)</h2>
+        <h2>🏆 {t("stats.masteredTitle")}</h2>
         {mastered.length === 0 ? (
           <div className="glass-panel empty-panel">
-            <p>No mastered characters yet. Keep practicing!</p>
+            <p>{t("stats.noMastered")}</p>
           </div>
         ) : (
           <div className="streaks-list glass-panel mastered-list">
@@ -126,7 +128,7 @@ export const Stats = () => {
 
       {/* Quiz History Graph */}
       <section className="stats-section">
-        <h2>📈 Quiz History (Daily)</h2>
+        <h2>📈 {t("stats.historyTitle")}</h2>
         <div className="glass-panel chart-panel" style={{ height: 400 }}>
           {history.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
@@ -159,23 +161,28 @@ export const Stats = () => {
                 <Legend />
                 <Bar
                   dataKey="correct"
-                  name="Correct"
+                  name={t("stats.chart.correct")}
                   fill="#10b981"
                   stackId="a"
                 />
-                <Bar dataKey="wrong" name="Wrong" fill="#ef4444" stackId="a" />
+                <Bar 
+                  dataKey="wrong" 
+                  name={t("stats.chart.wrong")} 
+                  fill="#ef4444" 
+                  stackId="a" 
+                />
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <p className="no-data">No history available yet.</p>
+            <p className="no-data">{t("stats.noHistory")}</p>
           )}
         </div>
       </section>
 
       <section className="stats-section">
-        <h2>🔥 Top Streaks</h2>
+        <h2>🔥 {t("stats.topStreaks")}</h2>
         {topStreaks.length === 0 ? (
-          <p className="no-data">Start practicing to build your streaks!</p>
+          <p className="no-data">{t("stats.noStreaks")}</p>
         ) : (
           <div className="streaks-list glass-panel">
             {topStreaks.map((s, i) => (

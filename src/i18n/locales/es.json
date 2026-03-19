@@ -1,0 +1,180 @@
+{
+  "common": {
+    "back": "Atrás",
+    "clear": "Limpiar",
+    "all": "Todo",
+    "comingSoon": "Próximamente",
+    "settings": "Ajustes",
+    "stats": "Estadísticas",
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "reset": "Restablecer",
+    "home": "Inicio",
+    "canvasClear": "Limpiar Lienzo"
+  },
+  "index": {
+    "titlePrefix": "日本語の",
+    "titleSuffix": "Hub",
+    "subtitle": "Domina el japonés con herramientas interactivas",
+    "cards": {
+      "practice": "Práctica de Kana",
+      "practiceDesc": "Practica la lectura de caracteres Hiragana y Katakana para construir tu base.",
+      "stats": "Estadísticas",
+      "statsDesc": "Sigue tu progreso de aprendizaje, precisión y ve cuánto has mejorado.",
+      "canvas": "Lienzo Libre",
+      "canvasDesc": "Practica la escritura de caracteres japoneses libremente en un lienzo digital.",
+      "kanji": "Kanjis",
+      "kanjiDesc": "Explora los niveles JLPT, consulta los detalles de los Kanji e inicia sesiones de práctica.",
+      "numbers": "Números",
+      "numbersDesc": "Aprende y practica la lectura de números japoneses y sistemas de conteo.",
+      "vocabulary": "Vocabulario",
+      "vocabularyDesc": "Aprende y practica la lectura de vocabulario japonés.",
+      "settings": "Ajustes",
+      "settingsDesc": "Personaliza la duración del quiz, el color de acento, los umbrales de dominio y más."
+    },
+    "viewOnGithub": "Ver en GitHub"
+  },
+  "home": {
+    "title": "Práctica de Kana",
+    "subtitle": "Selecciona caracteres para dominar",
+    "tabs": {
+      "hiragana": "Hiragana",
+      "katakana": "Katakana"
+    },
+    "controls": {
+      "selected": "{{count}} seleccionados",
+      "weakest10": "Los 10 más débiles",
+      "startQuiz": "Empezar Quiz"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "appearance": "Apariencia",
+      "quiz": "Quiz",
+      "practice": "Práctica",
+      "general": "General"
+    },
+    "appearance": {
+      "accentColor": "Color de Acento",
+      "standardThemes": "Temas Estándar",
+      "purple": "Púrpura (Defecto)",
+      "blue": "Azul Océano",
+      "green": "Verde Esmeralda",
+      "orange": "Naranja Atardecer",
+      "customTheme": "Tema Personalizado",
+      "primary": "Primario",
+      "secondary": "Secundario",
+      "animations": "Animaciones",
+      "animationsDesc": "Transiciones suaves y efectos de cartas"
+    },
+    "quiz": {
+      "title": "Ajustes del Quiz",
+      "length": "Preguntas por Quiz",
+      "lengthDesc": "Cuántas preguntas aparecen en una sesión de quiz",
+      "types": "Tipos de Preguntas Habilitados",
+      "typesDesc": "Elige qué formatos de preguntas aparecen en tu quiz. Al menos uno debe permanecer habilitado.",
+      "lastTypeWarning": "Al menos un tipo debe permanecer habilitado",
+      "typeLabels": {
+        "romaji": "Kana → Rōmaji",
+        "kana": "Rōmaji → Kana",
+        "sequence": "Orden de Secuencia",
+        "pair": "Emparejar",
+        "drawing": "Dibujar Kana"
+      },
+      "typeDescs": {
+        "romaji": "Mira un carácter kana, elige la lectura rōmaji correcta",
+        "kana": "Mira una lectura rōmaji, elige el carácter kana correcto",
+        "sequence": "Mira una palabra rōmaji, organiza los kana individuales en el orden correcto",
+        "pair": "Mira un par de rōmaji, selecciona el par de kana correspondiente",
+        "drawing": "Mira un rōmaji, dibuja el carácter kana a mano alzada"
+      },
+      "hints": "Pistas de Rōmaji",
+      "hintsDesc": "Mostrar lecturas en las cartas durante el quiz (modo clásico)"
+    },
+    "general": {
+      "language": "Idioma",
+      "languageDesc": "Selecciona tu idioma preferido para la aplicación",
+      "resetTitle": "Restablecimiento de Fábrica",
+      "resetDesc": "Borrar todos los ajustes y el progreso",
+      "resetButton": "Restablecer todos los datos",
+      "resetConfirm": "¿Estás seguro de que quieres restablecer TODO? Esto borrará todo el progreso y los ajustes."
+    }
+  },
+  "quiz": {
+    "quit": "Salir",
+    "questionProgress": "Pregunta {{current}} / {{total}}",
+    "remaining": "quedan {{count}}",
+    "prompts": {
+      "romaji": "Selecciona el Romaji correcto",
+      "kana": "Selecciona el Hiragana correcto",
+      "sequence": "Organiza en orden",
+      "pair": "Empareja correctamente",
+      "drawing": "Dibuja el carácter",
+      "default": "Resolver"
+    },
+    "actions": {
+      "check": "Comprobar",
+      "next": "Siguiente",
+      "override": "Marcar como correcto",
+      "verified": "Verificado",
+      "unsure": "Inseguro"
+    },
+    "feedback": {
+      "correct": "¡Correcto!",
+      "incorrect": "Respuesta correcta: "
+    },
+    "results": {
+      "title": "Resultado del Quiz",
+      "score": "Puntuación",
+      "accuracy": "Precisión",
+      "viewStats": "Ver estadísticas"
+    }
+  },
+  "stats": {
+    "title": "Tu Progreso",
+    "quizzesFinished": "Quizzes Finalizados",
+    "accuracy": "Precisión",
+    "totalCorrect": "Total Correctos",
+    "totalWrong": "Total Errados",
+    "masteredTitle": "Kana Dominados (Racha de 100+)",
+    "noMastered": "Aún no has dominado ningún carácter. ¡Sigue practicando!",
+    "historyTitle": "Historial de Quizzes (Diario)",
+    "noHistory": "Aún no hay historial disponible.",
+    "topStreaks": "Mejores Rachas",
+    "noStreaks": "¡Empieza a practicar para construir tus rachas!",
+    "chart": {
+      "correct": "Correctos",
+      "wrong": "Errados"
+    }
+  },
+  "kanji": {
+    "title": "Compendio de Kanji",
+    "subtitle": "Explora y selecciona Kanjis para practicar",
+    "modes": {
+      "view": "Ver Detalles",
+      "select": "Seleccionar Kanjis"
+    },
+    "levelCount": "{{count}} Kanjis",
+    "selectAll": "Seleccionar Todo",
+    "deselect": "Deseleccionar",
+    "expand": "Expandir nivel",
+    "collapse": "Contraer nivel",
+    "backToKanji": "Volver a Kanji",
+    "radical": "Radical",
+    "kunyomi": "Kunyomi (Japonés)",
+    "onyomi": "Onyomi (Chino)"
+  },
+  "practice": {
+    "dakuon": "Dakuon (Sonoros)",
+    "handakuon": "Handakuon (Semi-sonoros)"
+  },
+  "canvas": {
+    "title": "Práctica Libre",
+    "recognize": "Reconocer (IA)",
+    "thinking": "Pensando...",
+    "copyTitle": "Haz clic para copiar",
+    "emptyState": "Dibuja arriba y haz clic en Reconocer",
+    "copySuccess": "Copiado al portapapeles",
+    "copyError": "Error al copiar"
+  }
+}

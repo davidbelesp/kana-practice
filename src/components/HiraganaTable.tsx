@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type { KanaChar } from "../data/hiragana";
 import type { KanaStat } from "../utils/statsManager";
 import { HiraganaCard } from "./HiraganaCard";
@@ -21,6 +22,7 @@ export const HiraganaTable = ({
   stats,
   masteredKanas,
 }: HiraganaTableProps) => {
+  const { t } = useTranslation();
   const gojuon = data.filter((k) => k.type === "gojuon");
   const dakuon = data.filter((k) => k.type === "dakuon");
   const handakuon = data.filter((k) => k.type === "handakuon");
@@ -98,8 +100,8 @@ export const HiraganaTable = ({
   return (
     <div className="hiragana-table-container">
       {renderGrid(gojuon)}
-      {renderGrid(dakuon, "Dakuon (Voiced)")}
-      {renderGrid(handakuon, "Handakuon (Semi-voiced)")}
+      {renderGrid(dakuon, t("practice.dakuon"))}
+      {renderGrid(handakuon, t("practice.handakuon"))}
     </div>
   );
 };

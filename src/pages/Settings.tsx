@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   useSettings,
   DEFAULT_SETTINGS,
@@ -10,61 +11,64 @@ import {
 import type { QuestionType } from "../types/QuizTypes";
 import "./Settings.css";
 
-type TabId = "quiz" | "appearance" | "practice";
+type TabId = "quiz" | "appearance" | "practice" | "general";
 
 interface Tab {
   id: TabId;
-  label: string;
+  labelKey: string;
   icon: string;
 }
 
 const TABS: Tab[] = [
-  { id: "quiz", label: "Quiz", icon: "📝" },
-  { id: "appearance", label: "Appearance", icon: "🎨" },
-  { id: "practice", label: "Practice", icon: "⚡" },
+  { id: "quiz", labelKey: "settings.tabs.quiz", icon: "📝" },
+  { id: "appearance", labelKey: "settings.tabs.appearance", icon: "🎨" },
+  { id: "practice", labelKey: "settings.tabs.practice", icon: "⚡" },
+  { id: "general", labelKey: "settings.tabs.general", icon: "⚙️" },
 ];
 
-const THEME_OPTIONS: { id: AppSettings["theme"]; label: string; gradient: string }[] = [
-  { id: "default", label: "Purple", gradient: "linear-gradient(135deg, #c85bff, #ff4fa6)" },
-  { id: "blue", label: "Blue", gradient: "linear-gradient(135deg, #3b82f6, #06b6d4)" },
-  { id: "green", label: "Green", gradient: "linear-gradient(135deg, #10b981, #84cc16)" },
-  { id: "orange", label: "Orange", gradient: "linear-gradient(135deg, #f97316, #eab308)" },
+const THEME_OPTIONS: { id: AppSettings["theme"]; labelKey: string; gradient: string }[] = [
+  { id: "default", labelKey: "settings.appearance.purple", gradient: "linear-gradient(135deg, #c85bff, #ff4fa6)" },
+  { id: "blue", labelKey: "settings.appearance.blue", gradient: "linear-gradient(135deg, #3b82f6, #06b6d4)" },
+  { id: "green", labelKey: "settings.appearance.green", gradient: "linear-gradient(135deg, #10b981, #84cc16)" },
+  { id: "orange", labelKey: "settings.appearance.orange", gradient: "linear-gradient(135deg, #f97316, #eab308)" },
 ];
 
-const QUESTION_TYPE_META: Record<QuestionType, { label: string; desc: string; emoji: string }> = {
-  "single-choice-romaji": {
-    label: "Kana → Rōmaji",
-    desc: "See a kana character, pick the correct rōmaji reading",
-    emoji: "あ→a",
-  },
-  "single-choice-kana": {
-    label: "Rōmaji → Kana",
-    desc: "See a rōmaji reading, pick the correct kana character",
-    emoji: "a→あ",
-  },
-  "sequence-order": {
-    label: "Sequence Order",
-    desc: "See a rōmaji word, arrange individual kana in the right order",
-    emoji: "🔀",
-  },
-  "pair-match": {
-    label: "Pair Match",
-    desc: "See a rōmaji pair, select the matching kana pair",
-    emoji: "🔗",
-  },
-  "drawing-kana": {
-    label: "Draw Kana",
-    desc: "See a rōmaji prompt, draw the kana character freehand",
-    emoji: "✏️",
-  },
-};
 
 const QUESTION_COUNT_OPTIONS: AppSettings["questionsPerQuiz"][] = [10, 20, 30, 60];
 
 export const Settings = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { settings, updateSetting } = useSettings();
+  const { settings, updateSetting, resetSettings } = useSettings();
   const [activeTab, setActiveTab] = useState<TabId>("quiz");
+
+  const QUESTION_TYPE_META: Record<QuestionType, { label: string; desc: string; emoji: string }> = {
+    "single-choice-romaji": {
+      label: t("settings.quiz.typeLabels.romaji"),
+      desc: t("settings.quiz.typeDescs.romaji"),
+      emoji: "あ→a",
+    },
+    "single-choice-kana": {
+      label: t("settings.quiz.typeLabels.kana"),
+      desc: t("settings.quiz.typeDescs.kana"),
+      emoji: "a→あ",
+    },
+    "sequence-order": {
+      label: t("settings.quiz.typeLabels.sequence"),
+      desc: t("settings.quiz.typeDescs.sequence"),
+      emoji: "🔀",
+    },
+    "pair-match": {
+      label: t("settings.quiz.typeLabels.pair"),
+      desc: t("settings.quiz.typeDescs.pair"),
+      emoji: "🔗",
+    },
+    "drawing-kana": {
+      label: t("settings.quiz.typeLabels.drawing"),
+      desc: t("settings.quiz.typeDescs.drawing"),
+      emoji: "✏️",
+    },
+  };
 
   /* ── Question type helpers ── */
   const toggleQuestionType = (type: QuestionType) => {
@@ -91,9 +95,9 @@ export const Settings = () => {
     <div className="settings-page">
       <header className="settings-header">
         <button className="btn-secondary back-btn" onClick={() => navigate("/")}>
-          ← Back
+          ← {t("common.back")}
         </button>
-        <h1>Settings</h1>
+        <h1>{t("common.settings")}</h1>
       </header>
 
       <div className="settings-layout">
@@ -106,7 +110,7 @@ export const Settings = () => {
               onClick={() => setActiveTab(tab.id)}
             >
               <span className="tab-icon">{tab.icon}</span>
-              <span className="tab-label">{tab.label}</span>
+              <span className="tab-label">{t(tab.labelKey)}</span>
             </button>
           ))}
         </nav>
@@ -118,7 +122,7 @@ export const Settings = () => {
           {activeTab === "quiz" && (
             <section className="settings-section">
               <div className="section-title-row">
-                <h2>📝 Quiz Settings</h2>
+                <h2>📝 {t("settings.quiz.title")}</h2>
                 <button
                   className="btn-text reset-btn"
                   onClick={() => {
@@ -127,14 +131,14 @@ export const Settings = () => {
                     updateSetting("enabledQuestionTypes", DEFAULT_SETTINGS.enabledQuestionTypes);
                   }}
                 >
-                  Reset
+                  {t("common.reset")}
                 </button>
               </div>
 
               <div className="setting-row">
                 <div className="setting-info">
-                  <span className="setting-label">Questions per Quiz</span>
-                  <span className="setting-desc">How many questions appear in a single quiz session</span>
+                  <span className="setting-label">{t("settings.quiz.length")}</span>
+                  <span className="setting-desc">{t("settings.quiz.lengthDesc")}</span>
                 </div>
                 <div className="setting-control">
                   <div className="chip-group">
@@ -153,8 +157,8 @@ export const Settings = () => {
 
               <div className="setting-row">
                 <div className="setting-info">
-                  <span className="setting-label">Show Rōmaji Hint</span>
-                  <span className="setting-desc">Display the romanisation below each kana card</span>
+                  <span className="setting-label">{t("settings.quiz.hints")}</span>
+                  <span className="setting-desc">{t("settings.quiz.hintsDesc")}</span>
                 </div>
                 <div className="setting-control">
                   <button
@@ -170,9 +174,9 @@ export const Settings = () => {
               {/* Question Types */}
               <div className="setting-row setting-row--block">
                 <div className="setting-info">
-                  <span className="setting-label">Question Types</span>
+                  <span className="setting-label">{t("settings.quiz.types")}</span>
                   <span className="setting-desc">
-                    Choose which question formats appear in your quiz. At least one must be enabled.
+                    {t("settings.quiz.typesDesc")}
                   </span>
                 </div>
                 <div className="question-types-grid">
@@ -185,7 +189,7 @@ export const Settings = () => {
                         key={type}
                         className={`question-type-card ${isEnabled ? "active" : ""} ${isLast ? "last-active" : ""}`}
                         onClick={() => toggleQuestionType(type)}
-                        title={isLast ? "At least one type must remain enabled" : ""}
+                        title={isLast ? t("settings.quiz.lastTypeWarning") : ""}
                       >
                         <span className="qt-emoji">{meta.emoji}</span>
                         <span className="qt-label">{meta.label}</span>
@@ -205,7 +209,7 @@ export const Settings = () => {
           {activeTab === "appearance" && (
             <section className="settings-section">
               <div className="section-title-row">
-                <h2>🎨 Appearance</h2>
+                <h2>🎨 {t("settings.appearance.title")}</h2>
                 <button
                   className="btn-text reset-btn"
                   onClick={() => {
@@ -214,25 +218,25 @@ export const Settings = () => {
                     updateSetting("animationsEnabled", DEFAULT_SETTINGS.animationsEnabled);
                   }}
                 >
-                  Reset
+                  {t("common.reset")}
                 </button>
               </div>
 
               <div className="setting-row">
                 <div className="setting-info">
-                  <span className="setting-label">Accent Colour</span>
-                  <span className="setting-desc">Choose from a preset palette or create your own</span>
+                  <span className="setting-label">{t("settings.appearance.accentColor")}</span>
+                  <span className="setting-desc">{t("settings.appearance.accentColorDesc")}</span>
                 </div>
                 <div className="setting-control">
                   <div className="theme-swatches">
-                    {THEME_OPTIONS.map((t) => (
+                    {THEME_OPTIONS.map((option) => (
                       <button
-                        key={t.id}
-                        className={`theme-swatch ${settings.theme === t.id ? "active" : ""}`}
-                        style={{ background: t.gradient }}
-                        onClick={() => updateSetting("theme", t.id)}
-                        title={t.label}
-                        aria-label={`Select ${t.label} theme`}
+                        key={option.id}
+                        className={`theme-swatch ${settings.theme === option.id ? "active" : ""}`}
+                        style={{ background: option.gradient }}
+                        onClick={() => updateSetting("theme", option.id)}
+                        title={t(option.labelKey)}
+                        aria-label={`Select ${t(option.labelKey)} theme`}
                       />
                     ))}
                     {/* Custom swatch */}
@@ -245,7 +249,7 @@ export const Settings = () => {
                         ),
                       }}
                       onClick={() => updateSetting("theme", "custom")}
-                      title="Custom"
+                      title={t("settings.appearance.customTheme")}
                       aria-label="Select custom theme"
                     >
                       {settings.theme !== "custom" && <span className="swatch-custom-icon">✏️</span>}
@@ -254,10 +258,9 @@ export const Settings = () => {
                 </div>
               </div>
 
-              {/* Custom Theme Editor */}
               <div className={`custom-theme-editor ${settings.theme === "custom" ? "visible" : ""}`}>
                 <div className="cte-header">
-                  <span className="cte-title">Custom Colours</span>
+                  <span className="cte-title">{t("settings.appearance.customColors")}</span>
                   <div
                     className="cte-preview"
                     style={{
@@ -271,7 +274,7 @@ export const Settings = () => {
                 <div className="cte-pickers">
                   <label className="color-picker-label">
                     <span className="color-dot" style={{ background: settings.customTheme.primary }} />
-                    <span className="color-picker-name">Primary</span>
+                    <span className="color-picker-name">{t("settings.appearance.primary")}</span>
                     <div className="color-picker-wrapper">
                       <input
                         type="color"
@@ -288,7 +291,7 @@ export const Settings = () => {
 
                   <label className="color-picker-label">
                     <span className="color-dot" style={{ background: settings.customTheme.secondary }} />
-                    <span className="color-picker-name">Secondary</span>
+                    <span className="color-picker-name">{t("settings.appearance.secondary")}</span>
                     <div className="color-picker-wrapper">
                       <input
                         type="color"
@@ -305,8 +308,8 @@ export const Settings = () => {
 
               <div className="setting-row">
                 <div className="setting-info">
-                  <span className="setting-label">Animations</span>
-                  <span className="setting-desc">Enable micro-animations and transitions</span>
+                  <span className="setting-label">{t("settings.appearance.animations")}</span>
+                  <span className="setting-desc">{t("settings.appearance.animationsDesc")}</span>
                 </div>
                 <div className="setting-control">
                   <button
@@ -325,7 +328,7 @@ export const Settings = () => {
           {activeTab === "practice" && (
             <section className="settings-section">
               <div className="section-title-row">
-                <h2>⚡ Practice Settings</h2>
+                <h2>⚡ {t("settings.practice.title")}</h2>
                 <button
                   className="btn-text reset-btn"
                   onClick={() => {
@@ -333,15 +336,15 @@ export const Settings = () => {
                     updateSetting("weakestCharCount", DEFAULT_SETTINGS.weakestCharCount);
                   }}
                 >
-                  Reset
+                  {t("common.reset")}
                 </button>
               </div>
 
               <div className="setting-row">
                 <div className="setting-info">
-                  <span className="setting-label">Mastery Threshold</span>
+                  <span className="setting-label">{t("settings.practice.masteryThreshold")}</span>
                   <span className="setting-desc">
-                    Correct-answer streak required to mark a character as mastered
+                    {t("settings.practice.masteryDesc")}
                   </span>
                 </div>
                 <div className="setting-control setting-control--slider">
@@ -363,9 +366,9 @@ export const Settings = () => {
 
               <div className="setting-row">
                 <div className="setting-info">
-                  <span className="setting-label">Weakest Characters Count</span>
+                  <span className="setting-label">{t("settings.practice.weakestCount")}</span>
                   <span className="setting-desc">
-                    Number of weakest characters selected when using "Weakest N" shortcut
+                    {t("settings.practice.weakestDesc")}
                   </span>
                 </div>
                 <div className="setting-control setting-control--slider">
@@ -382,6 +385,58 @@ export const Settings = () => {
                     className="range-slider"
                   />
                   <span className="range-value">{settings.weakestCharCount}</span>
+                </div>
+              </div>
+            </section>
+          )}
+          {/* ── General Tab ── */}
+          {activeTab === "general" && (
+            <section className="settings-section">
+              <div className="section-title-row">
+                <h2>⚙️ {t("settings.tabs.general")}</h2>
+              </div>
+
+              <div className="setting-row">
+                <div className="setting-info">
+                  <span className="setting-label">{t("settings.general.language")}</span>
+                  <span className="setting-desc">{t("settings.general.languageDesc")}</span>
+                </div>
+                <div className="setting-control">
+                  <div className="chip-group">
+                    <button
+                      className={`chip ${settings.language === "en" ? "active" : ""}`}
+                      onClick={() => updateSetting("language", "en")}
+                    >
+                      English
+                    </button>
+                    <button
+                      className={`chip ${settings.language === "es" ? "active" : ""}`}
+                      onClick={() => updateSetting("language", "es")}
+                    >
+                      Español
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="setting-row setting-row--danger">
+                <div className="setting-info">
+                  <span className="setting-label">{t("settings.general.resetTitle")}</span>
+                  <span className="setting-desc">{t("settings.general.resetDesc")}</span>
+                </div>
+                <div className="setting-control">
+                  <button 
+                    className="btn-danger" 
+                    onClick={() => {
+                      if (window.confirm(t("settings.general.resetConfirm"))) {
+                        resetSettings();
+                        localStorage.clear();
+                        window.location.reload();
+                      }
+                    }}
+                  >
+                    {t("settings.general.resetButton")}
+                  </button>
                 </div>
               </div>
             </section>

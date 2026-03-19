@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import type { KanaChar } from "../data/hiragana";
 import "./HiraganaCard.css";
@@ -18,6 +19,7 @@ export const HiraganaCard = React.memo(({
   streak,
   isMastered,
 }: HiraganaCardProps) => {
+  const { t } = useTranslation();
   if (kana.isEmpty) {
     return <div className="hiragana-card empty" />;
   }
@@ -29,7 +31,7 @@ export const HiraganaCard = React.memo(({
         "is-mastered": isMastered,
       })}
       onClick={() => onToggle(kana.char)}
-      aria-label={`Select ${kana.romaji}`}
+      aria-label={`${t("common.save") === "Save" ? "Select" : "Seleccionar"} ${kana.romaji}`}
       aria-pressed={isSelected}
     >
       <div className="kana-char">{kana.char}</div>

@@ -5,6 +5,7 @@ import {
   useState,
   useEffect,
 } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ReactSketchCanvas,
   type ReactSketchCanvasRef,
@@ -26,6 +27,7 @@ export interface KanaCanvasRef {
 
 export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
   ({ targetChar, onVerify, isRevealed }, ref) => {
+    const { t } = useTranslation();
     const sketchRef = useRef<ReactSketchCanvasRef>(null);
     const [lastScore, setLastScore] = useState<number | null>(null);
     const [isPassing, setIsPassing] = useState(false);
@@ -154,7 +156,7 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
             onClick={handleClear}
             disabled={isRevealed}
           >
-            Clear
+            {t("common.clear")}
           </button>
 
           <div className="status-badges">
@@ -165,7 +167,7 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
                   background: lastScore > 70 ? "var(--accent-primary)" : "gray",
                 }}
               >
-                {lastScore > 70 ? "Verified" : "Unsure"}
+                {lastScore > 70 ? t("quiz.actions.verified") : t("quiz.actions.unsure")}
               </div>
             )}
           </div>

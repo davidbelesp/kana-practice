@@ -6,6 +6,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
+import i18n from "../i18n/config";
 import type { QuestionType } from "../types/QuizTypes";
 
 export type Theme = "default" | "blue" | "green" | "orange" | "custom";
@@ -37,6 +38,9 @@ export interface AppSettings {
   // Practice
   masteryThreshold: number;
   weakestCharCount: number;
+
+  // General
+  language: "en" | "es";
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -48,6 +52,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   animationsEnabled: true,
   masteryThreshold: 100,
   weakestCharCount: 10,
+  language: (i18n.language?.startsWith("es") ? "es" : "en") as "en" | "es",
 };
 
 const STORAGE_KEY = "app_settings";
@@ -126,6 +131,13 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     saveSettings(settings);
   }, [settings]);
+
+  // Sync i18n language
+  useEffect(() => {
+    if (i18n.language !== settings.language) {
+      i18n.changeLanguage(settings.language);
+    }
+  }, [settings.language]);
 
   const updateSetting = useCallback(
     <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => {

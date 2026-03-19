@@ -1,0 +1,180 @@
+{
+  "common": {
+    "back": "Back",
+    "clear": "Clear",
+    "all": "All",
+    "comingSoon": "Coming Soon",
+    "settings": "Settings",
+    "stats": "Stats",
+    "loading": "Loading...",
+    "save": "Save",
+    "reset": "Reset",
+    "home": "Home",
+    "canvasClear": "Clear Canvas"
+  },
+  "index": {
+    "titlePrefix": "日本語の",
+    "titleSuffix": "Hub",
+    "subtitle": "Master Japanese with Interactive Tools",
+    "cards": {
+      "practice": "Kana Practice",
+      "practiceDesc": "Practice reading Hiragana and Katakana characters to build your foundation.",
+      "stats": "Stats",
+      "statsDesc": "Track your learning progress, accuracy, and see how much you've improved.",
+      "canvas": "Free Canvas",
+      "canvasDesc": "Practice writing Japanese characters freely on a digital canvas.",
+      "kanji": "Kanjis",
+      "kanjiDesc": "Explore JLPT levels, check Kanji details, and initiate practice sessions based on meaning.",
+      "numbers": "Numbers",
+      "numbersDesc": "Learn and practice reading Japanese numbers and counting systems.",
+      "vocabulary": "Vocabulary",
+      "vocabularyDesc": "Learn and practice reading Japanese vocabulary.",
+      "settings": "Settings",
+      "settingsDesc": "Customise quiz length, accent colour, mastery thresholds, and more."
+    },
+    "viewOnGithub": "View on GitHub"
+  },
+  "home": {
+    "title": "Kana Practice",
+    "subtitle": "Select characters to master",
+    "tabs": {
+      "hiragana": "Hiragana",
+      "katakana": "Katakana"
+    },
+    "controls": {
+      "selected": "{{count}} selected",
+      "weakest10": "Weakest 10 ⚡",
+      "startQuiz": "Start Quiz"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "appearance": "Appearance",
+      "quiz": "Quiz",
+      "practice": "Practice",
+      "general": "General"
+    },
+    "appearance": {
+      "accentColor": "Accent Colour",
+      "standardThemes": "Standard Themes",
+      "purple": "Purple (Default)",
+      "blue": "Ocean Blue",
+      "green": "Emerald Green",
+      "orange": "Sunset Orange",
+      "customTheme": "Custom Theme",
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "animations": "Animations",
+      "animationsDesc": "Smooth transitions and card effects"
+    },
+    "quiz": {
+      "title": "Quiz Settings",
+      "length": "Questions per Quiz",
+      "lengthDesc": "How many questions appear in a single quiz session",
+      "types": "Enabled Question Types",
+      "typesDesc": "Choose which question formats appear in your quiz. At least one must remain enabled.",
+      "lastTypeWarning": "At least one type must remain enabled",
+      "typeLabels": {
+        "romaji": "Kana → Rōmaji",
+        "kana": "Rōmaji → Kana",
+        "sequence": "Sequence Order",
+        "pair": "Pair Match",
+        "drawing": "Draw Kana"
+      },
+      "typeDescs": {
+        "romaji": "See a kana character, pick the correct rōmaji reading",
+        "kana": "See a rōmaji reading, pick the correct kana character",
+        "sequence": "See a rōmaji word, arrange individual kana in the right order",
+        "pair": "See a rōmaji pair, select the matching kana pair",
+        "drawing": "See a rōmaji prompt, draw the kana character freehand"
+      },
+      "hints": "Rōmaji Hints",
+      "hintsDesc": "Show readings on cards during quiz (classic mode)"
+    },
+    "general": {
+      "language": "Language",
+      "languageDesc": "Select your preferred application language",
+      "resetTitle": "Factory Reset",
+      "resetDesc": "Wipe all settings and progress",
+      "resetButton": "Reset All Data",
+      "resetConfirm": "Are you sure you want to reset EVERYTHING? This will wipe all progress and settings."
+    }
+  },
+  "quiz": {
+    "quit": "Quit",
+    "questionProgress": "Question {{current}} / {{total}}",
+    "remaining": "{{count}} remaining",
+    "prompts": {
+      "romaji": "Select correct Romaji",
+      "kana": "Select correct Hiragana",
+      "sequence": "Arrange in Order",
+      "pair": "Select matching Pair",
+      "drawing": "Draw the Character",
+      "default": "Solve"
+    },
+    "actions": {
+      "check": "Check",
+      "next": "Next",
+      "override": "Mark as Correct",
+      "verified": "Verified",
+      "unsure": "Unsure"
+    },
+    "feedback": {
+      "correct": "Correct!",
+      "incorrect": "Correct answer: "
+    },
+    "results": {
+      "title": "Quiz Result",
+      "score": "Score",
+      "accuracy": "Accuracy",
+      "viewStats": "View Stats"
+    }
+  },
+  "stats": {
+    "title": "Your Progress",
+    "quizzesFinished": "Quizzes Finished",
+    "accuracy": "Accuracy",
+    "totalCorrect": "Total Correct",
+    "totalWrong": "Total Wrong",
+    "masteredTitle": "Mastered Kana (100+ Streak)",
+    "noMastered": "No mastered characters yet. Keep practicing!",
+    "historyTitle": "Quiz History (Daily)",
+    "noHistory": "No history available yet.",
+    "topStreaks": "Top Streaks",
+    "noStreaks": "Start practicing to build your streaks!",
+    "chart": {
+      "correct": "Correct",
+      "wrong": "Wrong"
+    }
+  },
+  "kanji": {
+    "title": "Kanji Compendium",
+    "subtitle": "Explore and select Kanjis for practice",
+    "modes": {
+      "view": "View Details",
+      "select": "Select Kanjis"
+    },
+    "levelCount": "{{count}} Kanjis",
+    "selectAll": "Select All",
+    "deselect": "Deselect",
+    "expand": "Expand level",
+    "collapse": "Collapse level",
+    "backToKanji": "Back to Kanji",
+    "radical": "Radical",
+    "kunyomi": "Kunyomi (Japanese)",
+    "onyomi": "Onyomi (Chinese)"
+  },
+  "practice": {
+    "dakuon": "Dakuon (Voiced)",
+    "handakuon": "Handakuon (Semi-voiced)"
+  },
+  "canvas": {
+    "title": "Free Practice",
+    "recognize": "Recognize (AI)",
+    "thinking": "Thinking...",
+    "copyTitle": "Click to copy",
+    "emptyState": "Draw above and click Recognize",
+    "copySuccess": "Copied to clipboard",
+    "copyError": "Failed to copy"
+  }
+}
