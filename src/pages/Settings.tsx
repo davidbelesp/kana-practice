@@ -426,7 +426,7 @@ export const Settings = () => {
                 </div>
                 <div className="setting-control">
                   <button 
-                    className="btn-danger" 
+                    className="btn-secondary" 
                     onClick={() => {
                       if (window.confirm(t("settings.general.resetConfirm"))) {
                         resetSettings();
