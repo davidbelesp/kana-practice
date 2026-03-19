@@ -8,14 +8,41 @@
   text-align: center;
 }
 
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .index-title {
   font-size: 4rem;
   font-weight: 800;
-  margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   display: flex;
   justify-content: center;
+}
+
+.settings-icon-tab {
+  font-size: 1.75rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-secondary);
+}
+
+.settings-icon-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
 }
 
 .title-letter {
@@ -29,7 +56,8 @@
 }
 
 .index-title:hover .title-letter {
-  transform: translate(var(--hover-x), var(--hover-y)) rotate(var(--hover-rotate));
+  transform: translate(var(--hover-x), var(--hover-y))
+    rotate(var(--hover-rotate));
 }
 
 .index-subtitle {
@@ -67,7 +95,7 @@
 }
 
 .index-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -121,6 +149,12 @@
   line-height: 1.5;
 }
 
+/* Groups title + desc so mobile flex-row works */
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
 .index-card.large {
   grid-column: span 2;
 }
@@ -158,21 +192,101 @@
   color: var(--text-secondary);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 640px), (orientation: portrait) and (max-width: 900px) {
+  .title-container {
+    gap: 0.75rem;
+    justify-content: center;
+    width: 100%;
+  }
+
   .index-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
-  
+
+  .settings-icon-tab {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
   .index-subtitle {
-    font-size: 1rem;
-    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
   }
-  
+
   .index-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
-  
+
   .index-card.large {
     grid-column: span 1;
   }
+
+  /* ── Compact horizontal card layout ── */
+  .index-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.1rem;
+  }
+
+  .card-icon {
+    font-size: 1.5rem;
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    margin-bottom: 0; /* remove column-mode bottom gap */
+    flex-shrink: 0;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    margin-bottom: 0;
+  }
+
+  .card-desc {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-badge {
+    position: static;
+    align-self: flex-start;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+  }
+}
+
+.index-footer {
+  margin-top: 4rem;
+  padding: 2rem;
+  border-top: 1px solid var(--glass-border);
+  width: 100%;
+  max-width: 900px;
+}
+
+.index-footer a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  opacity: 0.7;
+}
+
+.index-footer a:hover {
+  opacity: 1;
+  color: var(--accent-primary);
+  text-shadow: 0 0 10px rgba(var(--accent-primary-rgb), 0.3);
 }

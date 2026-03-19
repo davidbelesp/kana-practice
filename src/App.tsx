@@ -6,29 +6,39 @@ import { Stats } from "./pages/Stats";
 import { FreeCanvas } from "./pages/FreeCanvas";
 import { KanjiPage } from "./pages/KanjiPage";
 import { KanjiQuiz } from "./pages/KanjiQuiz";
+import { Settings } from "./pages/Settings";
 import "./App.css";
-import { ThemeSwitcher } from "./components/ThemeSwitcher";
 import { NotificationProvider } from "./contexts/NotificationContext";
+import { SettingsProvider, useSettings } from "./contexts/SettingsContext";
 
 function App() {
   return (
-    <Router>
-      <NotificationProvider>
-        <div className="app-container">
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/practice" element={<Home />} />
-            <Route path="/quiz" element={<Quiz />} />
-            <Route path="/kanji-quiz" element={<KanjiQuiz />} />
-            <Route path="/stats" element={<Stats />} />
-            <Route path="/canvas" element={<FreeCanvas />} />
-            <Route path="/kanji" element={<KanjiPage />} />
-          </Routes>
-          <ThemeSwitcher />
-        </div>
-      </NotificationProvider>
-    </Router>
+    <SettingsProvider>
+      <Router>
+        <NotificationProvider>
+          <SettingsContextConsumer />
+        </NotificationProvider>
+      </Router>
+    </SettingsProvider>
   );
 }
+
+const SettingsContextConsumer = () => {
+  const { settings } = useSettings();
+  return (
+    <div className={`app-container ${!settings.animationsEnabled ? "no-animations" : ""}`}>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/practice" element={<Home />} />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/kanji-quiz" element={<KanjiQuiz />} />
+        <Route path="/stats" element={<Stats />} />
+        <Route path="/canvas" element={<FreeCanvas />} />
+        <Route path="/kanji" element={<KanjiPage />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </div>
+  );
+};
 
 export default App;

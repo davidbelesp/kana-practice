@@ -38,20 +38,26 @@ const getDistractors = (
   return distractors;
 };
 
-export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
-  // Randomly select question type
-  const rand = Math.random();
-  let type: QuestionType = "single-choice-romaji";
+export const generateQuestion = (
+  pool: KanaChar[],
+  allowedTypes?: QuestionType[],
+): QuizQuestion => {
+  // Determine the valid type pool
+  const validTypes: QuestionType[] = allowedTypes && allowedTypes.length > 0
+    ? allowedTypes
+    : ["single-choice-romaji", "single-choice-kana", "sequence-order", "pair-match", "drawing-kana"];
 
-  if (rand < 0.2) type = "single-choice-romaji";
-  else if (rand < 0.4) type = "single-choice-kana";
-  else if (rand < 0.6) type = "sequence-order";
-  else if (rand < 0.8) type = "pair-match";
-  else type = "drawing-kana";
+  // Pick a random type from the allowed set
+  let type: QuestionType = validTypes[Math.floor(Math.random() * validTypes.length)];
 
   // Fallback if pool is too small for complex types
   if (pool.length < 3) {
-    type = Math.random() > 0.5 ? "single-choice-romaji" : "single-choice-kana";
+    const simpleTypes = validTypes.filter(
+      (t) => t === "single-choice-romaji" || t === "single-choice-kana" || t === "drawing-kana",
+    );
+    type = simpleTypes.length > 0
+      ? simpleTypes[Math.floor(Math.random() * simpleTypes.length)]
+      : "single-choice-romaji";
   }
 
   switch (type) {
@@ -189,7 +195,11 @@ export const generateQuestion = (pool: KanaChar[]): QuizQuestion => {
   };
 };
 
-export const generateQuizDeck = (pool: KanaChar[], maxCount: number): QuizQuestion[] => {
+export const generateQuizDeck = (
+  pool: KanaChar[],
+  maxCount: number,
+  allowedTypes?: QuestionType[],
+): QuizQuestion[] => {
   if (!pool.length || maxCount <= 0) return [];
   
   const deck: QuizQuestion[] = [];
@@ -197,7 +207,7 @@ export const generateQuizDeck = (pool: KanaChar[], maxCount: number): QuizQuesti
   
   let failsafe = 0;
   while (deck.length < maxCount && failsafe < 1000) {
-    const q = generateQuestion(pool);
+    const q = generateQuestion(pool, allowedTypes);
     if (!usedPrompts.has(q.prompt)) {
       usedPrompts.add(q.prompt);
       deck.push(q);

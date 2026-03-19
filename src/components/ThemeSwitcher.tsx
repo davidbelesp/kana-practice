@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSettings } from "../contexts/SettingsContext";
 import "./ThemeSwitcher.css";
 
 type Theme = "default" | "blue" | "green" | "orange";
 
 export const ThemeSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem("app_theme");
-    const validThemes: Theme[] = ["default", "blue", "green", "orange"];
-    return validThemes.includes(saved as Theme) ? (saved as Theme) : "default";
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", currentTheme);
-    localStorage.setItem("app_theme", currentTheme);
-  }, [currentTheme]);
+  const { settings, updateSetting } = useSettings();
+  const currentTheme = settings.theme;
 
   const themes: { id: Theme; color: string }[] = [
     { id: "default", color: "linear-gradient(135deg, #c85bff, #ff4fa6)" },
@@ -32,7 +25,7 @@ export const ThemeSwitcher = () => {
             className={`theme-option ${currentTheme === t.id ? "active" : ""}`}
             style={{ background: t.color }}
             onClick={() => {
-              setCurrentTheme(t.id);
+              updateSetting("theme", t.id);
               setIsOpen(false);
             }}
             title={`Select ${t.id} theme`}

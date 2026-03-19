@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { HiraganaTable } from "../components/HiraganaTable";
 import { hiraganaData, katakanaData } from "../data/kana";
@@ -69,7 +69,10 @@ export const Home = () => {
   };
 
   const handleSelectWeakest = () => {
-    const weakest = getWeakestChars(10);
+    const currentChars = currentData
+      .filter((k) => !k.isEmpty)
+      .map((k) => k.char);
+    const weakest = getWeakestChars(10, currentChars);
     if (weakest.length > 0) {
       setSelectedChars(weakest);
     }
@@ -81,22 +84,17 @@ export const Home = () => {
 
   const handleStartQuiz = () => {
     if (selectedChars.length < 3) return;
-    navigate("/quiz", { state: { selectedChars } });
+    navigate("/quiz", { state: { selectedChars, from: "/practice" } });
   };
 
   return (
     <div className="home-container container">
       <header className="home-header">
+        <div className="home-header-top">
+          <button className="btn-secondary" onClick={() => navigate("/")}>← Back</button>
+        </div>
         <h1 className="title">Kana Practice</h1>
         <p className="subtitle">Select characters to master</p>
-        <div className="secondary-actions">
-          <Link to="/stats" className="btn-secondary link-btn">
-            View Stats 📊
-          </Link>
-          <Link to="/canvas" className="btn-secondary link-btn">
-            Free Canvas 🖌️
-          </Link>
-        </div>
       </header>
 
       <div className="tab-container">

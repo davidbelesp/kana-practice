@@ -144,9 +144,14 @@ export const getMasteredKana = (): KanaStat[] => {
     .sort((a, b) => b.streak - a.streak);
 };
 
-export const getWeakestChars = (limit: number = 10): string[] => {
+export const getWeakestChars = (limit: number = 10, filterChars?: string[]): string[] => {
   const stats = getKanaStats();
-  const allStats = Object.values(stats);
+  let allStats = Object.values(stats);
+
+  if (filterChars && filterChars.length > 0) {
+    const filterSet = new Set(filterChars);
+    allStats = allStats.filter((s) => filterSet.has(s.char));
+  }
 
   const sorted = allStats.sort((a, b) => {
     const scoreA = a.incorrect * 2 - a.correct - a.streak;

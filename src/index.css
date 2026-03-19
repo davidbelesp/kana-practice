@@ -166,3 +166,9 @@ a {
   
 }
 
+/* ── Global No Animations Override ── */
+.no-animations * {
+  animation: none !important;
+  transition: none !important;
+}
+

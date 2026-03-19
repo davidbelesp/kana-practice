@@ -5,23 +5,27 @@ import { QuizCard } from "../components/QuizCard";
 import { generateQuizDeck } from "../utils/questionGenerator";
 import { saveStatResult, saveQuizHistory } from "../utils/statsManager";
 import { type QuizQuestion } from "../types/QuizTypes";
+import { useSettings } from "../contexts/SettingsContext";
 import "./Quiz.css";
 
 interface QuizState {
   selectedChars: string[];
+  from?: string;
 }
 
 export const Quiz = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as QuizState;
+  const { settings } = useSettings();
 
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [userAnswer, setUserAnswer] = useState<string | string[]>("");
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [deck] = useState<QuizQuestion[]>(() => {
     const p = allKanaData.filter((k) => state?.selectedChars?.includes(k.char));
-    return generateQuizDeck(p, Math.min(60, p.length * 3));
+    const count = Math.min(settings.questionsPerQuiz, p.length * 3); // factor of 3 to allow multiple types per char
+    return generateQuizDeck(p, count, settings.enabledQuestionTypes);
   });
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
@@ -105,8 +109,8 @@ export const Quiz = () => {
             Accuracy: {attempts > 0 ? Math.round((score / attempts) * 100) : 0}%
           </p>
           <div className="actions">
-            <button className="btn-primary" onClick={() => navigate("/")}>
-              Back to Home
+            <button className="btn-primary" onClick={() => navigate(state?.from ?? "/")}>
+              Back
             </button>
             <button className="btn-text" onClick={() => navigate("/stats")}>
               View Stats

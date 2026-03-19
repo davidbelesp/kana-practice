@@ -4,6 +4,12 @@
   padding-top: 2rem;
 }
 
+.home-header-top {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
 .title {
   font-size: 3rem;
   font-weight: 800;
@@ -144,7 +150,8 @@
     flex-direction: column;
     gap: 1rem;
     align-items: stretch;
-    position: static;
+    position: sticky; /* Keep it sticky on mobile too */
+    top: 0.5rem;
   }
 
   .actions {
