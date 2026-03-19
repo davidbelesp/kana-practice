@@ -370,6 +370,7 @@
 
   .cte-pickers {
     padding: 0 0 1rem;
+    flex-direction: column;
   }
 }
 
