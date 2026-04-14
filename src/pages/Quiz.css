@@ -161,7 +161,7 @@
   }
 }
 
-@media screen and (max-width: 678px) {
+@media screen and (max-width: 740px) {
   .container {
     padding: 0 1rem;
   }
@@ -191,7 +191,6 @@
   }
 
   .glass-panel {
-    padding: 1rem .5rem !important;
-
+    padding: 1rem .5rem;
   }
 }

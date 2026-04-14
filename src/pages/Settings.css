@@ -323,6 +323,7 @@
 @media screen and (max-width: 768px) {
   .settings-layout {
     grid-template-columns: 1fr;
+    flex: none;
   }
 
   .settings-sidebar {
@@ -361,7 +362,7 @@
   }
 
   .settings-content {
-    padding: 1.25rem;
+    padding: 2rem;
   }
 
   .cte-header {

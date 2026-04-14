@@ -91,7 +91,7 @@
   margin-top: 2.5rem;
 }
 
-@media screen and (max-width: 678px) {
+@media screen and (max-width: 740px) {
   .free-header {
     padding: 2rem 1rem;
   }
