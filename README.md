@@ -20,8 +20,13 @@ A premium, interactive web application designed to master Japanese Hiragana, Kat
     -   **UI Preferences**: Toggle animations for a snappier experience on low-end devices.
 -   **Smart Quizzes**: Pre-generated decks with no-repeat logic and an 80/20 focus algorithm targeting your weakest characters.
 -   **Progress Analytics**: Visualized accuracy, top streaks, and mastery tracking (100+ streak milestones).
+-   **Vocabulary Hub**: 
+    -   **50+ Words**: Explore categorized sets of Fruits, Animals, Colors, and more.
+    -   **Interactive Tags**: Deep-dive into specific themes by clicking any tag badge.
+    -   **Visual Aids**: Every card features a representing emoji/icon in the top-right corner for instant recognition.
+    -   **Global Search**: Real-time debounced search by **Japanese**, **Romaji**, **English**, **Spanish**, or **Tag**.
+    -   **Click-to-Copy**: Click any Japanese word title to copy it to your clipboard with a success notification.
 -   **Mobile First**: Responsive layouts including sticky action bars, centered mobile controls, and high-contrast glass panels for readability.
--   **Factory Reset**: Easily clear all progress and settings from the General tab.
 
 ## 🛠️ Tech Stack
 
@@ -64,7 +69,8 @@ A premium, interactive web application designed to master Japanese Hiragana, Kat
 2.  **Settings**: Click the ⚙️ icon or "Settings" card to customize appearance, quiz behavior, and language.
 3.  **Practice**: Select characters and start a quiz. Use "Weakest 10" for targeted learning.
 4.  **Kanji**: View character details or select specific ones for a Kanji session.
-5.  **Free Canvas**: Draw any character and use the AI Recognize button to see if you got it right!
+5.  **Vocabulary**: Browse themes or search for specific words. Click tags to filter and word titles to copy them.
+6.  **Free Canvas**: Draw any character and use the AI Recognize button to see if you got it right!
 
 ## 📄 License
 
