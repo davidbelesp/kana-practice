@@ -198,5 +198,21 @@
     "emptyState": "Dibuja arriba y haz clic en Reconocer",
     "copySuccess": "Copiado al portapapeles",
     "copyError": "Error al copiar"
+  },
+  "vocabulary": {
+    "title": "Centro de Vocabulario",
+    "subtitle": "Aprende palabras en japonés por categoría",
+    "categories": {
+      "fruit": "Frutas",
+      "animal": "Animales",
+      "color": "Colores",
+      "food": "Comida"
+    },
+    "itemCount": "{{count}} palabras",
+    "back": "Volver a Temas",
+    "search": "Buscar palabras o etiquetas...",
+    "resultsFor": "Resultados de búsqueda para \"{{query}}\"",
+    "noResults": "No se encontraron palabras que coincidan con su búsqueda.",
+    "moreComingSoon": "Más pronto..."
   }
 }

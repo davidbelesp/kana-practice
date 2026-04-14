@@ -78,14 +78,13 @@ export const Index: React.FC = () => {
           </div>
         </Link>
 
-        <div className="index-card disabled large">
+        <Link to="/vocabulary" className="index-card large">
           <div className="card-icon">🍎</div>
           <div className="card-body">
-            <div className="card-badge">{t("common.comingSoon")}</div>
             <h2 className="card-title">{t("index.cards.vocabulary")}</h2>
             <p className="card-desc">{t("index.cards.vocabularyDesc")}</p>
           </div>
-        </div>
+        </Link>
 
         <div className="index-card disabled">
           <div className="card-icon">123</div>

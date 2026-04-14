@@ -200,5 +200,21 @@
     "emptyState": "Draw above and click Recognize",
     "copySuccess": "Copied to clipboard",
     "copyError": "Failed to copy"
+  },
+  "vocabulary": {
+    "title": "Vocabulary Hub",
+    "subtitle": "Learn Japanese words by category",
+    "categories": {
+      "fruit": "Fruits",
+      "animal": "Animals",
+      "color": "Colors",
+      "food": "Food"
+    },
+    "itemCount": "{{count}} words",
+    "back": "Back to Themes",
+    "search": "Search words or tags...",
+    "resultsFor": "Search results for \"{{query}}\"",
+    "noResults": "No words found matching your search.",
+    "moreComingSoon": "More coming soon..."
   }
 }

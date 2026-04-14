@@ -7,6 +7,7 @@ import { FreeCanvas } from "./pages/FreeCanvas";
 import { KanjiPage } from "./pages/KanjiPage";
 import { KanjiQuiz } from "./pages/KanjiQuiz";
 import { Settings } from "./pages/Settings";
+import { Vocabulary } from "./pages/Vocabulary";
 import "./App.css";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import { SettingsProvider, useSettings } from "./contexts/SettingsContext";
@@ -36,6 +37,7 @@ const SettingsContextConsumer = () => {
         <Route path="/canvas" element={<FreeCanvas />} />
         <Route path="/kanji" element={<KanjiPage />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/vocabulary" element={<Vocabulary />} />
       </Routes>
     </div>
   );
