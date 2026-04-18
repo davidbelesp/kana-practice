@@ -216,5 +216,18 @@
     "resultsFor": "Resultados de búsqueda para \"{{query}}\"",
     "noResults": "No se encontraron palabras que coincidan con su búsqueda.",
     "moreComingSoon": "Más pronto..."
+  },
+  "numbers": {
+    "prompt": "¿Cómo se lee este número?",
+    "mode": {
+      "romaji": "Romaji",
+      "hiragana": "Hiragana"
+    },
+    "placeholder": {
+      "romaji": "ej. ni sen nana hyaku juu ni",
+      "hiragana": "ej. にせんななひゃくじゅうに"
+    },
+    "next": "Siguiente número",
+    "skip": "Saltar"
   }
 }

@@ -86,14 +86,13 @@ export const Index: React.FC = () => {
           </div>
         </Link>
 
-        <div className="index-card disabled">
+        <Link to="/numbers" className="index-card">
           <div className="card-icon">123</div>
           <div className="card-body">
-            <div className="card-badge">{t("common.comingSoon")}</div>
             <h2 className="card-title">{t("index.cards.numbers")}</h2>
             <p className="card-desc">{t("index.cards.numbersDesc")}</p>
           </div>
-        </div>
+        </Link>
       </div>
       
       <footer className="index-footer">

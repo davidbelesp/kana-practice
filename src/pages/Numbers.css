@@ -1,0 +1,124 @@
+.numbers-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.numbers-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  gap: 1.5rem;
+}
+
+.numbers-card.correct {
+  border-color: #10b981;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.numbers-card.incorrect {
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+}
+
+.numbers-display {
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0.5rem 0 1rem;
+  background: var(--accent-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  padding: 0.25rem;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-btn.active {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.mode-btn:not(.active):hover {
+  color: var(--text-primary);
+}
+
+.numbers-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.numbers-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.numbers-input.correct {
+  border-color: #10b981;
+}
+
+.numbers-input.incorrect {
+  border-color: #ef4444;
+}
+
+.numbers-input:disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.numbers-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.numbers-answer-hiragana {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+@media (max-width: 740px) {
+  .numbers-display {
+    font-size: 3.5rem;
+  }
+
+  .numbers-card {
+    border-radius: 0;
+    padding: 1.5rem 1rem;
+  }
+}
