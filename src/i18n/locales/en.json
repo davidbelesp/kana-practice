@@ -208,7 +208,9 @@
       "fruit": "Fruits",
       "animal": "Animals",
       "color": "Colors",
-      "food": "Food"
+      "food": "Food",
+      "day": "Days of the Week",
+      "time": "Time"
     },
     "itemCount": "{{count}} words",
     "back": "Back to Themes",

@@ -641,5 +641,91 @@ export const vocabularyData: VocabularyItem[] = [
     ],
     tags: ["animal"],
     image: "🐼"
+  },
+
+  // --- DAYS OF THE WEEK ---
+  {
+    japanese: "月曜日",
+    hiragana: "げつようび",
+    romaji: "getsuyoubi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "Monday" },
+      { lang: "es", translation: "lunes" }
+    ],
+    tags: ["day", "time"],
+    image: "🌙"
+  },
+  {
+    japanese: "火曜日",
+    hiragana: "かようび",
+    romaji: "kayoubi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "Tuesday" },
+      { lang: "es", translation: "martes" }
+    ],
+    tags: ["day", "time"],
+    image: "🔥"
+  },
+  {
+    japanese: "水曜日",
+    hiragana: "すいようび",
+    romaji: "suiyoubi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "Wednesday" },
+      { lang: "es", translation: "miércoles" }
+    ],
+    tags: ["day", "time"],
+    image: "💧"
+  },
+  {
+    japanese: "木曜日",
+    hiragana: "もくようび",
+    romaji: "mokuyoubi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "Thursday" },
+      { lang: "es", translation: "jueves" }
+    ],
+    tags: ["day", "time"],
+    image: "🌳"
+  },
+  {
+    japanese: "金曜日",
+    hiragana: "きんようび",
+    romaji: "kin'youbi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "Friday" },
+      { lang: "es", translation: "viernes" }
+    ],
+    tags: ["day", "time"],
+    image: "✨"
+  },
+  {
+    japanese: "土曜日",
+    hiragana: "どようび",
+    romaji: "doyoubi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "Saturday" },
+      { lang: "es", translation: "sábado" }
+    ],
+    tags: ["day", "time"],
+    image: "🌍"
+  },
+  {
+    japanese: "日曜日",
+    hiragana: "にちようび",
+    romaji: "nichiyoubi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "Sunday" },
+      { lang: "es", translation: "domingo" }
+    ],
+    tags: ["day", "time"],
+    image: "☀️"
   }
 ];
