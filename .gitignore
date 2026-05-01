@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# AI related
+.agent
+.agents
+.vscode/.agent
+.claude
+.gemini
