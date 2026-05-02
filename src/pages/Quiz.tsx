@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { allKanaData } from "../data/kana";
 import { QuizCard } from "../components/QuizCard";
 import { generateQuizDeck } from "../utils/questionGenerator";
-import { saveStatResult, saveQuizHistory } from "../utils/statsManager";
+import { saveStatResultsBatch, saveQuizHistory } from "../utils/statsManager";
 import { type QuizQuestion } from "../types/QuizTypes";
 import { useSettings } from "../contexts/SettingsContext";
 import "./Quiz.css";
@@ -20,18 +20,27 @@ export const Quiz = () => {
   const navigate = useNavigate();
   const state = location.state as QuizState;
   const { settings } = useSettings();
+  const pendingStatsRef = useRef<Array<{ char: string; isCorrect: boolean }>>([]);
 
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [userAnswer, setUserAnswer] = useState<string | string[]>("");
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [deck] = useState<QuizQuestion[]>(() => {
-    const p = allKanaData.filter((k) => state?.selectedChars?.includes(k.char));
-    const count = Math.min(settings.questionsPerQuiz, p.length * 3); // factor of 3 to allow multiple types per char
-    return generateQuizDeck(p, count, settings.enabledQuestionTypes);
-  });
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+
+  const selectedCharsSet = useMemo(
+    () => new Set(state?.selectedChars),
+    [state?.selectedChars]
+  );
+
+  const deck = useMemo(() => {
+    const p = allKanaData.filter((k) => selectedCharsSet.has(k.char));
+    const count = Math.min(settings.questionsPerQuiz, p.length * 3);
+    return generateQuizDeck(p, count, settings.enabledQuestionTypes);
+  }, [selectedCharsSet, settings.questionsPerQuiz, settings.enabledQuestionTypes]);
+
+  const maxQuestions = deck.length;
 
   useEffect(() => {
     if (!state?.selectedChars || state.selectedChars.length === 0) {
@@ -45,12 +54,9 @@ export const Quiz = () => {
     }
   }, [state, navigate, deck]);
 
-  const maxQuestions = deck.length;
-
   const nextQuestion = () => {
     if (attempts >= maxQuestions) {
-      saveQuizHistory(score, attempts - score);
-      setIsFinished(true);
+      finishQuiz();
       return;
     }
 
@@ -85,9 +91,11 @@ export const Quiz = () => {
 
     // Save Stats
     if (currentQuestion.targets) {
-      currentQuestion.targets.forEach((char) => {
-        saveStatResult(char, correct);
-      });
+      const results = currentQuestion.targets.map((char) => ({
+        char,
+        isCorrect: correct,
+      }));
+      pendingStatsRef.current.push(...results);
     }
 
     if (submission !== undefined) {
@@ -97,6 +105,15 @@ export const Quiz = () => {
     setIsCorrect(correct);
     setAttempts((p) => p + 1);
     if (correct) setScore((p) => p + 1);
+  };
+
+  const finishQuiz = () => {
+    if (pendingStatsRef.current.length > 0) {
+      saveStatResultsBatch(pendingStatsRef.current);
+      pendingStatsRef.current = [];
+    }
+    saveQuizHistory(score, attempts - score);
+    setIsFinished(true);
   };
 
   if (isFinished) {
@@ -127,11 +144,12 @@ export const Quiz = () => {
     if (isCorrect === false && currentQuestion) {
       setIsCorrect(true);
       setScore((p) => p + 1);
-      // Register a success to balance out the failure in stats
       if (currentQuestion.targets) {
-        currentQuestion.targets.forEach((char) => {
-          saveStatResult(char, true);
-        });
+        const results = currentQuestion.targets.map((char) => ({
+          char,
+          isCorrect: true,
+        }));
+        pendingStatsRef.current.push(...results);
       }
     }
   };

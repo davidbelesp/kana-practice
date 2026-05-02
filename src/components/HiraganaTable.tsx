@@ -14,6 +14,14 @@ interface HiraganaTableProps {
   masteredKanas: Record<string, boolean>;
 }
 
+const chunkArray = (arr: KanaChar[], size: number): KanaChar[][] => {
+  const chunks: KanaChar[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
+  }
+  return chunks;
+};
+
 export const HiraganaTable = ({
   data,
   selectedChars,
@@ -23,19 +31,12 @@ export const HiraganaTable = ({
   masteredKanas,
 }: HiraganaTableProps) => {
   const { t } = useTranslation();
-  const gojuon = data.filter((k) => k.type === "gojuon");
-  const dakuon = data.filter((k) => k.type === "dakuon");
-  const handakuon = data.filter((k) => k.type === "handakuon");
+
+  const gojuon = useMemo(() => data.filter((k) => k.type === "gojuon"), [data]);
+  const dakuon = useMemo(() => data.filter((k) => k.type === "dakuon"), [data]);
+  const handakuon = useMemo(() => data.filter((k) => k.type === "handakuon"), [data]);
 
   const selectedSet = useMemo(() => new Set(selectedChars), [selectedChars]);
-
-  const chunkArray = (arr: KanaChar[], size: number) => {
-    const chunks = [];
-    for (let i = 0; i < arr.length; i += size) {
-      chunks.push(arr.slice(i, i + size));
-    }
-    return chunks;
-  };
 
   const renderGrid = (items: KanaChar[], title?: string) => {
     if (items.length === 0) return null;

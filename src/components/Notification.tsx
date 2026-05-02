@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./Notification.css";
 import { Check, X, Info } from "lucide-react";
 
@@ -15,30 +15,47 @@ export const Notification = ({
   isVisible,
   onClose,
 }: NotificationProps) => {
-  const [shouldRender, setShouldRender] = useState(isVisible);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
   useEffect(() => {
-    if (isVisible) {
-      setShouldRender(true);
-    } else {
-      const timer = setTimeout(() => setShouldRender(false), 300); // Wait for animation
+    if (!isVisible && !isAnimatingOut) {
+      setIsAnimatingOut(true);
+      const timer = setTimeout(() => {
+        setIsAnimatingOut(false);
+      }, 300);
       return () => clearTimeout(timer);
+    } else if (isVisible) {
+      setIsAnimatingOut(false);
     }
-  }, [isVisible]);
+  }, [isVisible, isAnimatingOut]);
+
+  const shouldRender = isVisible || isAnimatingOut;
+
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
 
   if (!shouldRender) return null;
 
   const icons = {
-    success: <Check size={20} />,
-    error: <X size={20} />,
-    info: <Info size={20} />,
+    success: <Check size={20} aria-hidden="true" />,
+    error: <X size={20} aria-hidden="true" />,
+    info: <Info size={20} aria-hidden="true" />,
   };
 
   return (
-    <div className={`notification-toast ${type} ${isVisible ? "visible" : ""}`}>
+    <div
+      className={`notification-toast ${type} ${isVisible ? "visible" : ""}`}
+      role="alert"
+      aria-live="polite"
+    >
       <div className="notification-icon">{icons[type]}</div>
       <span className="notification-message">{message}</span>
-      <button className="notification-close" onClick={onClose}>
+      <button
+        className="notification-close"
+        onClick={handleClose}
+        aria-label="Close notification"
+      >
         ×
       </button>
     </div>

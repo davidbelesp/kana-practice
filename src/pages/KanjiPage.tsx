@@ -86,20 +86,20 @@ export const KanjiPage: React.FC = () => {
     }
   }, [isSelectionMode]);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setActiveModalKanji(null);
-  };
+  }, []);
 
-  const handleStartQuiz = () => {
+  const handleStartQuiz = useCallback(() => {
     if (selectedChars.length < 3) return;
     navigate("/kanji-quiz", { state: { selectedChars } });
-  };
-  
-  const handleClearSelection = () => {
-    setSelectedChars([]);
-  };
+  }, [navigate, selectedChars]);
 
-  const handleSelectLevel = (levelChars: string[], shouldSelect: boolean) => {
+  const handleClearSelection = useCallback(() => {
+    setSelectedChars([]);
+  }, []);
+
+  const handleSelectLevel = useCallback((levelChars: string[], shouldSelect: boolean) => {
     setSelectedChars((prev) => {
       const set = new Set(prev);
       levelChars.forEach((c) => {
@@ -108,14 +108,14 @@ export const KanjiPage: React.FC = () => {
       });
       return Array.from(set);
     });
-  };
+  }, []);
 
-  const toggleLevelCollapse = (level: string) => {
+  const toggleLevelCollapse = useCallback((level: string) => {
     setCollapsedLevels((prev) => ({
       ...prev,
       [level]: !prev[level]
     }));
-  };
+  }, []);
 
   return (
     <div className="container kanji-page-container">

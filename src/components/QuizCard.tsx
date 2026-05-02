@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { Play, Eye, EyeOff } from "lucide-react";
@@ -16,7 +16,7 @@ interface QuizCardProps {
   onOverride?: () => void;
 }
 
-export const QuizCard = ({
+export const QuizCard = memo(({
   question,
   userAnswer,
   isCorrect,
@@ -33,57 +33,58 @@ export const QuizCard = ({
   const canvasRef = useRef<KanaCanvasRef>(null);
   const [showHint, setShowHint] = useState(false);
 
-  // Auto-play audio for listening questions
   useEffect(() => {
     if (isListening && !isSubmitted) {
       speakJapanese(question.prompt);
     }
-    // Reset hint when question changes
     setShowHint(false);
   }, [question, isListening, isSubmitted]);
 
-  const handleOptionClick = (option: string) => {
+  const handleOptionClick = useCallback((option: string) => {
     if (isSubmitted) return;
     onAnswer(option);
-    // Auto-submit for non-sequence types
     if (!isSequence && !isDrawing) {
       onSubmit(option);
     }
-  };
+  }, [isSubmitted, onAnswer, onSubmit, isSequence, isDrawing]);
 
-  const handlePoolClick = (char: string) => {
+  const handlePoolClick = useCallback((char: string) => {
     if (isSubmitted) return;
-    const currentSequence = (
-      Array.isArray(userAnswer) ? userAnswer : []
-    ) as string[];
-    // Don't exceed expected length
-    if (currentSequence.length >= (question.correctAnswer as string[]).length)
-      return;
-
+    const currentSequence = (Array.isArray(userAnswer) ? userAnswer : []) as string[];
+    if (currentSequence.length >= (question.correctAnswer as string[]).length) return;
     onAnswer([...currentSequence, char]);
-  };
+  }, [isSubmitted, userAnswer, question.correctAnswer, onAnswer]);
 
-  const handleSlotClick = (index: number) => {
+  const handleSlotClick = useCallback((index: number) => {
     if (isSubmitted) return;
-    const currentSequence = (
-      Array.isArray(userAnswer) ? userAnswer : []
-    ) as string[];
+    const currentSequence = (Array.isArray(userAnswer) ? userAnswer : []) as string[];
     const newSequence = currentSequence.filter((_, i) => i !== index);
     onAnswer(newSequence);
-  };
+  }, [isSubmitted, userAnswer, onAnswer]);
 
-  const handleDrawingParams = (accuracy: number) => {
-    // 70% threshold
+  const handleDrawingParams = useCallback((accuracy: number) => {
     const passed = accuracy >= 70;
     const result = passed ? (question.correctAnswer as string) : "FAILED_DRAW";
     onSubmit(result);
-  };
+  }, [question.correctAnswer, onSubmit]);
 
-  const handleDrawingCheck = () => {
+  const handleDrawingCheck = useCallback(() => {
     if (canvasRef.current) {
       canvasRef.current.check();
     }
-  };
+  }, []);
+
+  const handlePlayAudio = useCallback(() => {
+    speakJapanese(question.prompt);
+  }, [question.prompt]);
+
+  const onMainSubmit = useCallback(() => {
+    if (isDrawing && !isSubmitted) {
+      handleDrawingCheck();
+    } else {
+      onSubmit();
+    }
+  }, [isDrawing, isSubmitted, handleDrawingCheck, onSubmit]);
 
   const renderChoiceOptions = () => {
     return (
@@ -172,7 +173,7 @@ export const QuizCard = ({
         <div className="listening-controls">
           <button 
             className="play-btn-large" 
-            onClick={() => speakJapanese(question.prompt)}
+            onClick={handlePlayAudio}
             aria-label="Play audio"
           >
             <div className="play-icon-container">
@@ -200,7 +201,7 @@ export const QuizCard = ({
     );
   };
 
-  const getPromptLabel = () => {
+  const getPromptLabel = useCallback(() => {
     switch (question.type) {
       case "single-choice-romaji":
         return t("quiz.prompts.romaji");
@@ -217,16 +218,7 @@ export const QuizCard = ({
       default:
         return t("quiz.prompts.default");
     }
-  };
-
-  // Logic for submit button click
-  const onMainSubmit = () => {
-    if (isDrawing && !isSubmitted) {
-      handleDrawingCheck();
-    } else {
-      onSubmit();
-    }
-  };
+  }, [question.type, t]);
 
   return (
     <div
@@ -296,4 +288,6 @@ export const QuizCard = ({
       </div>
     </div>
   );
-};
+});
+
+QuizCard.displayName = "QuizCard";

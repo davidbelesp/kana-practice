@@ -5,6 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/kana.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Dynamic language detection for accessibility -->
+    <script>
+      (function() {
+        const lang = navigator.language || navigator.userLanguage;
+        if (lang.startsWith('es')) {
+          document.documentElement.lang = 'es';
+        }
+      })();
+    </script>
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jp.davidbelesp.com/" />
+
     <title>Kana Practice - Master Hiragana & Katakana</title>
     <meta
       name="description"
@@ -12,14 +25,16 @@
     />
     <meta
       name="keywords"
-      content="japanese, hiragana, katakana, learn japanese, kana quiz, handwriting practice, flashcards, study japanese, drawing practice"
+      content="japanese, hiragana, katakana, learn japanese, kana quiz, handwriting practice, flashcards, study japanese, drawing practice, JLPT"
     />
     <meta name="author" content="Kana Practice" />
     <meta name="theme-color" content="#0f172a" />
+    <meta name="robots" content="index, follow" />
+    <link rel="index" title="Kana Practice" href="https://jp.davidbelesp.com/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://kanapractice.app/" />
+    <meta property="og:url" content="https://jp.davidbelesp.com/" />
     <meta
       property="og:title"
       content="Kana Practice - Master Japanese Characters"
@@ -29,9 +44,12 @@
       content="Interactive Kana learning tool with handwriting recognition, quizzes, and streak tracking."
     />
     <meta property="og:image" content="/kana.svg" />
+    <meta property="og:site_name" content="Kana Practice" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://jp.davidbelesp.com/" />
     <meta
       property="twitter:title"
       content="Kana Practice - Master Japanese Characters"
@@ -41,6 +59,11 @@
       content="Interactive Kana learning tool with handwriting recognition, quizzes, and streak tracking."
     />
     <meta property="twitter:image" content="/kana.svg" />
+
+    <!-- Language alternate -->
+    <link rel="alternate" hreflang="en" href="https://jp.davidbelesp.com/" />
+    <link rel="alternate" hreflang="es" href="https://jp.davidbelesp.com/?lang=es" />
+    <link rel="alternate" hreflang="x-default" href="https://jp.davidbelesp.com/" />
 
     <!-- PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -53,6 +76,37 @@
     <meta name="msapplication-config" content="/browserconfig.xml">
     <meta name="theme-color" content="#0f172a">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Kana Practice",
+      "description": "Master Japanese Hiragana and Katakana with interactive quizzes and handwriting recognition",
+      "url": "https://jp.davidbelesp.com/",
+      "applicationCategory": "EducationApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Hiragana practice",
+        "Katakana practice",
+        "Handwriting recognition",
+        "Interactive quizzes",
+        "Progress tracking",
+        "Kanji learning (JLPT N5-N1)"
+      ],
+      "browserRequirements": "Requires JavaScript"
+    }
+    </script>
+
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   </head>
   <body>
     <div id="root"></div>

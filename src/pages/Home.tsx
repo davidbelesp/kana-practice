@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
@@ -39,9 +39,16 @@ export const Home = () => {
     setMasteredKanas(getMasteredStatus());
   }, []);
 
-  const currentData = activeTab === "hiragana" ? hiraganaData : katakanaData;
+  const currentData = useMemo(
+    () => (activeTab === "hiragana" ? hiraganaData : katakanaData),
+    [activeTab]
+  );
 
-  /* ... existing handlers ... */
+  const currentChars = useMemo(
+    () => currentData.filter((k) => !k.isEmpty).map((k) => k.char),
+    [currentData]
+  );
+
   const handleToggleChar = useCallback((char: string) => {
     setSelectedChars((prev) =>
       prev.includes(char) ? prev.filter((c) => c !== char) : [...prev, char],
@@ -59,35 +66,28 @@ export const Home = () => {
     });
   }, []);
 
-  /* ... existing handlers ... */
-  const handleSelectAll = () => {
-    const currentChars = currentData
-      .filter((k) => !k.isEmpty)
-      .map((k) => k.char);
+  const handleSelectAll = useCallback(() => {
     setSelectedChars((prev) => {
       const set = new Set([...prev, ...currentChars]);
       return Array.from(set);
     });
-  };
+  }, [currentChars]);
 
-  const handleSelectWeakest = () => {
-    const currentChars = currentData
-      .filter((k) => !k.isEmpty)
-      .map((k) => k.char);
+  const handleSelectWeakest = useCallback(() => {
     const weakest = getWeakestChars(10, currentChars);
     if (weakest.length > 0) {
       setSelectedChars(weakest);
     }
-  };
+  }, [currentChars]);
 
-  const handleDeselectAll = () => {
+  const handleDeselectAll = useCallback(() => {
     setSelectedChars([]);
-  };
+  }, []);
 
-  const handleStartQuiz = () => {
+  const handleStartQuiz = useCallback(() => {
     if (selectedChars.length < 3) return;
     navigate("/quiz", { state: { selectedChars, from: "/practice" } });
-  };
+  }, [navigate, selectedChars]);
 
   return (
     <div className="home-container container">

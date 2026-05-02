@@ -3,6 +3,7 @@ import {
   useImperativeHandle,
   forwardRef,
   useState,
+  useCallback,
   useEffect,
 } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,10 +20,19 @@ interface KanaCanvasProps {
   isRevealed: boolean;
 }
 
+interface SketchPoint {
+  x: number;
+  y: number;
+}
+
+interface SketchPath {
+  paths: SketchPoint[];
+}
+
 export interface KanaCanvasRef {
   check: () => void;
   clear: () => void;
-  getPaths: () => Promise<any>;
+  getPaths: () => Promise<SketchPath[]>;
 }
 
 export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
@@ -33,8 +43,13 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
     const [isPassing, setIsPassing] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const targetCharRef = useRef(targetChar);
 
-    const runOcr = async (): Promise<number> => {
+    useEffect(() => {
+      targetCharRef.current = targetChar;
+    }, [targetChar]);
+
+    const runOcr = useCallback(async (): Promise<number> => {
       if (!sketchRef.current) return 0;
       setIsProcessing(true);
 
@@ -44,11 +59,11 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
         return 0;
       }
 
-      const trace = paths.map((p: any) => {
+      const trace = paths.map((p: SketchPath) => {
         const strokeX: number[] = [];
         const strokeY: number[] = [];
         const strokeT: number[] = [];
-        p.paths.forEach((point: any) => {
+        p.paths.forEach((point: SketchPoint) => {
           strokeX.push(point.x);
           strokeY.push(point.y);
           strokeT.push(0);
@@ -64,23 +79,28 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
             numOfReturn: 10,
           },
           (results: string[]) => {
-            console.log("Google OCR Candidates:", results);
             setIsProcessing(false);
 
-            if (results.includes(targetChar)) {
+            if (results.includes(targetCharRef.current)) {
               resolve(100);
             } else {
               resolve(0);
             }
           },
-          (err: any) => {
-            console.error("OCR Error", err);
+          (err: Error) => {
+            console.error("OCR Error:", err.message);
             setIsProcessing(false);
             resolve(0);
           },
         );
       });
-    };
+    }, []);
+
+    const handleClear = useCallback(() => {
+      sketchRef.current?.clearCanvas();
+      setLastScore(null);
+      setIsPassing(false);
+    }, []);
 
     useImperativeHandle(ref, () => ({
       check: async () => {
@@ -89,36 +109,25 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
         setIsPassing(score >= 70);
         onVerify(score);
       },
-      clear: () => {
-        sketchRef.current?.clearCanvas();
-        setLastScore(null);
-        setIsPassing(false);
-      },
+      clear: handleClear,
       getPaths: async () => {
-        return sketchRef.current?.exportPaths() || [];
+        const paths = await sketchRef.current?.exportPaths();
+        return paths || [];
       },
-    }));
+    }), [runOcr, handleClear, onVerify]);
 
-    const handleStroke = () => {
+    const handleStroke = useCallback(() => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      // 1 second debounce limit
       timerRef.current = setTimeout(async () => {
         const score = await runOcr();
         setLastScore(score);
         setIsPassing(score >= 70);
       }, 1000);
-    };
+    }, [runOcr]);
 
-    const handleClear = () => {
-      sketchRef.current?.clearCanvas();
-      setLastScore(null);
-      setIsPassing(false);
-    };
-
-    // Auto-clear when target character changes (new question)
-    useEffect(() => {
+    const handleClearClick = useCallback(() => {
       handleClear();
-    }, [targetChar]);
+    }, [handleClear]);
 
     return (
       <div className="kana-canvas-container">
@@ -126,11 +135,11 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
           {isRevealed && <div className="ghost-overlay">{targetChar}</div>}
 
           {isPassing && !isRevealed && (
-            <div className="passing-indicator">✓</div>
+            <div className="passing-indicator" aria-live="polite">✓</div>
           )}
 
           {isProcessing && !isPassing && !isRevealed && (
-            <div className="processing-indicator">
+            <div className="processing-indicator" aria-live="polite">
               <div className="spinner"></div>
             </div>
           )}
@@ -153,13 +162,14 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
         <div className="canvas-controls">
           <button
             className="btn-secondary btn-sm"
-            onClick={handleClear}
+            onClick={handleClearClick}
             disabled={isRevealed}
+            aria-label={t("common.clear")}
           >
             {t("common.clear")}
           </button>
 
-          <div className="status-badges">
+          <div className="status-badges" role="status" aria-live="polite">
             {lastScore !== null && (
               <div
                 className="score-badge"
