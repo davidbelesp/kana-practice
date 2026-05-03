@@ -7,6 +7,7 @@ import { generateKanjiQuizDeck } from "../utils/kanjiQuestionGenerator";
 import { saveStatResult, saveQuizHistory } from "../utils/statsManager";
 import { type QuizQuestion } from "../types/QuizTypes";
 import { useSettings } from "../contexts/SettingsContext";
+import { BackButton } from "../components/ui/BackButton";
 import "./Quiz.css";
 
 interface QuizState {
@@ -137,12 +138,7 @@ export const KanjiQuiz = () => {
   return (
     <div className="quiz-container container">
       <header className="quiz-header">
-        <button
-          className="btn-secondary back-btn"
-          onClick={() => navigate("/kanji")}
-        >
-          ← {t("quiz.quit")}
-        </button>
+        <BackButton to="/kanji" label={t("quiz.quit")} />
         <div className="score-display">
           {t("quiz.results.score")}: {score} / {attempts}
         </div>

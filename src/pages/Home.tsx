@@ -11,6 +11,7 @@ import {
   saveMasteredStatus,
   type KanaStat,
 } from "../utils/statsManager";
+import { BackButton } from "../components/ui/BackButton";
 import "./Home.css";
 
 type Tab = "hiragana" | "katakana";
@@ -93,9 +94,7 @@ export const Home = () => {
     <div className="home-container container">
       <header className="home-header">
         <div className="home-header-top">
-          <button className="btn-secondary" onClick={() => navigate("/")}>
-            ← {t("common.back")}
-          </button>
+          <BackButton to="/" />
         </div>
         <h1 className="title">{t("home.title")}</h1>
         <p className="subtitle">{t("home.subtitle")}</p>

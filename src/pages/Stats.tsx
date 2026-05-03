@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   getAggregates,
@@ -19,6 +18,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { BackButton } from "../components/ui/BackButton";
 import "./Stats.css";
 
 interface AggregateData {
@@ -30,7 +30,7 @@ interface AggregateData {
 
 export const Stats = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
   const [aggregates] = useState<AggregateData | null>(getAggregates);
   const [topStreaks] = useState<KanaStat[]>(() => getTopStreaks(5));
   const [mastered] = useState<KanaStat[]>(getMasteredKana);
@@ -74,12 +74,7 @@ export const Stats = () => {
   return (
     <div className="container stats-container">
       <header className="stats-header">
-        <button
-          className="btn-secondary back-btn"
-          onClick={() => navigate("/")}
-        >
-          ← {t("common.back")}
-        </button>
+        <BackButton to="/" />
         <h1>{t("stats.title")}</h1>
       </header>
 

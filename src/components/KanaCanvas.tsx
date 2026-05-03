@@ -153,7 +153,7 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
             width="400px"
             height="400px"
             strokeWidth={10}
-            strokeColor="white"
+            strokeColor="#1a1a1a"
             canvasColor="transparent"
             onChange={handleStroke}
           />

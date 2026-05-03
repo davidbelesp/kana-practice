@@ -58,10 +58,10 @@
       "title": "Appearance Settings",
       "accentColor": "Accent Colour",
       "standardThemes": "Standard Themes",
-      "purple": "Purple (Default)",
-      "blue": "Ocean Blue",
-      "green": "Emerald Green",
-      "orange": "Sunset Orange",
+      "purple": "Pencil (Default)",
+      "blue": "Blue Ballpoint",
+      "green": "Green Pen",
+      "orange": "Red Pen",
       "customTheme": "Custom Theme",
       "primary": "Primary",
       "secondary": "Secondary",
@@ -94,7 +94,11 @@
         "listening": "Listen to the word and select the correct one"
       },
       "hints": "Rōmaji Hints",
-      "hintsDesc": "Show readings on cards during quiz (classic mode)"
+      "hintsDesc": "Show readings on cards during quiz (classic mode)",
+      "numbersRange": "Number Range",
+      "numbersRangeDesc": "Min and max for the Numbers quiz random number generator",
+      "numbersMin": "Min",
+      "numbersMax": "Max"
     },
     "general": {
       "language": "Language",
@@ -210,25 +214,33 @@
       "color": "Colors",
       "food": "Food",
       "day": "Days of the Week",
-      "time": "Time"
+      "time": "Time",
+      "people": "People",
+      "pronoun": "Pronouns",
+      "meal": "Meals",
+      "drink": "Drinks",
+      "number": "Numbers",
+      "month": "Months of the Year",
+      "calendar": "Calendar"
     },
     "itemCount": "{{count}} words",
     "back": "Back to Themes",
     "search": "Search words or tags...",
     "resultsFor": "Search results for \"{{query}}\"",
     "noResults": "No words found matching your search.",
-    "moreComingSoon": "More coming soon..."
+    "moreComingSoon": "More coming soon...",
+    "suggest": {
+      "tags": "Tags",
+      "startingWith": "Starting with",
+      "containing": "Containing"
+    }
   },
   "numbers": {
     "prompt": "How do you read this number?",
-    "mode": {
-      "romaji": "Romaji",
-      "hiragana": "Hiragana"
-    },
-    "placeholder": {
-      "romaji": "e.g. ni sen nana hyaku juu ni",
-      "hiragana": "e.g. にせんななひゃくじゅうに"
-    },
+    "promptChoice": "Which number is this?",
+    "modeTyping": "Type Answer",
+    "modeChoice": "Multiple Choice",
+    "placeholder": "e.g. ni sen nana hyaku or にせんなな",
     "next": "Next Number",
     "skip": "Skip"
   }

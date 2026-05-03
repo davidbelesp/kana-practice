@@ -98,9 +98,14 @@ function normalizeRomaji(input: string): string {
     .join(" ");
 }
 
-export function checkNumberAnswer(n: number, input: string, mode: "romaji" | "hiragana"): boolean {
-  if (mode === "romaji") {
-    return normalizeRomaji(input) === buildRomaji(n);
+function isHiraganaInput(input: string): boolean {
+  return /[぀-ゟ]/.test(input);
+}
+
+export function checkNumberAnswer(n: number, input: string): boolean {
+  const trimmed = input.trim();
+  if (isHiraganaInput(trimmed)) {
+    return trimmed.replace(/\s+/g, "") === buildHiragana(n).replace(/\s+/g, "");
   }
-  return input.trim() === buildHiragana(n);
+  return normalizeRomaji(trimmed) === buildRomaji(n);
 }

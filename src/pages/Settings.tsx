@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   useSettings,
@@ -9,6 +8,8 @@ import {
   type AppSettings,
 } from "../contexts/SettingsContext";
 import type { QuestionType } from "../types/QuizTypes";
+import { BackButton } from "../components/ui/BackButton";
+import { ClipboardList, Palette, Zap, Settings as SettingsIcon, type LucideIcon } from "lucide-react";
 import "./Settings.css";
 
 type TabId = "quiz" | "appearance" | "practice" | "general";
@@ -16,14 +17,14 @@ type TabId = "quiz" | "appearance" | "practice" | "general";
 interface Tab {
   id: TabId;
   labelKey: string;
-  icon: string;
+  Icon: LucideIcon;
 }
 
 const TABS: Tab[] = [
-  { id: "quiz", labelKey: "settings.tabs.quiz", icon: "📝" },
-  { id: "appearance", labelKey: "settings.tabs.appearance", icon: "🎨" },
-  { id: "practice", labelKey: "settings.tabs.practice", icon: "⚡" },
-  { id: "general", labelKey: "settings.tabs.general", icon: "⚙️" },
+  { id: "quiz", labelKey: "settings.tabs.quiz", Icon: ClipboardList },
+  { id: "appearance", labelKey: "settings.tabs.appearance", Icon: Palette },
+  { id: "practice", labelKey: "settings.tabs.practice", Icon: Zap },
+  { id: "general", labelKey: "settings.tabs.general", Icon: SettingsIcon },
 ];
 
 const THEME_OPTIONS: { id: AppSettings["theme"]; labelKey: string; gradient: string }[] = [
@@ -38,7 +39,7 @@ const QUESTION_COUNT_OPTIONS: AppSettings["questionsPerQuiz"][] = [10, 20, 30, 6
 
 export const Settings = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
   const { settings, updateSetting, resetSettings } = useSettings();
   const [activeTab, setActiveTab] = useState<TabId>("quiz");
 
@@ -99,9 +100,7 @@ export const Settings = () => {
   return (
     <div className="settings-page">
       <header className="settings-header">
-        <button className="btn-secondary back-btn" onClick={() => navigate("/")}>
-          ← {t("common.back")}
-        </button>
+        <BackButton to="/" />
         <h1>{t("common.settings")}</h1>
       </header>
 
@@ -114,7 +113,7 @@ export const Settings = () => {
               className={`settings-tab-btn ${activeTab === tab.id ? "active" : ""}`}
               onClick={() => setActiveTab(tab.id)}
             >
-              <span className="tab-icon">{tab.icon}</span>
+              <tab.Icon size={16} strokeWidth={2} className="tab-icon" />
               <span className="tab-label">{t(tab.labelKey)}</span>
             </button>
           ))}
@@ -127,13 +126,15 @@ export const Settings = () => {
           {activeTab === "quiz" && (
             <section className="settings-section">
               <div className="section-title-row">
-                <h2>📝 {t("settings.quiz.title")}</h2>
+                <h2>{t("settings.quiz.title")}</h2>
                 <button
                   className="btn-text reset-btn"
                   onClick={() => {
                     updateSetting("questionsPerQuiz", DEFAULT_SETTINGS.questionsPerQuiz);
                     updateSetting("showRomaji", DEFAULT_SETTINGS.showRomaji);
                     updateSetting("enabledQuestionTypes", DEFAULT_SETTINGS.enabledQuestionTypes);
+                    updateSetting("numbersMin", DEFAULT_SETTINGS.numbersMin);
+                    updateSetting("numbersMax", DEFAULT_SETTINGS.numbersMax);
                   }}
                 >
                   {t("common.reset")}
@@ -207,6 +208,41 @@ export const Settings = () => {
                   })}
                 </div>
               </div>
+
+              {/* Number Range */}
+              <div className="setting-row">
+                <div className="setting-info">
+                  <span className="setting-label">{t("settings.quiz.numbersRange")}</span>
+                  <span className="setting-desc">{t("settings.quiz.numbersRangeDesc")}</span>
+                </div>
+                <div className="setting-control numbers-range-control">
+                  <label className="range-label">{t("settings.quiz.numbersMin")}</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={settings.numbersMax - 1}
+                    value={settings.numbersMin}
+                    onChange={e => {
+                      const v = Math.max(1, Math.min(Number(e.target.value), settings.numbersMax - 1));
+                      updateSetting("numbersMin", v);
+                    }}
+                    className="numbers-range-input"
+                  />
+                  <span className="range-separator">–</span>
+                  <label className="range-label">{t("settings.quiz.numbersMax")}</label>
+                  <input
+                    type="number"
+                    min={settings.numbersMin + 1}
+                    max={10000}
+                    value={settings.numbersMax}
+                    onChange={e => {
+                      const v = Math.min(10000, Math.max(Number(e.target.value), settings.numbersMin + 1));
+                      updateSetting("numbersMax", v);
+                    }}
+                    className="numbers-range-input"
+                  />
+                </div>
+              </div>
             </section>
           )}
 
@@ -214,7 +250,7 @@ export const Settings = () => {
           {activeTab === "appearance" && (
             <section className="settings-section">
               <div className="section-title-row">
-                <h2>🎨 {t("settings.appearance.title")}</h2>
+                <h2>{t("settings.appearance.title")}</h2>
                 <button
                   className="btn-text reset-btn"
                   onClick={() => {
@@ -333,7 +369,7 @@ export const Settings = () => {
           {activeTab === "practice" && (
             <section className="settings-section">
               <div className="section-title-row">
-                <h2>⚡ {t("settings.practice.title")}</h2>
+                <h2>{t("settings.practice.title")}</h2>
                 <button
                   className="btn-text reset-btn"
                   onClick={() => {
@@ -398,7 +434,7 @@ export const Settings = () => {
           {activeTab === "general" && (
             <section className="settings-section">
               <div className="section-title-row">
-                <h2>⚙️ {t("settings.tabs.general")}</h2>
+                <h2>{t("settings.tabs.general")}</h2>
               </div>
 
               <div className="setting-row">

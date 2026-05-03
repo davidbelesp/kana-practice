@@ -1,13 +1,15 @@
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Settings as SettingsIcon, BookOpen, BarChart3, Brush, Apple, Hash } from "lucide-react";
+import { IconButton } from "../components/ui/IconButton";
 import "./Index.css";
 
 const generateRandomStyles = (count: number) => {
   return Array.from({ length: count }).map(() => {
-    const angle = (Math.random() - 0.5) * 40; // max 20deg rotation
-    const x = (Math.random() - 0.5) * 60;     // max 30px translation
-    const y = (Math.random() - 0.5) * 60;
+    const angle = (Math.random() - 0.5) * 8; // gentle wobble for notebook feel
+    const x = (Math.random() - 0.5) * 6;
+    const y = (Math.random() - 0.5) * 6;
     return {
       "--hover-rotate": `${angle}deg`,
       "--hover-x": `${x}px`,
@@ -18,7 +20,7 @@ const generateRandomStyles = (count: number) => {
 
 export const Index: React.FC = () => {
   const { t } = useTranslation();
-  
+
   const titleText = useMemo(() => {
     const prefix = t("index.titlePrefix");
     const suffix = t("index.titleSuffix");
@@ -37,17 +39,22 @@ export const Index: React.FC = () => {
         <h1 className="index-title" onMouseEnter={handleMouseEnter}>
           {titleText.map((char, i) => (
             <span key={i} className="title-letter" style={letterStyles[i] || {}}>
-              {char === " " ? "\u00A0" : char}
+              {char === " " ? " " : char}
             </span>
           ))}
         </h1>
-        <Link to="/settings" className="settings-icon-tab" title={t("common.settings")}>⚙️</Link>
+        <IconButton
+          icon={SettingsIcon}
+          to="/settings"
+          label={t("common.settings")}
+          className="settings-icon-tab"
+        />
       </div>
       <p className="index-subtitle">{t("index.subtitle")}</p>
 
       <div className="index-grid">
         <Link to="/practice" className="index-card large">
-          <div className="card-icon">🎌</div>
+          <div className="card-icon"><BookOpen size={48} strokeWidth={1.6} aria-hidden="true" /></div>
           <div className="card-body">
             <h2 className="card-title">{t("index.cards.practice")}</h2>
             <p className="card-desc">{t("index.cards.practiceDesc")}</p>
@@ -55,7 +62,7 @@ export const Index: React.FC = () => {
         </Link>
 
         <Link to="/stats" className="index-card">
-          <div className="card-icon">📊</div>
+          <div className="card-icon"><BarChart3 size={48} strokeWidth={1.6} aria-hidden="true" /></div>
           <div className="card-body">
             <h2 className="card-title">{t("index.cards.stats")}</h2>
             <p className="card-desc">{t("index.cards.statsDesc")}</p>
@@ -63,7 +70,7 @@ export const Index: React.FC = () => {
         </Link>
 
         <Link to="/canvas" className="index-card">
-          <div className="card-icon">🖌️</div>
+          <div className="card-icon"><Brush size={48} strokeWidth={1.6} aria-hidden="true" /></div>
           <div className="card-body">
             <h2 className="card-title">{t("index.cards.canvas")}</h2>
             <p className="card-desc">{t("index.cards.canvasDesc")}</p>
@@ -71,7 +78,7 @@ export const Index: React.FC = () => {
         </Link>
 
         <Link to="/kanji" className="index-card large">
-          <div className="card-icon">漢字</div>
+          <div className="card-icon card-icon-jp">漢字</div>
           <div className="card-body">
             <h2 className="card-title">{t("index.cards.kanji")}</h2>
             <p className="card-desc">{t("index.cards.kanjiDesc")}</p>
@@ -79,7 +86,7 @@ export const Index: React.FC = () => {
         </Link>
 
         <Link to="/vocabulary" className="index-card large">
-          <div className="card-icon">🍎</div>
+          <div className="card-icon"><Apple size={48} strokeWidth={1.6} aria-hidden="true" /></div>
           <div className="card-body">
             <h2 className="card-title">{t("index.cards.vocabulary")}</h2>
             <p className="card-desc">{t("index.cards.vocabularyDesc")}</p>
@@ -87,18 +94,18 @@ export const Index: React.FC = () => {
         </Link>
 
         <Link to="/numbers" className="index-card">
-          <div className="card-icon">123</div>
+          <div className="card-icon"><Hash size={48} strokeWidth={1.6} aria-hidden="true" /></div>
           <div className="card-body">
             <h2 className="card-title">{t("index.cards.numbers")}</h2>
             <p className="card-desc">{t("index.cards.numbersDesc")}</p>
           </div>
         </Link>
       </div>
-      
+
       <footer className="index-footer">
-        <a 
-          href="https://github.com/davidbelesp/kana-practice/" 
-          target="_blank" 
+        <a
+          href="https://github.com/davidbelesp/kana-practice/"
+          target="_blank"
           rel="noopener noreferrer"
         >
           {t("index.viewOnGithub")}

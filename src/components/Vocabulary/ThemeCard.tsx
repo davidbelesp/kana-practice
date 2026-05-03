@@ -1,27 +1,34 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { getCategory } from "../../data/categories";
 
 interface ThemeCardProps {
   theme: string;
-  icon: string;
   count: number;
-  onClick: () => void;
+  onClick: (theme: string) => void;
   isComingSoon?: boolean;
 }
 
-export const ThemeCard: React.FC<ThemeCardProps> = React.memo(({ 
-  theme, 
-  icon, 
-  count, 
+export const ThemeCard: React.FC<ThemeCardProps> = React.memo(({
+  theme,
+  count,
   onClick,
-  isComingSoon 
+  isComingSoon
 }) => {
   const { t } = useTranslation();
 
+  const handleClick = React.useCallback(() => {
+    if (!isComingSoon) {
+      onClick(theme);
+    }
+  }, [isComingSoon, onClick, theme]);
+
+  const icon = isComingSoon ? "⏳" : getCategory(theme).icon;
+
   return (
-    <div 
+    <div
       className={`theme-card ${isComingSoon ? 'coming-soon' : ''}`}
-      onClick={!isComingSoon ? onClick : undefined}
+      onClick={handleClick}
     >
       <div className="theme-icon">{icon}</div>
       <h2 className="theme-title">

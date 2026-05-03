@@ -1,37 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ChevronDown } from "lucide-react";
+import { getCategory } from "../../data/categories";
 
 interface TagSelectorProps {
   tags: string[];
-  activeTag: string;
-  onTagClick: (tag: string) => void;
-  tagColors: Record<string, string>;
+  activeTags: string[];
+  onTagToggle: (tag: string) => void;
 }
 
 export const TagSelector: React.FC<TagSelectorProps> = React.memo(({
   tags,
-  activeTag,
-  onTagClick,
-  tagColors
+  activeTags,
+  onTagToggle
 }) => {
   const { t } = useTranslation();
+  const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="tag-filters">
-      {tags.map(tag => (
-        <button 
-          key={tag} 
-          className={`tag-filter-btn ${activeTag.toLowerCase() === tag.toLowerCase() ? 'active' : ''}`}
-          onClick={() => onTagClick(tag)}
-          style={{ 
-            '--tag-color': tagColors[tag] || tagColors.default,
-            '--tag-bg': `${tagColors[tag] || tagColors.default}1a`,
-            '--tag-border': `${tagColors[tag] || tagColors.default}4d`
-          } as React.CSSProperties}
-        >
-          {t(`vocabulary.categories.${tag}`) || tag}
-        </button>
-      ))}
+    <div className={`tag-filters-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
+      <button
+        type="button"
+        className="tag-filters-toggle btn-icon"
+        onClick={() => setExpanded(prev => !prev)}
+        aria-expanded={expanded}
+        title={expanded ? t("kanji.collapse") : t("kanji.expand")}
+      >
+        <ChevronDown
+          size={20}
+          className={`tag-filters-toggle-icon ${expanded ? '' : 'collapsed'}`}
+        />
+      </button>
+      <div className="tag-filters">
+        {tags.map(tag => {
+          const isActive = activeTags.includes(tag);
+          const { color } = getCategory(tag);
+          return (
+            <button
+              key={tag}
+              className={`tag-filter-btn ${isActive ? 'active' : ''}`}
+              onClick={() => onTagToggle(tag)}
+              style={{
+                '--tag-color': color,
+                '--tag-bg': `${color}1a`,
+                '--tag-border': `${color}4d`
+              } as React.CSSProperties}
+            >
+              {t(`vocabulary.categories.${tag}`) || tag}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 });

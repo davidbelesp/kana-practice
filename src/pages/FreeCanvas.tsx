@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { KanaCanvas, type KanaCanvasRef } from "../components/KanaCanvas";
 import handwriting from "../utils/handwriting";
 import "./FreeCanvas.css";
-import { Link } from "react-router-dom";
 import { useNotification } from "../contexts/NotificationContext";
+import { BackButton } from "../components/ui/BackButton";
 
 export const FreeCanvas = () => {
   const { t } = useTranslation();
@@ -68,9 +68,7 @@ export const FreeCanvas = () => {
   return (
     <div className="free-canvas-container container">
       <header className="free-header">
-        <Link to="/" className="btn-secondary back-btn">
-          ← {t("common.home")}
-        </Link>
+        <BackButton to="/" label={t("common.home")} />
         <h2 className="title free-practice-title">{t("canvas.title")}</h2>
       </header>
 

@@ -1,25 +1,26 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import type { VocabularyItem } from "../../types/Vocabulary";
+import { getCategory } from "../../data/categories";
 
 interface WordCardProps {
   item?: VocabularyItem;
   isComingSoon?: boolean;
   langFlags: Record<string, string>;
-  tagColors: Record<string, string>;
   onTagClick: (tag: string) => void;
   onCopy: (text: string) => void;
   copyTitle: string;
+  activeTags?: string[];
 }
 
 export const WordCard: React.FC<WordCardProps> = React.memo(({
   item,
   isComingSoon,
   langFlags,
-  tagColors,
   onTagClick,
   onCopy,
-  copyTitle
+  copyTitle,
+  activeTags = []
 }) => {
   const { t, i18n } = useTranslation();
 
@@ -41,8 +42,8 @@ export const WordCard: React.FC<WordCardProps> = React.memo(({
   if (!item) return null;
 
   const currentLang = i18n.language.split("-")[0];
-  const translation = item.translation.find(t => t.lang === currentLang) || 
-                     item.translation.find(t => t.lang === "en") || 
+  const translation = item.translation.find(t => t.lang === currentLang) ||
+                     item.translation.find(t => t.lang === "en") ||
                      item.translation[0];
 
   return (
@@ -52,8 +53,8 @@ export const WordCard: React.FC<WordCardProps> = React.memo(({
           <div className="word-card-category-wrapper">
             <span className="word-type-badge">{item.type}</span>
           </div>
-          <span 
-            className="word-japanese clickable" 
+          <span
+            className="word-japanese clickable"
             onClick={() => onCopy(item.japanese)}
             title={copyTitle}
           >
@@ -63,7 +64,7 @@ export const WordCard: React.FC<WordCardProps> = React.memo(({
           <span className="word-romaji">{item.romaji}</span>
         </div>
       </div>
-      
+
       {item.image && (
         <div className="word-card-image">
           {item.image.startsWith("http") ? (
@@ -73,7 +74,7 @@ export const WordCard: React.FC<WordCardProps> = React.memo(({
           )}
         </div>
       )}
-      
+
       <div className="word-card-footer">
         <div className="word-translations">
           {translation && (
@@ -85,24 +86,42 @@ export const WordCard: React.FC<WordCardProps> = React.memo(({
         </div>
 
         <div className="word-tags">
-          {item.tags.map(tag => (
-            <button 
-              key={tag} 
-              className="tag-badge clickable"
-              onClick={() => onTagClick(tag)}
-              style={{ 
-                backgroundColor: `${tagColors[tag] || tagColors.default}33`,
-                color: tagColors[tag] || tagColors.default,
-                borderColor: `${tagColors[tag] || tagColors.default}66`
-              } as React.CSSProperties}
-            >
-              {t(`vocabulary.categories.${tag}`) || tag}
-            </button>
-          ))}
+          {item.tags.map(tag => {
+            const isActive = activeTags.includes(tag);
+            const { color } = getCategory(tag);
+            return (
+              <button
+                key={tag}
+                className={`tag-badge clickable ${isActive ? 'active' : ''}`}
+                onClick={() => onTagClick(tag)}
+                style={{
+                  backgroundColor: isActive ? color : `${color}33`,
+                  color: isActive ? "#fff" : color,
+                  borderColor: isActive ? color : `${color}66`
+                } as React.CSSProperties}
+              >
+                {t(`vocabulary.categories.${tag}`) || tag}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
   );
+}, (prevProps, nextProps) => {
+  if (prevProps.item !== nextProps.item) return false;
+  if (prevProps.isComingSoon !== nextProps.isComingSoon) return false;
+  if (prevProps.copyTitle !== nextProps.copyTitle) return false;
+
+  if (prevProps.item && nextProps.item) {
+    const prevActive = prevProps.activeTags?.filter(t => prevProps.item!.tags.includes(t)).join(',');
+    const nextActive = nextProps.activeTags?.filter(t => nextProps.item!.tags.includes(t)).join(',');
+    if (prevActive !== nextActive) return false;
+  } else if (prevProps.activeTags !== nextProps.activeTags) {
+    return false;
+  }
+
+  return true;
 });
 
 WordCard.displayName = "WordCard";

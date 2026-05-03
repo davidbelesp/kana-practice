@@ -58,10 +58,10 @@
       "title": "Ajustes de Apariencia",
       "accentColor": "Color de Acento",
       "standardThemes": "Temas Estándar",
-      "purple": "Púrpura (Defecto)",
-      "blue": "Azul Océano",
-      "green": "Verde Esmeralda",
-      "orange": "Naranja Atardecer",
+      "purple": "Lápiz (Defecto)",
+      "blue": "Bolígrafo Azul",
+      "green": "Pluma Verde",
+      "orange": "Bolígrafo Rojo",
       "customTheme": "Tema Personalizado",
       "primary": "Primario",
       "secondary": "Secundario",
@@ -94,7 +94,11 @@
         "listening": "Escucha la palabra y selecciona la correcta"
       },
       "hints": "Pistas de Rōmaji",
-      "hintsDesc": "Mostrar lecturas en las cartas durante el quiz (modo clásico)"
+      "hintsDesc": "Mostrar lecturas en las cartas durante el quiz (modo clásico)",
+      "numbersRange": "Rango de Números",
+      "numbersRangeDesc": "Mín. y máx. para el generador de números aleatorios del quiz de Números",
+      "numbersMin": "Mín.",
+      "numbersMax": "Máx."
     },
     "general": {
       "language": "Idioma",
@@ -208,25 +212,33 @@
       "color": "Colores",
       "food": "Comida",
       "day": "Días de la semana",
-      "time": "Tiempo"
+      "time": "Tiempo",
+      "people": "Personas",
+      "pronoun": "Pronombres",
+      "meal": "Comidas",
+      "drink": "Bebidas",
+      "number": "Números",
+      "month": "Meses del año",
+      "calendar": "Calendario"
     },
     "itemCount": "{{count}} palabras",
     "back": "Volver a Temas",
     "search": "Buscar palabras o etiquetas...",
     "resultsFor": "Resultados de búsqueda para \"{{query}}\"",
     "noResults": "No se encontraron palabras que coincidan con su búsqueda.",
-    "moreComingSoon": "Más pronto..."
+    "moreComingSoon": "Más pronto...",
+    "suggest": {
+      "tags": "Etiquetas",
+      "startingWith": "Empieza por",
+      "containing": "Contiene"
+    }
   },
   "numbers": {
     "prompt": "¿Cómo se lee este número?",
-    "mode": {
-      "romaji": "Romaji",
-      "hiragana": "Hiragana"
-    },
-    "placeholder": {
-      "romaji": "ej. ni sen nana hyaku juu ni",
-      "hiragana": "ej. にせんななひゃくじゅうに"
-    },
+    "promptChoice": "¿Qué número es este?",
+    "modeTyping": "Escribir Respuesta",
+    "modeChoice": "Opción Múltiple",
+    "placeholder": "ej. ni sen nana hyaku o にせんなな",
     "next": "Siguiente número",
     "skip": "Saltar"
   }

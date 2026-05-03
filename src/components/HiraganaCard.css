@@ -3,77 +3,77 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  padding: 1rem;
+  background: var(--paper-card);
+  border: var(--border-ink-thin);
+  border-radius: 0;
+  padding: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  color: var(--text-primary);
+  color: var(--ink-black);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 0 0 var(--ink-black);
   aspect-ratio: 1;
+  transform: translate(0, 0);
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease,
+    background 0.1s ease;
 }
 
 .hiragana-card:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  background: var(--paper-card-hover);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--ink-black);
+}
+
+.hiragana-card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 0 var(--ink-black);
 }
 
 .hiragana-card.is-mastered {
-  border-color: #fbbf24;
-  box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
-  background: linear-gradient(
-    135deg,
-    rgb(97, 78, 31) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
+  border-color: #c8a400;
+  box-shadow: 2px 2px 0 0 #c8a400;
+  background: rgba(200, 164, 0, 0.08);
 }
 
 .hiragana-card.is-selected {
-  background: var(--accent-gradient);
-  border-color: transparent;
-  box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.4);
+  background: var(--ink-black);
+  color: var(--paper-bg);
+  border-color: var(--ink-black);
+  box-shadow: 0 0 0 0 var(--ink-black);
+  transform: translate(2px, 2px);
 }
 
 .hiragana-card.is-selected.is-mastered {
-  border-color: #f59e0b;
-  border-color: rgba(251, 191, 36, 0.5);
+  background: var(--ink-black);
+  border-color: #c8a400;
 }
 
 .hiragana-card .kana-char {
   font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
   line-height: 1;
 }
-
-/* ... */
 
 .card-progress-track {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 4px;
-  background: rgba(0, 0, 0, 0.2);
+  height: 3px;
+  background: rgba(26, 26, 26, 0.12);
 }
 
 .card-progress-fill {
   height: 100%;
-  background: var(--accent-gradient);
-  transition: width 0.3s ease-out;
+  background: var(--ink-black);
+  transition: width 0.25s ease-out;
 }
 
 .hiragana-card.is-mastered .card-progress-fill {
-  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  background: #c8a400;
 }
 
 .hiragana-card.empty {
@@ -84,21 +84,15 @@
 
 @media (max-width: 640px) {
   .hiragana-card {
-    padding: 0.25rem;
-    border-radius: 8px;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateZ(0);
-    transition: transform 0.1s;
+    padding: 0.2rem;
   }
 
   .hiragana-card .kana-char {
-    font-size: 1.25rem;
-    margin-bottom: 0.1rem;
+    font-size: 1.2rem;
+    margin-bottom: 0.05rem;
   }
 
   .hiragana-card .kana-romaji {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
 }

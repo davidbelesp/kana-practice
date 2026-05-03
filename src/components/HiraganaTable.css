@@ -3,27 +3,28 @@
 }
 
 .section-title {
-  color: var(--text-secondary);
-  font-size: 1rem;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  font-weight: 700;
   margin-bottom: 1rem;
-  padding-left: 0.5rem;
-  border-left: 2px solid var(--accent-primary);
-  opacity: 0.8;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--accent-primary);
+  opacity: 0.9;
   user-select: none;
 }
 
 .hiragana-rows {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .kana-row {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .row-selector {
@@ -36,66 +37,71 @@
 .row-checkbox {
   appearance: none;
   -webkit-appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  border-radius: 6px;
+  background: var(--paper-card);
+  border: var(--border-ink);
+  border-radius: 0;
+  box-shadow: 2px 2px 0 0 var(--ink-black);
   position: relative;
-  transition: all 0.2s ease;
+  transition: background 0.1s, box-shadow 0.08s, transform 0.08s;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .row-checkbox:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--paper-card-hover);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--ink-black);
 }
 
 .row-checkbox:checked {
-  background: var(--accent-gradient);
-  border-color: transparent;
+  background: var(--ink-black);
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 0 var(--ink-black);
 }
 
 .row-checkbox:checked::after {
   content: "✓";
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+  color: var(--paper-bg);
+  font-size: 14px;
+  font-weight: 700;
   line-height: 1;
+  position: absolute;
 }
 
 .row-checkbox:indeterminate {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--paper-card-hover);
 }
 
 .row-checkbox:indeterminate::after {
   content: "";
   width: 12px;
   height: 2px;
-  background: white;
-  border-radius: 2px;
+  background: var(--ink-black);
   display: block;
+  position: absolute;
 }
 
 .row-cards {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
+  gap: 0.5rem;
   flex: 1;
 }
 
 @media (max-width: 640px) {
   .kana-row {
-    gap: 0.5rem;
+    gap: 0.35rem;
   }
+
   .row-selector {
-    width: 30px;
+    width: 28px;
   }
+
   .row-cards {
-    gap: 0.5rem;
+    gap: 0.35rem;
   }
 }

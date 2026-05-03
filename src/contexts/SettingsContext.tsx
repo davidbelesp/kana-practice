@@ -40,6 +40,10 @@ export interface AppSettings {
   masteryThreshold: number;
   weakestCharCount: number;
 
+  // Numbers
+  numbersMin: number;
+  numbersMax: number;
+
   // General
   language: "en" | "es";
 }
@@ -53,6 +57,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   animationsEnabled: true,
   masteryThreshold: 100,
   weakestCharCount: 10,
+  numbersMin: 1,
+  numbersMax: 10000,
   language: (i18n.language?.startsWith("es") ? "es" : "en") as "en" | "es",
 };
 
