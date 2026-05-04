@@ -233,10 +233,10 @@ export const Settings = () => {
                   <input
                     type="number"
                     min={settings.numbersMin + 1}
-                    max={10000}
+                    max={1000000}
                     value={settings.numbersMax}
                     onChange={e => {
-                      const v = Math.min(10000, Math.max(Number(e.target.value), settings.numbersMin + 1));
+                      const v = Math.min(1000000, Math.max(Number(e.target.value), settings.numbersMin + 1));
                       updateSetting("numbersMax", v);
                     }}
                     className="numbers-range-input"

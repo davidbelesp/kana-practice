@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { numberToJapanese, checkNumberAnswer } from "../utils/numberToJapanese";
+import { saveNumberResult } from "../utils/statsManager";
 import { useSettings } from "../contexts/SettingsContext";
 import { NavBar } from "../components/ui/NavBar";
 import "./Numbers.css";
@@ -123,6 +124,7 @@ export const Numbers = () => {
     setAttempts(a => a + 1);
     if (correct) setScore(s => s + 1);
     setStatus(correct ? "correct" : "incorrect");
+    saveNumberResult(number, correct);
   }, [status, input, number, nextNumber]);
 
   const handleChoiceSelect = useCallback((choice: number) => {
@@ -131,6 +133,7 @@ export const Numbers = () => {
     setAttempts(a => a + 1);
     if (correct) setScore(s => s + 1);
     setStatus(correct ? "correct" : "incorrect");
+    saveNumberResult(number, correct);
   }, [status, number]);
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

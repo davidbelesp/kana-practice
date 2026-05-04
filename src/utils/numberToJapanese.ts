@@ -13,9 +13,8 @@ export interface JapaneseNumber {
   hiragana: string;
 }
 
-function buildRomaji(n: number): string {
-  if (n === 10000) return "ichiman";
-
+// Builds romaji for 1–9999 with space-separated tokens
+function buildPartRomaji(n: number): string {
   const parts: string[] = [];
   const th = Math.floor(n / 1000);
   const rem1 = n % 1000;
@@ -30,7 +29,6 @@ function buildRomaji(n: number): string {
     else if (th === 8) parts.push("hassen");
     else parts.push(ROMAJI[th] + "sen");
   }
-
   if (hu > 0) {
     if (hu === 1) parts.push("hyaku");
     else if (hu === 3) parts.push("sanbyaku");
@@ -38,20 +36,16 @@ function buildRomaji(n: number): string {
     else if (hu === 8) parts.push("happyaku");
     else parts.push(ROMAJI[hu] + "hyaku");
   }
-
   if (te > 0) {
     if (te === 1) parts.push("juu");
     else parts.push(ROMAJI[te] + "juu");
   }
-
   if (on > 0) parts.push(ROMAJI[on]);
-
   return parts.join(" ");
 }
 
-function buildHiragana(n: number): string {
-  if (n === 10000) return "いちまん";
-
+// Builds hiragana for 1–9999
+function buildPartHiragana(n: number): string {
   let result = "";
   const th = Math.floor(n / 1000);
   const rem1 = n % 1000;
@@ -66,7 +60,6 @@ function buildHiragana(n: number): string {
     else if (th === 8) result += "はっせん";
     else result += HIRAGANA[th] + "せん";
   }
-
   if (hu > 0) {
     if (hu === 1) result += "ひゃく";
     else if (hu === 3) result += "さんびゃく";
@@ -74,14 +67,38 @@ function buildHiragana(n: number): string {
     else if (hu === 8) result += "はっぴゃく";
     else result += HIRAGANA[hu] + "ひゃく";
   }
-
   if (te > 0) {
     if (te === 1) result += "じゅう";
     else result += HIRAGANA[te] + "じゅう";
   }
-
   if (on > 0) result += HIRAGANA[on];
+  return result;
+}
 
+function buildRomaji(n: number): string {
+  const manPart = Math.floor(n / 10000);
+  const remainder = n % 10000;
+  const parts: string[] = [];
+  if (manPart > 0) {
+    // Concatenate man-prefix tokens (e.g. "juu ni" → "juuni") then append "man"
+    parts.push(buildPartRomaji(manPart).replace(/\s+/g, "") + "man");
+  }
+  if (remainder > 0) {
+    parts.push(buildPartRomaji(remainder));
+  }
+  return parts.join(" ");
+}
+
+function buildHiragana(n: number): string {
+  const manPart = Math.floor(n / 10000);
+  const remainder = n % 10000;
+  let result = "";
+  if (manPart > 0) {
+    result += buildPartHiragana(manPart) + "まん";
+  }
+  if (remainder > 0) {
+    result += buildPartHiragana(remainder);
+  }
   return result;
 }
 

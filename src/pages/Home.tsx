@@ -12,6 +12,8 @@ import {
   type KanaStat,
 } from "../utils/statsManager";
 import { NavBar } from "../components/ui/NavBar";
+import { IconButton } from "../components/ui/IconButton";
+import { CheckSquare, TrendingDown, Eraser } from "lucide-react";
 import "./Home.css";
 
 type Tab = "hiragana" | "katakana";
@@ -124,15 +126,21 @@ export const Home = () => {
             </span>
           </div>
           <div className="actions">
-            <button className="btn-secondary" onClick={handleSelectAll}>
-              {t("common.all")}
-            </button>
-            <button className="btn-secondary" onClick={handleSelectWeakest}>
-              {t("home.controls.weakest10")}
-            </button>
-            <button className="btn-secondary" onClick={handleDeselectAll}>
-              {t("common.clear")}
-            </button>
+            <IconButton
+              icon={CheckSquare}
+              label={`${t("common.all")} (${t(`home.tabs.${activeTab}`)})`}
+              onClick={handleSelectAll}
+            />
+            <IconButton
+              icon={TrendingDown}
+              label={t("home.controls.weakest10")}
+              onClick={handleSelectWeakest}
+            />
+            <IconButton
+              icon={Eraser}
+              label={t("common.clear")}
+              onClick={handleDeselectAll}
+            />
             <button
               className="btn-primary start-btn"
               onClick={handleStartQuiz}

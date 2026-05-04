@@ -198,6 +198,41 @@ export const getMasteredKana = (): KanaStat[] => {
     .sort((a, b) => b.streak - a.streak);
 };
 
+//  Number stats 
+
+export interface NumberGroupStat {
+  correct: number;
+  incorrect: number;
+}
+
+const NUMBER_STATS_KEY = "number_stats";
+
+export function digitGroup(n: number): string {
+  if (n < 10) return "1";
+  if (n < 100) return "2";
+  if (n < 1000) return "3";
+  if (n < 10000) return "4";
+  if (n < 100000) return "5";
+  if (n < 1000000) return "6";
+  return "7";
+}
+
+export const getNumberStats = (): Record<string, NumberGroupStat> => {
+  const json = localStorage.getItem(NUMBER_STATS_KEY);
+  if (!json) return {};
+  try { return JSON.parse(json); } catch { return {}; }
+};
+
+export const saveNumberResult = (n: number, isCorrect: boolean): void => {
+  const stats = getNumberStats();
+  const key = digitGroup(n);
+  const current = stats[key] ?? { correct: 0, incorrect: 0 };
+  if (isCorrect) current.correct++;
+  else current.incorrect++;
+  stats[key] = current;
+  localStorage.setItem(NUMBER_STATS_KEY, JSON.stringify(stats));
+};
+
 export const getWeakestChars = (limit: number = 10, filterChars?: string[]): string[] => {
   const stats = getKanaStats();
   let allStats = Object.values(stats);

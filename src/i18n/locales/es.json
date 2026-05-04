@@ -168,6 +168,8 @@
     "noHistory": "Aún no hay historial disponible.",
     "topStreaks": "Mejores Rachas",
     "noStreaks": "¡Empieza a practicar para construir tus rachas!",
+    "numbersTitle": "Progreso en Números",
+    "numbersNoData": "Aún no has practicado números. ¡Ve a la página de Números!",
     "chart": {
       "correct": "Correctos",
       "wrong": "Errados"

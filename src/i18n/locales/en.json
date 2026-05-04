@@ -170,6 +170,8 @@
     "noHistory": "No history available yet.",
     "topStreaks": "Top Streaks",
     "noStreaks": "Start practicing to build your streaks!",
+    "numbersTitle": "Numbers Progress",
+    "numbersNoData": "No numbers practiced yet. Head to the Numbers page!",
     "chart": {
       "correct": "Correct",
       "wrong": "Wrong"

@@ -5,8 +5,10 @@ import {
   getTopStreaks,
   getMasteredKana,
   getHistory,
+  getNumberStats,
   type KanaStat,
   type QuizResult,
+  type NumberGroupStat,
 } from "../utils/statsManager";
 import {
   BarChart,
@@ -21,6 +23,16 @@ import {
 import { NavBar } from "../components/ui/NavBar";
 import "./Stats.css";
 
+const NUMBER_GROUPS: { key: string; label: string }[] = [
+  { key: "1", label: "1 – 9" },
+  { key: "2", label: "10 – 99" },
+  { key: "3", label: "100 – 999" },
+  { key: "4", label: "1,000 – 9,999" },
+  { key: "5", label: "10,000 – 99,999" },
+  { key: "6", label: "100,000 – 999,999" },
+  { key: "7", label: "1,000,000" },
+];
+
 interface AggregateData {
   totalQuizzes: number;
   totalCorrect: number;
@@ -32,6 +44,7 @@ export const Stats = () => {
   const { t } = useTranslation();
 
   const [aggregates] = useState<AggregateData | null>(getAggregates);
+  const [numberStats] = useState<Record<string, NumberGroupStat>>(getNumberStats);
   const [topStreaks] = useState<KanaStat[]>(() => getTopStreaks(5));
   const [mastered] = useState<KanaStat[]>(getMasteredKana);
   const [history] = useState<QuizResult[]>(() => {
@@ -171,6 +184,37 @@ export const Stats = () => {
             <p className="no-data">{t("stats.noHistory")}</p>
           )}
         </div>
+      </section>
+
+      {/* Numbers Progress Section */}
+      <section className="stats-section">
+        <h2>🔢 {t("stats.numbersTitle")}</h2>
+        {Object.keys(numberStats).length === 0 ? (
+          <p className="no-data">{t("stats.numbersNoData")}</p>
+        ) : (
+          <div className="glass-panel number-stats-grid">
+            {NUMBER_GROUPS.map(({ key, label }) => {
+              const stat = numberStats[key];
+              if (!stat) return null;
+              const total = stat.correct + stat.incorrect;
+              const pct = total > 0 ? Math.round((stat.correct / total) * 100) : 0;
+              return (
+                <div key={key} className="number-stat-row">
+                  <span className="number-stat-range">{label}</span>
+                  <div className="number-stat-bar-wrap">
+                    <div className="number-stat-bar" style={{ width: `${pct}%` }} />
+                  </div>
+                  <span className="number-stat-pct">{pct}%</span>
+                  <span className="number-stat-counts">
+                    <span className="text-success">{stat.correct}</span>
+                    {" / "}
+                    <span className="text-danger">{stat.incorrect}</span>
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       <section className="stats-section">

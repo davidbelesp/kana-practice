@@ -108,7 +108,7 @@
 }
 
 .hiragana-card .kana-char {
-  font-size: 2rem;
+  font-size: 4rem;
   font-weight: 700;
   margin-bottom: 0.2rem;
   line-height: 1;
@@ -133,6 +133,13 @@
   opacity: 0;
   pointer-events: none;
   cursor: default;
+}
+
+@media (max-width: 900px) {
+  .hiragana-card .kana-char {
+    font-size: 3rem;
+    margin-bottom: 0.05rem;
+  }
 }
 
 @media (max-width: 640px) {

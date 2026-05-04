@@ -1,6 +1,4 @@
 .numbers-container {
-  height: calc(100dvh - var(--navbar-height));
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding-top: 0.75rem;
@@ -31,8 +29,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   width: 100%;
+  margin-top: 1rem;
 }
 
 .numbers-container .quiz-content-wrapper {
@@ -236,5 +234,18 @@
 
   .numbers-card {
     padding: 1.5rem 1rem;
+  }
+
+  .numbers-container .quiz-content-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  
+
+  .numbers-choices {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    width: 100%;
   }
 }
