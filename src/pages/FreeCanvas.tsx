@@ -4,7 +4,7 @@ import { KanaCanvas, type KanaCanvasRef } from "../components/KanaCanvas";
 import handwriting from "../utils/handwriting";
 import "./FreeCanvas.css";
 import { useNotification } from "../contexts/NotificationContext";
-import { BackButton } from "../components/ui/BackButton";
+import { NavBar } from "../components/ui/NavBar";
 
 export const FreeCanvas = () => {
   const { t } = useTranslation();
@@ -66,11 +66,9 @@ export const FreeCanvas = () => {
   };
 
   return (
-    <div className="free-canvas-container container">
-      <header className="free-header">
-        <BackButton to="/" label={t("common.home")} />
-        <h2 className="title free-practice-title">{t("canvas.title")}</h2>
-      </header>
+    <>
+      <NavBar title={t("canvas.title")} />
+      <div className="free-canvas-container container">
 
       <div className="canvas-area">
         <KanaCanvas
@@ -108,6 +106,7 @@ export const FreeCanvas = () => {
           <div className="empty-state">{t("canvas.emptyState")}</div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 };

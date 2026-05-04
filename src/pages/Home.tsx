@@ -11,7 +11,7 @@ import {
   saveMasteredStatus,
   type KanaStat,
 } from "../utils/statsManager";
-import { BackButton } from "../components/ui/BackButton";
+import { NavBar } from "../components/ui/NavBar";
 import "./Home.css";
 
 type Tab = "hiragana" | "katakana";
@@ -91,36 +91,25 @@ export const Home = () => {
   }, [navigate, selectedChars]);
 
   return (
-    <div className="home-container container">
-      <header className="home-header">
-        <div className="home-header-top">
-          <BackButton to="/" />
-        </div>
-        <h1 className="title">{t("home.title")}</h1>
-        <p className="subtitle">{t("home.subtitle")}</p>
-      </header>
-
-      <div className="tab-container">
+    <>
+      <NavBar title={t("home.title")}>
         <div className="tab-switch">
           <div className={classNames("tab-slider", activeTab)} />
           <button
-            className={classNames("tab-btn", {
-              active: activeTab === "hiragana",
-            })}
+            className={classNames("tab-btn", { active: activeTab === "hiragana" })}
             onClick={() => setActiveTab("hiragana")}
           >
             {t("home.tabs.hiragana")}
           </button>
           <button
-            className={classNames("tab-btn", {
-              active: activeTab === "katakana",
-            })}
+            className={classNames("tab-btn", { active: activeTab === "katakana" })}
             onClick={() => setActiveTab("katakana")}
           >
             {t("home.tabs.katakana")}
           </button>
         </div>
-      </div>
+      </NavBar>
+      <div className="home-container container">
 
       <div className="controls glass-panel">
         <div className="selection-info">
@@ -129,16 +118,16 @@ export const Home = () => {
           </span>
         </div>
         <div className="actions">
-          <button className="btn-text" onClick={handleSelectAll}>
+          <button className="btn-secondary" onClick={handleSelectAll}>
             {t("common.all")} ({t(`home.tabs.${activeTab}`)})
           </button>
           <button
-            className="btn-text weakest-btn"
+            className="btn-secondary"
             onClick={handleSelectWeakest}
           >
             {t("home.controls.weakest10")}
           </button>
-          <button className="btn-text" onClick={handleDeselectAll}>
+          <button className="btn-secondary" onClick={handleDeselectAll}>
             {t("common.clear")}
           </button>
           <button
@@ -160,6 +149,7 @@ export const Home = () => {
         stats={stats}
         masteredKanas={masteredKanas}
       />
-    </div>
+      </div>
+    </>
   );
 };

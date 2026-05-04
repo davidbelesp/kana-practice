@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { numberToJapanese, checkNumberAnswer } from "../utils/numberToJapanese";
 import { useSettings } from "../contexts/SettingsContext";
-import { BackButton } from "../components/ui/BackButton";
+import { NavBar } from "../components/ui/NavBar";
 import "./Numbers.css";
 
 type QuestionMode = "typing" | "multiple-choice";
@@ -145,15 +145,11 @@ export const Numbers = () => {
   const handleMultipleChoiceMode = useCallback(() => setQuestionMode("multiple-choice"), []);
 
   return (
-    <div className="numbers-container container">
-      <header className="quiz-header">
-        <BackButton to="/" />
-        <div className="score-display">
-          {t("quiz.results.score")}: {score} / {attempts}
-        </div>
-      </header>
-
-      <div className="numbers-mode-toggle">
+    <>
+      <NavBar title={t("numbers.title")} />
+      <div className="numbers-container container">
+        <div className="numbers-top-bar">
+          <div className="numbers-mode-toggle">
         <button
           className={classNames("mode-btn", { active: questionMode === "typing" })}
           onClick={handleTypingMode}
@@ -166,9 +162,13 @@ export const Numbers = () => {
         >
           {t("numbers.modeChoice")}
         </button>
-      </div>
+          </div>
+          <div className="score-display">
+            {t("quiz.results.score")}: {score} / {attempts}
+          </div>
+        </div>
 
-      <main className="quiz-main">
+        <main className="quiz-main">
         <div className="quiz-content-wrapper">
           <div className={classNames("numbers-card glass-panel", status)}>
 
@@ -256,7 +256,8 @@ export const Numbers = () => {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </>
   );
 };

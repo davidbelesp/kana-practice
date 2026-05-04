@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { NavBar } from "../components/ui/NavBar";
 import { useTranslation } from "react-i18next";
 import { vocabularyData } from "../data/vocabulary";
 import { useNotification } from "../contexts/NotificationContext";
@@ -126,12 +126,14 @@ export const Vocabulary: React.FC = () => {
   }, [isFiltering, selectedTags, debouncedTextQuery, t]);
 
   return (
-    <div className="container vocabulary-container">
-      <header className="home-header">
-        <h1 className="title">{t("vocabulary.title")}</h1>
-        <p className="subtitle">{subtitle}</p>
+    <>
+      <NavBar title={t("vocabulary.title")} />
+      <div className="container vocabulary-container">
+        <header className="home-header">
+          <h1 className="title">{t("vocabulary.title")}</h1>
+          <p className="subtitle">{subtitle}</p>
 
-        <div className="vocabulary-controls">
+          <div className="vocabulary-controls">
           <SearchBar
             allTags={themes}
             selectedTags={selectedTags}
@@ -145,11 +147,6 @@ export const Vocabulary: React.FC = () => {
             onClearAll={handleClearAll}
           />
 
-          <div className="secondary-actions">
-            <Link to="/" className="btn-secondary link-btn">
-              ← {t("common.home")}
-            </Link>
-          </div>
         </div>
 
         {themes.length > 0 && (
@@ -199,6 +196,7 @@ export const Vocabulary: React.FC = () => {
           )}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 };

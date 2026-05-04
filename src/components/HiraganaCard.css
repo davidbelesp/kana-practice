@@ -31,23 +31,80 @@
   box-shadow: 0 0 0 0 var(--ink-black);
 }
 
+/*  Mastered: gold foil with sweep-shine on hover  */
 .hiragana-card.is-mastered {
-  border-color: #c8a400;
-  box-shadow: 2px 2px 0 0 #c8a400;
-  background: rgba(200, 164, 0, 0.08);
+  background: linear-gradient(135deg,
+    #f5d060 0%,
+    #d4920c 28%,
+    #efc030 52%,
+    #b87808 76%,
+    #f0cc40 100%
+  );
+  border-color: #7a5400;
+  box-shadow: 2px 2px 0 0 #7a5400;
+  color: #3d2000;
 }
 
+.hiragana-card.is-mastered:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 #7a5400;
+}
+
+/* Sweep shine — slides across on hover */
+.hiragana-card.is-mastered::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 75%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.45s ease;
+  pointer-events: none;
+}
+
+.hiragana-card.is-mastered:hover::after {
+  transform: translateX(130%);
+}
+
+.hiragana-card.is-mastered .card-progress-track {
+  background: rgba(61, 32, 0, 0.15);
+}
+
+.hiragana-card.is-mastered .card-progress-fill {
+  background: rgba(61, 32, 0, 0.45);
+}
+
+/*  Selected: accent color  */
 .hiragana-card.is-selected {
-  background: var(--ink-black);
+  background: var(--accent-primary);
   color: var(--paper-bg);
-  border-color: var(--ink-black);
-  box-shadow: 0 0 0 0 var(--ink-black);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 0 var(--accent-primary);
   transform: translate(2px, 2px);
 }
 
+.hiragana-card.is-selected .card-progress-track {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hiragana-card.is-selected .card-progress-fill {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/*  Selected + mastered: accent wins, no shine  */
 .hiragana-card.is-selected.is-mastered {
-  background: var(--ink-black);
-  border-color: #c8a400;
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 0 var(--accent-primary);
+  color: var(--paper-bg);
+}
+
+.hiragana-card.is-selected.is-mastered::after {
+  display: none;
 }
 
 .hiragana-card .kana-char {
@@ -72,10 +129,6 @@
   transition: width 0.25s ease-out;
 }
 
-.hiragana-card.is-mastered .card-progress-fill {
-  background: #c8a400;
-}
-
 .hiragana-card.empty {
   opacity: 0;
   pointer-events: none;
@@ -88,7 +141,7 @@
   }
 
   .hiragana-card .kana-char {
-    font-size: 1.2rem;
+    font-size: 2rem;
     margin-bottom: 0.05rem;
   }
 

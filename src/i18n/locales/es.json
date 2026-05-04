@@ -233,7 +233,13 @@
       "containing": "Contiene"
     }
   },
+  "nav": {
+    "openMenu": "Abrir menú de navegación",
+    "closeMenu": "Cerrar menú de navegación",
+    "navigation": "Navegación del sitio"
+  },
   "numbers": {
+    "title": "Números",
     "prompt": "¿Cómo se lee este número?",
     "promptChoice": "¿Qué número es este?",
     "modeTyping": "Escribir Respuesta",

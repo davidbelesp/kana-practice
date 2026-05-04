@@ -42,8 +42,7 @@ export const TagSelector: React.FC<TagSelectorProps> = React.memo(({
               onClick={() => onTagToggle(tag)}
               style={{
                 '--tag-color': color,
-                '--tag-bg': `${color}1a`,
-                '--tag-border': `${color}4d`
+                '--tag-border': `${color}99`
               } as React.CSSProperties}
             >
               {t(`vocabulary.categories.${tag}`) || tag}

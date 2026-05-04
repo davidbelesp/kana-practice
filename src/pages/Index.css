@@ -195,6 +195,7 @@
     min-width: 44px;
     margin-bottom: 0;
     flex-shrink: 0;
+    font-size: larger;
   }
 
   .card-icon svg {

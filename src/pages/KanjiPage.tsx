@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { NavBar } from "../components/ui/NavBar";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import {
@@ -53,7 +54,9 @@ export const KanjiPage: React.FC = () => {
   const { t } = useTranslation();
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedChars, setSelectedChars] = useState<string[]>([]);
-  const [collapsedLevels, setCollapsedLevels] = useState<Record<string, boolean>>({});
+  const [collapsedLevels, setCollapsedLevels] = useState<Record<string, boolean>>(
+    () => Object.fromEntries(kanjiLevels.map(({ level }) => [level, true]))
+  );
   const [activeModalKanji, setActiveModalKanji] = useState<KanjiChar | null>(null);
   const [stats, setStats] = useState<Record<string, KanaStat>>({});
   const [masteredKanas, setMasteredKanas] = useState<Record<string, boolean>>({});
@@ -118,17 +121,9 @@ export const KanjiPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="container kanji-page-container">
-      <header className="home-header">
-        <h1 className="title">{t("kanji.title")}</h1>
-        <p className="subtitle">{t("kanji.subtitle")}</p>
-        <div className="secondary-actions">
-          <Link to="/" className="btn-secondary link-btn">
-            ← {t("common.home") || "Home"}
-          </Link>
-        </div>
-      </header>
-
+    <>
+      <NavBar title={t("kanji.title")} />
+      <div className="container kanji-page-container">
       <div className="controls glass-panel kanji-controls">
         <div className="tab-switch kanji-mode-switch">
           <div className={classNames("tab-slider", { "selection-mode": isSelectionMode })} />
@@ -244,7 +239,8 @@ export const KanjiPage: React.FC = () => {
       {activeModalKanji && (
         <KanjiModal kanji={activeModalKanji} onClose={closeModal} />
       )}
-    </div>
+      </div>
+    </>
   );
 };
 ;

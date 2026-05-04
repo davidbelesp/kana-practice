@@ -4,8 +4,8 @@
 
 .kanji-controls {
   position: sticky;
-  top: 1rem;
-  z-index: 100;
+  top: calc(var(--navbar-height) + 0.5rem);
+  z-index: 10;
   margin: 1rem auto 2rem;
   padding: 1rem 2rem;
   display: flex;

@@ -273,7 +273,7 @@
   border: var(--border-ink);
   background: var(--paper-card);
   cursor: text;
-  z-index: 1000;
+  z-index: 5;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -281,7 +281,7 @@
 }
 
 .search-bar-tagged.has-dropdown {
-  z-index: 1001;
+  z-index: 6;
 }
 
 .search-bar-tagged:focus-within {
@@ -348,7 +348,7 @@
   top: calc(100% + 2px);
   left: -2px;
   right: -2px;
-  z-index: 1100;
+  z-index: 7;
   background: var(--paper-card);
   border: var(--border-ink);
   border-top: none;
@@ -631,7 +631,7 @@
   padding: 5px 12px;
   border-radius: 0;
   border: 1px solid var(--tag-border, var(--ink-black));
-  background: var(--tag-bg, var(--paper-card));
+  background: color-mix(in srgb, var(--tag-color, var(--ink-black)) 18%, var(--paper-card));
   color: var(--tag-color, var(--ink-black));
   font-size: 0.82rem;
   font-weight: 700;

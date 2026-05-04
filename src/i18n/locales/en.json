@@ -43,7 +43,7 @@
     },
     "controls": {
       "selected": "{{count}} selected",
-      "weakest10": "Weakest 10 ⚡",
+      "weakest10": "Weakest 10",
       "startQuiz": "Start Quiz"
     }
   },
@@ -235,7 +235,13 @@
       "containing": "Containing"
     }
   },
+  "nav": {
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "navigation": "Site navigation"
+  },
   "numbers": {
+    "title": "Numbers",
     "prompt": "How do you read this number?",
     "promptChoice": "Which number is this?",
     "modeTyping": "Type Answer",

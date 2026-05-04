@@ -18,7 +18,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { BackButton } from "../components/ui/BackButton";
+import { NavBar } from "../components/ui/NavBar";
 import "./Stats.css";
 
 interface AggregateData {
@@ -72,11 +72,10 @@ export const Stats = () => {
   if (!aggregates) return null;
 
   return (
-    <div className="container stats-container">
-      <header className="stats-header">
-        <BackButton to="/" />
+    <>
+      <NavBar title={t("stats.title")} />
+      <div className="container stats-container">
         <h1>{t("stats.title")}</h1>
-      </header>
 
       <div className="stats-grid">
         <div className="stat-card">
@@ -190,6 +189,7 @@ export const Stats = () => {
           </div>
         )}
       </section>
-    </div>
+      </div>
+    </>
   );
 };

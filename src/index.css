@@ -50,6 +50,8 @@
   --border-ink: 2px solid var(--ink-black);
   --border-ink-thin: 1px solid var(--ink-black);
 
+  --navbar-height: 56px;
+
   --font-family: "Inter", system-ui, -apple-system, sans-serif;
 
   min-height: 100vh;
@@ -292,7 +294,7 @@ button:focus-visible {
   }
 }
 
-/* ── Scrollbar — squared notebook style ── */
+/*  Scrollbar — squared notebook style  */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -323,7 +325,7 @@ button:focus-visible {
   scrollbar-color: var(--ink-black) var(--paper-bg);
 }
 
-/* ── Global No Animations Override ── */
+/*  Global No Animations Override  */
 .no-animations * {
   animation: none !important;
   transition: none !important;

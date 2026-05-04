@@ -34,6 +34,10 @@ export const QuizCard = memo(({
   const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
+    canvasRef.current?.clear();
+  }, [question]);
+
+  useEffect(() => {
     if (isListening && !isSubmitted) {
       speakJapanese(question.prompt);
     }

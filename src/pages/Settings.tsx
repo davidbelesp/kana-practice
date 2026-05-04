@@ -76,7 +76,7 @@ export const Settings = () => {
     },
   };
 
-  /* ── Question type helpers ── */
+  /*  Question type helpers  */
   const toggleQuestionType = (type: QuestionType) => {
     const current = settings.enabledQuestionTypes;
     if (current.includes(type)) {
@@ -88,7 +88,7 @@ export const Settings = () => {
     }
   };
 
-  /* ── Custom theme helpers ── */
+  /*  Custom theme helpers  */
   const updateCustomColor = (key: "primary" | "secondary", hex: string) => {
     updateSetting("customTheme", { ...settings.customTheme, [key]: hex });
     // Auto-switch to custom theme when user edits colors
@@ -105,7 +105,7 @@ export const Settings = () => {
       </header>
 
       <div className="settings-layout">
-        {/* ── Sidebar 20% ── */}
+        {/*  Sidebar 20%  */}
         <nav className="settings-sidebar glass-panel">
           {TABS.map((tab) => (
             <button
@@ -119,10 +119,10 @@ export const Settings = () => {
           ))}
         </nav>
 
-        {/* ── Content 80% ── */}
+        {/*  Content 80%  */}
         <main className="settings-content glass-panel">
 
-          {/* ── Quiz Tab ── */}
+          {/*  Quiz Tab  */}
           {activeTab === "quiz" && (
             <section className="settings-section">
               <div className="section-title-row">
@@ -246,7 +246,7 @@ export const Settings = () => {
             </section>
           )}
 
-          {/* ── Appearance Tab ── */}
+          {/*  Appearance Tab  */}
           {activeTab === "appearance" && (
             <section className="settings-section">
               <div className="section-title-row">
@@ -365,7 +365,7 @@ export const Settings = () => {
             </section>
           )}
 
-          {/* ── Practice Tab ── */}
+          {/*  Practice Tab  */}
           {activeTab === "practice" && (
             <section className="settings-section">
               <div className="section-title-row">
@@ -430,7 +430,7 @@ export const Settings = () => {
               </div>
             </section>
           )}
-          {/* ── General Tab ── */}
+          {/*  General Tab  */}
           {activeTab === "general" && (
             <section className="settings-section">
               <div className="section-title-row">

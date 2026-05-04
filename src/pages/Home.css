@@ -89,7 +89,7 @@
 /* Controls toolbar */
 .controls {
   position: sticky;
-  top: 1rem;
+  top: calc(var(--navbar-height) + 0.5rem);
   z-index: 10;
   display: flex;
   justify-content: space-between;
@@ -159,7 +159,6 @@
   }
 
   .start-btn {
-    width: 100%;
     order: 10;
     margin-top: 0.25rem;
     padding: 1rem !important;

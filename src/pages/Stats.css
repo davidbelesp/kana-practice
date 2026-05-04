@@ -2,11 +2,12 @@
   padding-bottom: 4rem;
 }
 
-.stats-header {
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.stats-container > h1 {
+  margin: 1.5rem 0 2rem;
+  font-size: 1.75rem;
+  border-bottom: 3px solid var(--ink-black);
+  padding-bottom: 0.3rem;
+  display: inline-block;
 }
 
 .stats-grid {
