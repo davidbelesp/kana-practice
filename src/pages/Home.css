@@ -90,22 +90,37 @@
 .controls {
   position: sticky;
   top: calc(var(--navbar-height) + 0.5rem);
-  z-index: 10;
+  z-index: 51;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: 0.6rem 1rem;
   margin-bottom: 2rem;
+  margin-top: 0.75rem;
   background: var(--paper-card);
   border: var(--border-ink);
   border-radius: 0;
   box-shadow: var(--shadow-card);
 }
 
+.selection-info {
+  position: absolute;
+  top: 0;
+  left: 0.75rem;
+  transform: translateY(-50%);
+  background: var(--paper-card);
+  border: var(--border-ink);
+  padding: 1px 8px;
+  line-height: 1.6;
+  z-index: 1;
+}
+
 .selection-info .count {
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--accent-primary);
   user-select: none;
+  white-space: nowrap;
 }
 
 .actions {
@@ -129,26 +144,7 @@
 
 @media (max-width: 740px) {
   .controls {
-    flex-direction: column;
-    gap: 1.25rem;
-    align-items: stretch;
-    padding: 1.25rem;
-  }
-
-  .selection-info {
-    text-align: center;
-    border-bottom: var(--border-ink-thin);
-    padding-bottom: 0.75rem;
-  }
-
-  .selection-info .count {
-    font-size: 1.1rem;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
+    padding: 0.6rem 0.75rem;
   }
 
   .actions {
@@ -156,11 +152,13 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
   }
 
   .start-btn {
     order: 10;
     margin-top: 0.25rem;
-    padding: 1rem !important;
+    padding: 0.6rem 1rem !important;
   }
 }

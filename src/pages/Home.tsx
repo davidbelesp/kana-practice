@@ -42,12 +42,12 @@ export const Home = () => {
 
   const currentData = useMemo(
     () => (activeTab === "hiragana" ? hiraganaData : katakanaData),
-    [activeTab]
+    [activeTab],
   );
 
   const currentChars = useMemo(
     () => currentData.filter((k) => !k.isEmpty).map((k) => k.char),
-    [currentData]
+    [currentData],
   );
 
   const handleToggleChar = useCallback((char: string) => {
@@ -56,16 +56,19 @@ export const Home = () => {
     );
   }, []);
 
-  const handleToggleGroup = useCallback((chars: string[], shouldSelect: boolean) => {
-    setSelectedChars((prev) => {
-      const set = new Set(prev);
-      chars.forEach((c) => {
-        if (shouldSelect) set.add(c);
-        else set.delete(c);
+  const handleToggleGroup = useCallback(
+    (chars: string[], shouldSelect: boolean) => {
+      setSelectedChars((prev) => {
+        const set = new Set(prev);
+        chars.forEach((c) => {
+          if (shouldSelect) set.add(c);
+          else set.delete(c);
+        });
+        return Array.from(set);
       });
-      return Array.from(set);
-    });
-  }, []);
+    },
+    [],
+  );
 
   const handleSelectAll = useCallback(() => {
     setSelectedChars((prev) => {
@@ -96,13 +99,17 @@ export const Home = () => {
         <div className="tab-switch">
           <div className={classNames("tab-slider", activeTab)} />
           <button
-            className={classNames("tab-btn", { active: activeTab === "hiragana" })}
+            className={classNames("tab-btn", {
+              active: activeTab === "hiragana",
+            })}
             onClick={() => setActiveTab("hiragana")}
           >
             {t("home.tabs.hiragana")}
           </button>
           <button
-            className={classNames("tab-btn", { active: activeTab === "katakana" })}
+            className={classNames("tab-btn", {
+              active: activeTab === "katakana",
+            })}
             onClick={() => setActiveTab("katakana")}
           >
             {t("home.tabs.katakana")}
@@ -110,45 +117,41 @@ export const Home = () => {
         </div>
       </NavBar>
       <div className="home-container container">
-
-      <div className="controls glass-panel">
-        <div className="selection-info">
-          <span className="count">
-            {t("home.controls.selected", { count: selectedChars.length })}
-          </span>
+        <div className="controls glass-panel">
+          <div className="selection-info">
+            <span className="count" >
+              {selectedChars.length}
+            </span>
+          </div>
+          <div className="actions">
+            <button className="btn-secondary" onClick={handleSelectAll}>
+              {t("common.all")}
+            </button>
+            <button className="btn-secondary" onClick={handleSelectWeakest}>
+              {t("home.controls.weakest10")}
+            </button>
+            <button className="btn-secondary" onClick={handleDeselectAll}>
+              {t("common.clear")}
+            </button>
+            <button
+              className="btn-primary start-btn"
+              onClick={handleStartQuiz}
+              disabled={selectedChars.length < 3}
+            >
+              {t("home.controls.startQuiz")}{" "}
+              {selectedChars.length > 0 && `(${selectedChars.length})`}
+            </button>
+          </div>
         </div>
-        <div className="actions">
-          <button className="btn-secondary" onClick={handleSelectAll}>
-            {t("common.all")} ({t(`home.tabs.${activeTab}`)})
-          </button>
-          <button
-            className="btn-secondary"
-            onClick={handleSelectWeakest}
-          >
-            {t("home.controls.weakest10")}
-          </button>
-          <button className="btn-secondary" onClick={handleDeselectAll}>
-            {t("common.clear")}
-          </button>
-          <button
-            className="btn-primary start-btn"
-            onClick={handleStartQuiz}
-            disabled={selectedChars.length < 3}
-          >
-            {t("home.controls.startQuiz")}{" "}
-            {selectedChars.length > 0 && `(${selectedChars.length})`}
-          </button>
-        </div>
-      </div>
 
-      <HiraganaTable
-        data={currentData}
-        selectedChars={selectedChars}
-        onToggleChar={handleToggleChar}
-        onToggleGroup={handleToggleGroup}
-        stats={stats}
-        masteredKanas={masteredKanas}
-      />
+        <HiraganaTable
+          data={currentData}
+          selectedChars={selectedChars}
+          onToggleChar={handleToggleChar}
+          onToggleGroup={handleToggleGroup}
+          stats={stats}
+          masteredKanas={masteredKanas}
+        />
       </div>
     </>
   );
