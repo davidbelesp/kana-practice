@@ -35,7 +35,7 @@ export const vocabularyData: VocabularyItem[] = [
       { lang: "en", translation: "orange" },
       { lang: "es", translation: "naranja" }
     ],
-    tags: ["fruit", "food"],
+    tags: ["fruit", "food", "color"],
     image: "🍊"
   },
   {
@@ -243,18 +243,6 @@ export const vocabularyData: VocabularyItem[] = [
     ],
     tags: ["color"],
     image: "🟪"
-  },
-  {
-    japanese: "オレンジ",
-    hiragana: "オレンジ",
-    romaji: "orenji",
-    type: "Noun",
-    translation: [
-      { lang: "en", translation: "orange" },
-      { lang: "es", translation: "naranja" }
-    ],
-    tags: ["color"],
-    image: "🧡"
   },
   {
     japanese: "ピンク",
@@ -784,10 +772,10 @@ export const vocabularyData: VocabularyItem[] = [
     romaji: "douryou",
     type: "Noun",
     translation: [
-      { lang: "en", translation: "co-worker" },
+      { lang: "en", translation: "co-worker / colleague" },
       { lang: "es", translation: "compañero de trabajo" }
     ],
-    tags: ["people"],
+    tags: ["people", "work"],
     image: "👔"
   },
   {
@@ -1625,5 +1613,2699 @@ export const vocabularyData: VocabularyItem[] = [
     ],
     tags: ["calendar", "time"],
     image: "🎆"
+  },
+
+  // --- BODY PARTS ---
+  {
+    japanese: "頭",
+    hiragana: "あたま",
+    romaji: "atama",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "head" },
+      { lang: "es", translation: "cabeza" }
+    ],
+    tags: ["body"],
+    image: "🗣️"
+  },
+  {
+    japanese: "目",
+    hiragana: "め",
+    romaji: "me",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "eye" },
+      { lang: "es", translation: "ojo" }
+    ],
+    tags: ["body"],
+    image: "👁️"
+  },
+  {
+    japanese: "耳",
+    hiragana: "みみ",
+    romaji: "mimi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "ear" },
+      { lang: "es", translation: "oreja" }
+    ],
+    tags: ["body"],
+    image: "👂"
+  },
+  {
+    japanese: "鼻",
+    hiragana: "はな",
+    romaji: "hana",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "nose" },
+      { lang: "es", translation: "nariz" }
+    ],
+    tags: ["body"],
+    image: "👃"
+  },
+  {
+    japanese: "口",
+    hiragana: "くち",
+    romaji: "kuchi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "mouth" },
+      { lang: "es", translation: "boca" }
+    ],
+    tags: ["body"],
+    image: "👄"
+  },
+  {
+    japanese: "手",
+    hiragana: "て",
+    romaji: "te",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "hand" },
+      { lang: "es", translation: "mano" }
+    ],
+    tags: ["body"],
+    image: "✋"
+  },
+  {
+    japanese: "足",
+    hiragana: "あし",
+    romaji: "ashi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "foot / leg" },
+      { lang: "es", translation: "pie / pierna" }
+    ],
+    tags: ["body"],
+    image: "🦶"
+  },
+  {
+    japanese: "指",
+    hiragana: "ゆび",
+    romaji: "yubi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "finger" },
+      { lang: "es", translation: "dedo" }
+    ],
+    tags: ["body"],
+    image: "☝️"
+  },
+  {
+    japanese: "心臓",
+    hiragana: "しんぞう",
+    romaji: "shinzou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "heart" },
+      { lang: "es", translation: "corazón" }
+    ],
+    tags: ["body"],
+    image: "❤️"
+  },
+  {
+    japanese: "胃",
+    hiragana: "い",
+    romaji: "i",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "stomach" },
+      { lang: "es", translation: "estómago" }
+    ],
+    tags: ["body"],
+    image: "🤢"
+  },
+  {
+    japanese: "背中",
+    hiragana: "せなか",
+    romaji: "senaka",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "back" },
+      { lang: "es", translation: "espalda" }
+    ],
+    tags: ["body"],
+    image: "🔙"
+  },
+  {
+    japanese: "肩",
+    hiragana: "かた",
+    romaji: "kata",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "shoulder" },
+      { lang: "es", translation: "hombro" }
+    ],
+    tags: ["body"],
+    image: "💪"
+  },
+  {
+    japanese: "腕",
+    hiragana: "うで",
+    romaji: "ude",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "arm" },
+      { lang: "es", translation: "brazo" }
+    ],
+    tags: ["body"],
+    image: "💪"
+  },
+  {
+    japanese: "膝",
+    hiragana: "ひざ",
+    romaji: "hiza",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "knee" },
+      { lang: "es", translation: "rodilla" }
+    ],
+    tags: ["body"],
+    image: "🦵"
+  },
+  {
+    japanese: "顔",
+    hiragana: "かお",
+    romaji: "kao",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "face" },
+      { lang: "es", translation: "cara" }
+    ],
+    tags: ["body"],
+    image: "😊"
+  },
+  {
+    japanese: "髪",
+    hiragana: "かみ",
+    romaji: "kami",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "hair" },
+      { lang: "es", translation: "pelo" }
+    ],
+    tags: ["body"],
+    image: "💇"
+  },
+  {
+    japanese: "歯",
+    hiragana: "は",
+    romaji: "ha",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "tooth" },
+      { lang: "es", translation: "diente" }
+    ],
+    tags: ["body"],
+    image: "😬"
+  },
+  {
+    japanese: "舌",
+    hiragana: "した",
+    romaji: "shita",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "tongue" },
+      { lang: "es", translation: "lengua" }
+    ],
+    tags: ["body"],
+    image: "👅"
+  },
+  {
+    japanese: "首",
+    hiragana: "くび",
+    romaji: "kubi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "neck" },
+      { lang: "es", translation: "cuello" }
+    ],
+    tags: ["body"],
+    image: "🦒"
+  },
+  {
+    japanese: "胸",
+    hiragana: "むね",
+    romaji: "mune",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "chest" },
+      { lang: "es", translation: "pecho" }
+    ],
+    tags: ["body"],
+    image: "💗"
+  },
+
+  // --- WEATHER ---
+  {
+    japanese: "天気",
+    hiragana: "てんき",
+    romaji: "tenki",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "weather" },
+      { lang: "es", translation: "clima" }
+    ],
+    tags: ["weather"],
+    image: "☀️"
+  },
+  {
+    japanese: "雨",
+    hiragana: "あめ",
+    romaji: "ame",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "rain" },
+      { lang: "es", translation: "lluvia" }
+    ],
+    tags: ["weather"],
+    image: "🌧️"
+  },
+  {
+    japanese: "雪",
+    hiragana: "ゆき",
+    romaji: "yuki",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "snow" },
+      { lang: "es", translation: "nieve" }
+    ],
+    tags: ["weather"],
+    image: "❄️"
+  },
+  {
+    japanese: "風",
+    hiragana: "かぜ",
+    romaji: "kaze",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "wind" },
+      { lang: "es", translation: "viento" }
+    ],
+    tags: ["weather"],
+    image: "🌬️"
+  },
+  {
+    japanese: "雲",
+    hiragana: "くも",
+    romaji: "kumo",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "cloud" },
+      { lang: "es", translation: "nube" }
+    ],
+    tags: ["weather"],
+    image: "☁️"
+  },
+  {
+    japanese: "雷",
+    hiragana: "かみなり",
+    romaji: "kaminari",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "thunder" },
+      { lang: "es", translation: "trueno" }
+    ],
+    tags: ["weather"],
+    image: "⛈️"
+  },
+  {
+    japanese: "虹",
+    hiragana: "にじ",
+    romaji: "niji",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "rainbow" },
+      { lang: "es", translation: "arcoíris" }
+    ],
+    tags: ["weather"],
+    image: "🌈"
+  },
+  {
+    japanese: "霧",
+    hiragana: "きり",
+    romaji: "kiri",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "fog" },
+      { lang: "es", translation: "niebla" }
+    ],
+    tags: ["weather"],
+    image: "🌫️"
+  },
+  {
+    japanese: "湿度",
+    hiragana: "しつど",
+    romaji: "shitsudo",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "humidity" },
+      { lang: "es", translation: "humedad" }
+    ],
+    tags: ["weather"],
+    image: "💧"
+  },
+  {
+    japanese: "気温",
+    hiragana: "きおん",
+    romaji: "kion",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "temperature" },
+      { lang: "es", translation: "temperatura" }
+    ],
+    tags: ["weather"],
+    image: "🌡️"
+  },
+
+  // --- TRANSPORTATION ---
+  {
+    japanese: "電車",
+    hiragana: "でんしゃ",
+    romaji: "densha",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "train" },
+      { lang: "es", translation: "tren" }
+    ],
+    tags: ["transport"],
+    image: "🚃"
+  },
+  {
+    japanese: "バス",
+    hiragana: "バス",
+    romaji: "basu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "bus" },
+      { lang: "es", translation: "autobús" }
+    ],
+    tags: ["transport"],
+    image: "🚌"
+  },
+  {
+    japanese: "車",
+    hiragana: "くるま",
+    romaji: "kuruma",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "car" },
+      { lang: "es", translation: "coche" }
+    ],
+    tags: ["transport"],
+    image: "🚗"
+  },
+  {
+    japanese: "自転車",
+    hiragana: "じてんしゃ",
+    romaji: "jitensha",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "bicycle" },
+      { lang: "es", translation: "bicicleta" }
+    ],
+    tags: ["transport"],
+    image: "🚲"
+  },
+  {
+    japanese: "船",
+    hiragana: "ふね",
+    romaji: "fune",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "ship / boat" },
+      { lang: "es", translation: "barco" }
+    ],
+    tags: ["transport"],
+    image: "⛵"
+  },
+  {
+    japanese: "飛行機",
+    hiragana: "ひこうき",
+    romaji: "hikouki",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "airplane" },
+      { lang: "es", translation: "avión" }
+    ],
+    tags: ["transport"],
+    image: "✈️"
+  },
+  {
+    japanese: "駅",
+    hiragana: "えき",
+    romaji: "eki",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "station" },
+      { lang: "es", translation: "estación" }
+    ],
+    tags: ["transport"],
+    image: "🚉"
+  },
+  {
+    japanese: "空港",
+    hiragana: "くうこう",
+    romaji: "kuukou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "airport" },
+      { lang: "es", translation: "aeropuerto" }
+    ],
+    tags: ["transport"],
+    image: "🛫"
+  },
+  {
+    japanese: "港",
+    hiragana: "みなと",
+    romaji: "minato",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "port / harbor" },
+      { lang: "es", translation: "puerto" }
+    ],
+    tags: ["transport"],
+    image: "⚓"
+  },
+  {
+    japanese: "道",
+    hiragana: "みち",
+    romaji: "michi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "road / way" },
+      { lang: "es", translation: "carretera" }
+    ],
+    tags: ["transport"],
+    image: "🛤️"
+  },
+
+  // --- CLOTHING ---
+  {
+    japanese: "服",
+    hiragana: "ふく",
+    romaji: "fuku",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "clothes" },
+      { lang: "es", translation: "ropa" }
+    ],
+    tags: ["clothing"],
+    image: "👕"
+  },
+  {
+    japanese: "靴",
+    hiragana: "くつ",
+    romaji: "kutsu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "shoes" },
+      { lang: "es", translation: "zapatos" }
+    ],
+    tags: ["clothing"],
+    image: "👟"
+  },
+  {
+    japanese: "帽子",
+    hiragana: "ぼうし",
+    romaji: "boushi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "hat / cap" },
+      { lang: "es", translation: "gorro" }
+    ],
+    tags: ["clothing"],
+    image: "👒"
+  },
+  {
+    japanese: "コート",
+    hiragana: "コート",
+    romaji: "kooto",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "coat / overcoat" },
+      { lang: "es", translation: "abrigo" }
+    ],
+    tags: ["clothing"],
+    image: "🧥"
+  },
+  {
+    japanese: "ズボン",
+    hiragana: "ズボン",
+    romaji: "zubon",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "pants / trousers" },
+      { lang: "es", translation: "pantalones" }
+    ],
+    tags: ["clothing"],
+    image: "👖"
+  },
+  {
+    japanese: "シャツ",
+    hiragana: "シャツ",
+    romaji: "shatsu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "shirt" },
+      { lang: "es", translation: "camisa" }
+    ],
+    tags: ["clothing"],
+    image: "👔"
+  },
+  {
+    japanese: "ドレス",
+    hiragana: "ドレス",
+    romaji: "doresu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "dress" },
+      { lang: "es", translation: "vestido" }
+    ],
+    tags: ["clothing"],
+    image: "👗"
+  },
+  {
+    japanese: "靴下",
+    hiragana: "くつした",
+    romaji: "kutsushita",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "socks" },
+      { lang: "es", translation: "calcetines" }
+    ],
+    tags: ["clothing"],
+    image: "🧦"
+  },
+  {
+    japanese: "鞄",
+    hiragana: "かばん",
+    romaji: "kaban",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "bag" },
+      { lang: "es", translation: "bolsa" }
+    ],
+    tags: ["clothing"],
+    image: "👜"
+  },
+  {
+    japanese: "指輪",
+    hiragana: "ゆびわ",
+    romaji: "yubiwa",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "ring" },
+      { lang: "es", translation: "anillo" }
+    ],
+    tags: ["clothing"],
+    image: "💍"
+  },
+
+  // --- HOUSE / ROOM ---
+  {
+    japanese: "家",
+    hiragana: "いえ",
+    romaji: "ie",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "house / home" },
+      { lang: "es", translation: "casa" }
+    ],
+    tags: ["house"],
+    image: "🏠"
+  },
+  {
+    japanese: "部屋",
+    hiragana: "へや",
+    romaji: "heya",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "room" },
+      { lang: "es", translation: "habitación" }
+    ],
+    tags: ["house"],
+    image: "🚪"
+  },
+  {
+    japanese: "台所",
+    hiragana: "だいどころ",
+    romaji: "daidokoro",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "kitchen" },
+      { lang: "es", translation: "cocina" }
+    ],
+    tags: ["house"],
+    image: "🍳"
+  },
+  {
+    japanese: "浴室",
+    hiragana: "よくしつ",
+    romaji: "yokushitsu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "bathroom" },
+      { lang: "es", translation: "baño" }
+    ],
+    tags: ["house"],
+    image: "🛁"
+  },
+  {
+    japanese: "寝室",
+    hiragana: "しんしつ",
+    romaji: "shinshitsu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "bedroom" },
+      { lang: "es", translation: "dormitorio" }
+    ],
+    tags: ["house"],
+    image: "🛏️"
+  },
+  {
+    japanese: "窓",
+    hiragana: "まど",
+    romaji: "mado",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "window" },
+      { lang: "es", translation: "ventana" }
+    ],
+    tags: ["house"],
+    image: "🪟"
+  },
+  {
+    japanese: "扉",
+    hiragana: "とびら",
+    romaji: "tobira",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "door" },
+      { lang: "es", translation: "puerta" }
+    ],
+    tags: ["house"],
+    image: "🚪"
+  },
+  {
+    japanese: "階段",
+    hiragana: "かいだん",
+    romaji: "kaidan",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "stairs / staircase" },
+      { lang: "es", translation: "escalera" }
+    ],
+    tags: ["house"],
+    image: "🪜"
+  },
+  {
+    japanese: "床",
+    hiragana: "ゆか",
+    romaji: "yuka",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "floor" },
+      { lang: "es", translation: "suelo" }
+    ],
+    tags: ["house"],
+    image: "🏠"
+  },
+  {
+    japanese: "天井",
+    hiragana: "てんじょう",
+    romaji: "tenjou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "ceiling" },
+      { lang: "es", translation: "techo" }
+    ],
+    tags: ["house"],
+    image: "🏠"
+  },
+  {
+    japanese: "壁",
+    hiragana: "かべ",
+    romaji: "kabe",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "wall" },
+      { lang: "es", translation: "pared" }
+    ],
+    tags: ["house"],
+    image: "🧱"
+  },
+  {
+    japanese: "屋根",
+    hiragana: "やね",
+    romaji: "yane",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "roof" },
+      { lang: "es", translation: "techo" }
+    ],
+    tags: ["house"],
+    image: "🏠"
+  },
+  {
+    japanese: "庭",
+    hiragana: "にわ",
+    romaji: "niwa",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "garden / yard" },
+      { lang: "es", translation: "jardín" }
+    ],
+    tags: ["house"],
+    image: "🌳"
+  },
+  {
+    japanese: "家具",
+    hiragana: "かぐ",
+    romaji: "kagu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "furniture" },
+      { lang: "es", translation: "muebles" }
+    ],
+    tags: ["house"],
+    image: "🪑"
+  },
+  {
+    japanese: "椅子",
+    hiragana: "いす",
+    romaji: "isu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "chair" },
+      { lang: "es", translation: "silla" }
+    ],
+    tags: ["house"],
+    image: "🪑"
+  },
+  {
+    japanese: "机",
+    hiragana: "つくえ",
+    romaji: "tsukue",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "desk / table" },
+      { lang: "es", translation: "escritorio" }
+    ],
+    tags: ["house"],
+    image: "🪑"
+  },
+  {
+    japanese: "布団",
+    hiragana: "ふとん",
+    romaji: "futon",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "futon / bedding" },
+      { lang: "es", translation: "futón" }
+    ],
+    tags: ["house"],
+    image: "🛏️"
+  },
+  {
+    japanese: "電気",
+    hiragana: "でんき",
+    romaji: "denki",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "electricity / light" },
+      { lang: "es", translation: "electricidad / luz" }
+    ],
+    tags: ["house"],
+    image: "💡"
+  },
+  {
+    japanese: "水道",
+    hiragana: "すいどう",
+    romaji: "suidou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "water supply / faucet" },
+      { lang: "es", translation: "agua / grifo" }
+    ],
+    tags: ["house"],
+    image: "🚰"
+  },
+
+  // --- SCHOOL / WORK ---
+  {
+    japanese: "学校",
+    hiragana: "がっこう",
+    romaji: "gakkou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "school" },
+      { lang: "es", translation: "escuela" }
+    ],
+    tags: ["school"],
+    image: "🏫"
+  },
+  {
+    japanese: "先生",
+    hiragana: "せんせい",
+    romaji: "sensei",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "teacher" },
+      { lang: "es", translation: "profesor" }
+    ],
+    tags: ["school"],
+    image: "👨‍🏫"
+  },
+  {
+    japanese: "生徒",
+    hiragana: "せいと",
+    romaji: "seito",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "student" },
+      { lang: "es", translation: "estudiante" }
+    ],
+    tags: ["school"],
+    image: "👦"
+  },
+  {
+    japanese: "教科",
+    hiragana: "きょうか",
+    romaji: "kyouka",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "subject" },
+      { lang: "es", translation: "asignatura" }
+    ],
+    tags: ["school"],
+    image: "📚"
+  },
+  {
+    japanese: "試験",
+    hiragana: "しけん",
+    romaji: "shiken",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "exam / test" },
+      { lang: "es", translation: "examen" }
+    ],
+    tags: ["school"],
+    image: "📝"
+  },
+  {
+    japanese: "問題",
+    hiragana: "もんだい",
+    romaji: "mondai",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "problem / question" },
+      { lang: "es", translation: "problema / pregunta" }
+    ],
+    tags: ["school"],
+    image: "❓"
+  },
+  {
+    japanese: "答え",
+    hiragana: "こたえ",
+    romaji: "kotae",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "answer" },
+      { lang: "es", translation: "respuesta" }
+    ],
+    tags: ["school"],
+    image: "💬"
+  },
+  {
+    japanese: "本",
+    hiragana: "ほん",
+    romaji: "hon",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "book" },
+      { lang: "es", translation: "libro" }
+    ],
+    tags: ["school"],
+    image: "📖"
+  },
+  {
+    japanese: "鉛筆",
+    hiragana: "えんぴつ",
+    romaji: "enpitsu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "pencil" },
+      { lang: "es", translation: "lápiz" }
+    ],
+    tags: ["school"],
+    image: "✏️"
+  },
+  {
+    japanese: "ペン",
+    hiragana: "ペン",
+    romaji: "pen",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "pen" },
+      { lang: "es", translation: "bolígrafo" }
+    ],
+    tags: ["school"],
+    image: "🖊️"
+  },
+  {
+    japanese: "会社",
+    hiragana: "かいしゃ",
+    romaji: "kaisha",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "company" },
+      { lang: "es", translation: "empresa" }
+    ],
+    tags: ["work"],
+    image: "🏢"
+  },
+  {
+    japanese: "仕事",
+    hiragana: "しごと",
+    romaji: "shigoto",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "work / job" },
+      { lang: "es", translation: "trabajo" }
+    ],
+    tags: ["work"],
+    image: "💼"
+  },
+  {
+    japanese: "会議",
+    hiragana: "かいぎ",
+    romaji: "kaigi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "meeting / conference" },
+      { lang: "es", translation: "reunión" }
+    ],
+    tags: ["work"],
+    image: "📊"
+  },
+  {
+    japanese: "書類",
+    hiragana: "しょるい",
+    romaji: "shorui",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "documents" },
+      { lang: "es", translation: "documentos" }
+    ],
+    tags: ["work"],
+    image: "📄"
+  },
+
+  // --- COMMON VERBS ---
+  {
+    japanese: "食べる",
+    hiragana: "たべる",
+    romaji: "taberu",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to eat" },
+      { lang: "es", translation: "comer" }
+    ],
+    tags: ["verb"],
+    image: "🍽️"
+  },
+  {
+    japanese: "飲む",
+    hiragana: "のむ",
+    romaji: "nomu",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to drink" },
+      { lang: "es", translation: "beber" }
+    ],
+    tags: ["verb"],
+    image: "🥤"
+  },
+  {
+    japanese: "見る",
+    hiragana: "みる",
+    romaji: "miru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to see / to look" },
+      { lang: "es", translation: "ver / mirar" }
+    ],
+    tags: ["verb"],
+    image: "👀"
+  },
+  {
+    japanese: "聞く",
+    hiragana: "きく",
+    romaji: "kiku",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to hear / to listen / to ask" },
+      { lang: "es", translation: "oír / escuchar / preguntar" }
+    ],
+    tags: ["verb"],
+    image: "👂"
+  },
+  {
+    japanese: "話す",
+    hiragana: "はなす",
+    romaji: "hanasu",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to speak / to talk" },
+      { lang: "es", translation: "hablar" }
+    ],
+    tags: ["verb"],
+    image: "💬"
+  },
+  {
+    japanese: "行く",
+    hiragana: "いく",
+    romaji: "iku",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to go" },
+      { lang: "es", translation: "ir" }
+    ],
+    tags: ["verb"],
+    image: "🚶"
+  },
+  {
+    japanese: "来る",
+    hiragana: "くる",
+    romaji: "kuru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to come" },
+      { lang: "es", translation: "venir" }
+    ],
+    tags: ["verb"],
+    image: "➡️"
+  },
+  {
+    japanese: "帰る",
+    hiragana: "かえる",
+    romaji: "kaeru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to return / to go home" },
+      { lang: "es", translation: "volver / regresar" }
+    ],
+    tags: ["verb"],
+    image: "🏠"
+  },
+  {
+    japanese: "寝る",
+    hiragana: "ねる",
+    romaji: "neru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to sleep" },
+      { lang: "es", translation: "dormir" }
+    ],
+    tags: ["verb"],
+    image: "😴"
+  },
+  {
+    japanese: "起きる",
+    hiragana: "おきる",
+    romaji: "okiru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to wake up / to get up" },
+      { lang: "es", translation: "despertarse / levantarse" }
+    ],
+    tags: ["verb"],
+    image: "⏰"
+  },
+  {
+    japanese: "書く",
+    hiragana: "かく",
+    romaji: "kaku",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to write" },
+      { lang: "es", translation: "escribir" }
+    ],
+    tags: ["verb"],
+    image: "✍️"
+  },
+  {
+    japanese: "読む",
+    hiragana: "よむ",
+    romaji: "yomu",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to read" },
+      { lang: "es", translation: "leer" }
+    ],
+    tags: ["verb"],
+    image: "📖"
+  },
+  {
+    japanese: "買う",
+    hiragana: "かう",
+    romaji: "kau",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to buy" },
+      { lang: "es", translation: "comprar" }
+    ],
+    tags: ["verb"],
+    image: "🛒"
+  },
+  {
+    japanese: "売る",
+    hiragana: "うる",
+    romaji: "uru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to sell" },
+      { lang: "es", translation: "vender" }
+    ],
+    tags: ["verb"],
+    image: "💰"
+  },
+  {
+    japanese: "待つ",
+    hiragana: "まつ",
+    romaji: "matsu",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to wait" },
+      { lang: "es", translation: "esperar" }
+    ],
+    tags: ["verb"],
+    image: "⏳"
+  },
+  {
+    japanese: "知る",
+    hiragana: "しる",
+    romaji: "shiru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to know" },
+      { lang: "es", translation: "saber / conocer" }
+    ],
+    tags: ["verb"],
+    image: "🧠"
+  },
+  {
+    japanese: "思う",
+    hiragana: "おもう",
+    romaji: "omou",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to think" },
+      { lang: "es", translation: "pensar" }
+    ],
+    tags: ["verb"],
+    image: "🤔"
+  },
+  {
+    japanese: "分かる",
+    hiragana: "わかる",
+    romaji: "wakaru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to understand / to be understood" },
+      { lang: "es", translation: "entender" }
+    ],
+    tags: ["verb"],
+    image: "💡"
+  },
+  {
+    japanese: "使う",
+    hiragana: "つかう",
+    romaji: "tsukau",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to use" },
+      { lang: "es", translation: "usar" }
+    ],
+    tags: ["verb"],
+    image: "🔧"
+  },
+  {
+    japanese: "作る",
+    hiragana: "つくる",
+    romaji: "tsukuru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to make / to create" },
+      { lang: "es", translation: "hacer / crear" }
+    ],
+    tags: ["verb"],
+    image: "🔨"
+  },
+  {
+    japanese: "出す",
+    hiragana: "だす",
+    romaji: "dasu",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to take out / to submit" },
+      { lang: "es", translation: "sacar / entregar" }
+    ],
+    tags: ["verb"],
+    image: "📤"
+  },
+  {
+    japanese: "入る",
+    hiragana: "はいる",
+    romaji: "hairu",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to enter" },
+      { lang: "es", translation: "entrar" }
+    ],
+    tags: ["verb"],
+    image: "🚪"
+  },
+  {
+    japanese: "出る",
+    hiragana: "でる",
+    romaji: "deru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to leave / to go out" },
+      { lang: "es", translation: "salir" }
+    ],
+    tags: ["verb"],
+    image: "🚶"
+  },
+  {
+    japanese: "開く",
+    hiragana: "あく",
+    romaji: "aku",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to open" },
+      { lang: "es", translation: "abrir" }
+    ],
+    tags: ["verb"],
+    image: "🚪"
+  },
+  {
+    japanese: "閉じる",
+    hiragana: "とじる",
+    romaji: "tojiru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to close" },
+      { lang: "es", translation: "cerrar" }
+    ],
+    tags: ["verb"],
+    image: "🚪"
+  },
+  {
+    japanese: "座る",
+    hiragana: "すわる",
+    romaji: "suwaru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to sit" },
+      { lang: "es", translation: "sentarse" }
+    ],
+    tags: ["verb"],
+    image: "🪑"
+  },
+  {
+    japanese: "立つ",
+    hiragana: "たつ",
+    romaji: "tatsu",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to stand" },
+      { lang: "es", translation: "levantarse" }
+    ],
+    tags: ["verb"],
+    image: "🧍"
+  },
+  {
+    japanese: "洗う",
+    hiragana: "あらう",
+    romaji: "arau",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to wash" },
+      { lang: "es", translation: "lavar" }
+    ],
+    tags: ["verb"],
+    image: "🧼"
+  },
+  {
+    japanese: "着る",
+    hiragana: "きる",
+    romaji: "kiru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to wear / to put on" },
+      { lang: "es", translation: "vestirse / ponerse" }
+    ],
+    tags: ["verb"],
+    image: "👕"
+  },
+
+  // --- COMMON ADJECTIVES ---
+  {
+    japanese: "大きい",
+    hiragana: "おおきい",
+    romaji: "ookii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "big / large" },
+      { lang: "es", translation: "grande" }
+    ],
+    tags: ["adjective"],
+    image: "🐘"
+  },
+  {
+    japanese: "小さい",
+    hiragana: "ちいさい",
+    romaji: "chiisai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "small / little" },
+      { lang: "es", translation: "pequeño" }
+    ],
+    tags: ["adjective"],
+    image: "🐜"
+  },
+  {
+    japanese: "新しい",
+    hiragana: "あたらしい",
+    romaji: "atarashii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "new" },
+      { lang: "es", translation: "nuevo" }
+    ],
+    tags: ["adjective"],
+    image: "✨"
+  },
+  {
+    japanese: "古い",
+    hiragana: "ふるい",
+    romaji: "furui",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "old (thing)" },
+      { lang: "es", translation: "viejo" }
+    ],
+    tags: ["adjective"],
+    image: "📦"
+  },
+  {
+    japanese: "良い",
+    hiragana: "いい / よい",
+    romaji: "ii / yoi",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "good" },
+      { lang: "es", translation: "bueno" }
+    ],
+    tags: ["adjective"],
+    image: "👍"
+  },
+  {
+    japanese: "悪い",
+    hiragana: "わるい",
+    romaji: "warui",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "bad" },
+      { lang: "es", translation: "malo" }
+    ],
+    tags: ["adjective"],
+    image: "👎"
+  },
+  {
+    japanese: "高い",
+    hiragana: "たかい",
+    romaji: "takai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "high / tall / expensive" },
+      { lang: "es", translation: "alto / caro" }
+    ],
+    tags: ["adjective"],
+    image: "🏔️"
+  },
+  {
+    japanese: "低い",
+    hiragana: "ひくい",
+    romaji: "hikui",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "low / short" },
+      { lang: "es", translation: "bajo" }
+    ],
+    tags: ["adjective"],
+    image: "📏"
+  },
+  {
+    japanese: "長い",
+    hiragana: "ながい",
+    romaji: "nagai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "long" },
+      { lang: "es", translation: "largo" }
+    ],
+    tags: ["adjective"],
+    image: "📏"
+  },
+  {
+    japanese: "短い",
+    hiragana: "みじかい",
+    romaji: "mijikai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "short" },
+      { lang: "es", translation: "corto" }
+    ],
+    tags: ["adjective"],
+    image: "📐"
+  },
+  {
+    japanese: "明るい",
+    hiragana: "あかるい",
+    romaji: "akarui",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "bright / light" },
+      { lang: "es", translation: "brillante / luminoso" }
+    ],
+    tags: ["adjective"],
+    image: "☀️"
+  },
+  {
+    japanese: "暗い",
+    hiragana: "くらい",
+    romaji: "kurai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "dark" },
+      { lang: "es", translation: "oscuro" }
+    ],
+    tags: ["adjective"],
+    image: "🌙"
+  },
+  {
+    japanese: "白い",
+    hiragana: "しろい",
+    romaji: "shiroi",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "white" },
+      { lang: "es", translation: "blanco" }
+    ],
+    tags: ["adjective", "color"],
+    image: "⬜"
+  },
+  {
+    japanese: "黒い",
+    hiragana: "くろい",
+    romaji: "kuroi",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "black" },
+      { lang: "es", translation: "negro" }
+    ],
+    tags: ["adjective", "color"],
+    image: "⬛"
+  },
+  {
+    japanese: "赤い",
+    hiragana: "あかい",
+    romaji: "akai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "red" },
+      { lang: "es", translation: "rojo" }
+    ],
+    tags: ["adjective", "color"],
+    image: "🔴"
+  },
+  {
+    japanese: "青い",
+    hiragana: "あおい",
+    romaji: "aoi",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "blue" },
+      { lang: "es", translation: "azul" }
+    ],
+    tags: ["adjective", "color"],
+    image: "🔵"
+  },
+  {
+    japanese: "甘い",
+    hiragana: "あまい",
+    romaji: "amai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "sweet" },
+      { lang: "es", translation: "dulce" }
+    ],
+    tags: ["adjective"],
+    image: "🍬"
+  },
+  {
+    japanese: "辛い",
+    hiragana: "からい",
+    romaji: "karai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "spicy / hot" },
+      { lang: "es", translation: "picante" }
+    ],
+    tags: ["adjective"],
+    image: "🌶️"
+  },
+  {
+    japanese: "美味しい",
+    hiragana: "おいしい",
+    romaji: "oishii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "delicious" },
+      { lang: "es", translation: "delicioso" }
+    ],
+    tags: ["adjective"],
+    image: "😋"
+  },
+  {
+    japanese: "速い",
+    hiragana: "はやい",
+    romaji: "hayai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "fast / quick" },
+      { lang: "es", translation: "rápido" }
+    ],
+    tags: ["adjective"],
+    image: "⚡"
+  },
+  {
+    japanese: "遅い",
+    hiragana: "おそい",
+    romaji: "osoi",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "slow / late" },
+      { lang: "es", translation: "lento / tarde" }
+    ],
+    tags: ["adjective"],
+    image: "🐌"
+  },
+  {
+    japanese: "強い",
+    hiragana: "つよい",
+    romaji: "tsuyoi",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "strong" },
+      { lang: "es", translation: "fuerte" }
+    ],
+    tags: ["adjective"],
+    image: "💪"
+  },
+  {
+    japanese: "弱い",
+    hiragana: "よわい",
+    romaji: "yowai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "weak" },
+      { lang: "es", translation: "débil" }
+    ],
+    tags: ["adjective"],
+    image: "😓"
+  },
+  {
+    japanese: "易しい",
+    hiragana: "やさしい",
+    romaji: "yasashii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "easy / kind" },
+      { lang: "es", translation: "fácil / amable" }
+    ],
+    tags: ["adjective"],
+    image: "👍"
+  },
+  {
+    japanese: "難しい",
+    hiragana: "むずかしい",
+    romaji: "muzukashii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "difficult" },
+      { lang: "es", translation: "difícil" }
+    ],
+    tags: ["adjective"],
+    image: "🤯"
+  },
+  {
+    japanese: "面白い",
+    hiragana: "おもしろい",
+    romaji: "omoshiroi",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "interesting / funny" },
+      { lang: "es", translation: "interesante / divertido" }
+    ],
+    tags: ["adjective"],
+    image: "😄"
+  },
+  {
+    japanese: "退屈な",
+    hiragana: "たいくつな",
+    romaji: "taikutsu na",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "boring" },
+      { lang: "es", translation: "aburrido" }
+    ],
+    tags: ["adjective"],
+    image: "😴"
+  },
+  {
+    japanese: "忙しい",
+    hiragana: "いそがしい",
+    romaji: "isogashii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "busy" },
+      { lang: "es", translation: "ocupado" }
+    ],
+    tags: ["adjective"],
+    image: "📚"
+  },
+  {
+    japanese: "暇な",
+    hiragana: "ひまな",
+    romaji: "hima na",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "free / idle / bored" },
+      { lang: "es", translation: "libre / aburrido" }
+    ],
+    tags: ["adjective"],
+    image: "🕰️"
+  },
+
+  // --- NATURE ---
+  {
+    japanese: "山",
+    hiragana: "やま",
+    romaji: "yama",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "mountain" },
+      { lang: "es", translation: "montaña" }
+    ],
+    tags: ["nature"],
+    image: "⛰️"
+  },
+  {
+    japanese: "川",
+    hiragana: "かわ",
+    romaji: "kawa",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "river" },
+      { lang: "es", translation: "río" }
+    ],
+    tags: ["nature"],
+    image: "🏞️"
+  },
+  {
+    japanese: "海",
+    hiragana: "うみ",
+    romaji: "umi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "sea / ocean" },
+      { lang: "es", translation: "mar" }
+    ],
+    tags: ["nature"],
+    image: "🌊"
+  },
+  {
+    japanese: "空",
+    hiragana: "そら",
+    romaji: "sora",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "sky" },
+      { lang: "es", translation: "cielo" }
+    ],
+    tags: ["nature"],
+    image: "☀️"
+  },
+  {
+    japanese: "星",
+    hiragana: "ほし",
+    romaji: "hoshi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "star" },
+      { lang: "es", translation: "estrella" }
+    ],
+    tags: ["nature"],
+    image: "⭐"
+  },
+  {
+    japanese: "月",
+    hiragana: "つき",
+    romaji: "tsuki",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "moon" },
+      { lang: "es", translation: "luna" }
+    ],
+    tags: ["nature"],
+    image: "🌙"
+  },
+  {
+    japanese: "太陽",
+    hiragana: "たいよう",
+    romaji: "taiyou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "sun" },
+      { lang: "es", translation: "sol" }
+    ],
+    tags: ["nature"],
+    image: "☀️"
+  },
+  {
+    japanese: "地球",
+    hiragana: "ちきゅう",
+    romaji: "chikyuu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "Earth" },
+      { lang: "es", translation: "Tierra" }
+    ],
+    tags: ["nature"],
+    image: "🌍"
+  },
+  {
+    japanese: "森",
+    hiragana: "もり",
+    romaji: "mori",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "forest" },
+      { lang: "es", translation: "bosque" }
+    ],
+    tags: ["nature"],
+    image: "🌲"
+  },
+  {
+    japanese: "花",
+    hiragana: "はな",
+    romaji: "hana",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "flower" },
+      { lang: "es", translation: "flor" }
+    ],
+    tags: ["nature"],
+    image: "🌸"
+  },
+  {
+    japanese: "木",
+    hiragana: "き",
+    romaji: "ki",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "tree / wood" },
+      { lang: "es", translation: "árbol / madera" }
+    ],
+    tags: ["nature"],
+    image: "🌳"
+  },
+  {
+    japanese: "草",
+    hiragana: "くさ",
+    romaji: "kusa",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "grass" },
+      { lang: "es", translation: "hierba" }
+    ],
+    tags: ["nature"],
+    image: "🌱"
+  },
+  {
+    japanese: "波",
+    hiragana: "なみ",
+    romaji: "nami",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "wave" },
+      { lang: "es", translation: "ola" }
+    ],
+    tags: ["nature"],
+    image: "🌊"
+  },
+  {
+    japanese: "火",
+    hiragana: "ひ",
+    romaji: "hi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "fire" },
+      { lang: "es", translation: "fuego" }
+    ],
+    tags: ["nature"],
+    image: "🔥"
+  },
+  {
+    japanese: "土",
+    hiragana: "つち",
+    romaji: "tsuchi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "earth / soil" },
+      { lang: "es", translation: "tierra" }
+    ],
+    tags: ["nature"],
+    image: "🌍"
+  },
+  {
+    japanese: "石",
+    hiragana: "いし",
+    romaji: "ishi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "stone / rock" },
+      { lang: "es", translation: "piedra" }
+    ],
+    tags: ["nature"],
+    image: "🪨"
+  },
+
+  // --- SPORTS / HOBBIES ---
+  {
+    japanese: "音楽",
+    hiragana: "おんがく",
+    romaji: "ongaku",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "music" },
+      { lang: "es", translation: "música" }
+    ],
+    tags: ["hobby"],
+    image: "🎵"
+  },
+  {
+    japanese: "映画",
+    hiragana: "えいが",
+    romaji: "eiga",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "movie / film" },
+      { lang: "es", translation: "película" }
+    ],
+    tags: ["hobby"],
+    image: "🎬"
+  },
+  {
+    japanese: "写真",
+    hiragana: "しゃしん",
+    romaji: "shashin",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "photograph" },
+      { lang: "es", translation: "fotografía" }
+    ],
+    tags: ["hobby"],
+    image: "📷"
+  },
+  {
+    japanese: "読書",
+    hiragana: "どくしょ",
+    romaji: "dokusho",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "reading" },
+      { lang: "es", translation: "lectura" }
+    ],
+    tags: ["hobby"],
+    image: "📚"
+  },
+  {
+    japanese: "旅行",
+    hiragana: "りょこう",
+    romaji: "ryokou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "travel / trip" },
+      { lang: "es", translation: "viaje" }
+    ],
+    tags: ["hobby"],
+    image: "✈️"
+  },
+  {
+    japanese: "料理",
+    hiragana: "りょうり",
+    romaji: "ryouri",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "cooking / cuisine" },
+      { lang: "es", translation: "cocina" }
+    ],
+    tags: ["hobby"],
+    image: "🍳"
+  },
+  {
+    japanese: "散歩",
+    hiragana: "さんぽ",
+    romaji: "sanpo",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "walk / stroll" },
+      { lang: "es", translation: "paseo" }
+    ],
+    tags: ["hobby"],
+    image: "🚶"
+  },
+  {
+    japanese: "ゲーム",
+    hiragana: "ゲーム",
+    romaji: "geemu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "game" },
+      { lang: "es", translation: "juego" }
+    ],
+    tags: ["hobby"],
+    image: "🎮"
+  },
+  {
+    japanese: "絵",
+    hiragana: "え",
+    romaji: "e",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "picture / painting" },
+      { lang: "es", translation: "cuadro / pintura" }
+    ],
+    tags: ["hobby"],
+    image: "🎨"
+  },
+  {
+    japanese: "ダンス",
+    hiragana: "ダンス",
+    romaji: "dansu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "dance" },
+      { lang: "es", translation: "danza" }
+    ],
+    tags: ["hobby"],
+    image: "💃"
+  },
+  {
+    japanese: "映画館",
+    hiragana: "えいがかん",
+    romaji: "eigakan",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "movie theater" },
+      { lang: "es", translation: "cine" }
+    ],
+    tags: ["place"],
+    image: "🎥"
+  },
+  {
+    japanese: "図書館",
+    hiragana: "としょかん",
+    romaji: "toshokan",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "library" },
+      { lang: "es", translation: "biblioteca" }
+    ],
+    tags: ["place"],
+    image: "📚"
+  },
+  {
+    japanese: "病院",
+    hiragana: "びょういん",
+    romaji: "byouin",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "hospital" },
+      { lang: "es", translation: "hospital" }
+    ],
+    tags: ["place"],
+    image: "🏥"
+  },
+  {
+    japanese: "銀行",
+    hiragana: "ぎんこう",
+    romaji: "ginkou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "bank" },
+      { lang: "es", translation: "banco" }
+    ],
+    tags: ["place"],
+    image: "🏦"
+  },
+  {
+    japanese: "商店",
+    hiragana: "しょうてん",
+    romaji: "shouten",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "shop / store" },
+      { lang: "es", translation: "tienda" }
+    ],
+    tags: ["place"],
+    image: "🏪"
+  },
+  {
+    japanese: "レストラン",
+    hiragana: "レストラン",
+    romaji: "resutoran",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "restaurant" },
+      { lang: "es", translation: "restaurante" }
+    ],
+    tags: ["place"],
+    image: "🍽️"
+  },
+  {
+    japanese: "喫茶店",
+    hiragana: "きっさてん",
+    romaji: "kissaten",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "cafe / coffee shop" },
+      { lang: "es", translation: "cafetería" }
+    ],
+    tags: ["place"],
+    image: "☕"
+  },
+  {
+    japanese: "公園",
+    hiragana: "こうえん",
+    romaji: "kouen",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "park" },
+      { lang: "es", translation: "parque" }
+    ],
+    tags: ["place"],
+    image: "🌳"
+  },
+  {
+    japanese: "神社",
+    hiragana: "じんじゃ",
+    romaji: "jinja",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "shrine" },
+      { lang: "es", translation: "santuario" }
+    ],
+    tags: ["place"],
+    image: "⛩️"
+  },
+  {
+    japanese: "寺",
+    hiragana: "てら",
+    romaji: "tera",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "temple" },
+      { lang: "es", translation: "templo" }
+    ],
+    tags: ["place"],
+    image: "🛕"
+  },
+
+  // --- EMOTIONS ---
+  {
+    japanese: "嬉しい",
+    hiragana: "うれしい",
+    romaji: "ureshii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "happy / glad" },
+      { lang: "es", translation: "feliz / contento" }
+    ],
+    tags: ["emotion"],
+    image: "😊"
+  },
+  {
+    japanese: "悲しい",
+    hiragana: "かなしい",
+    romaji: "kanashii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "sad" },
+      { lang: "es", translation: "triste" }
+    ],
+    tags: ["emotion"],
+    image: "😢"
+  },
+  {
+    japanese: "怖い",
+    hiragana: "こわい",
+    romaji: "kowai",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "scary / frightened" },
+      { lang: "es", translation: "asustado" }
+    ],
+    tags: ["emotion"],
+    image: "😱"
+  },
+  {
+    japanese: "怒る",
+    hiragana: "おこる",
+    romaji: "okoru",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to get angry" },
+      { lang: "es", translation: "enojarse" }
+    ],
+    tags: ["emotion"],
+    image: "😠"
+  },
+  {
+    japanese: "驚く",
+    hiragana: "おどろく",
+    romaji: "odoroku",
+    type: "Verb",
+    translation: [
+      { lang: "en", translation: "to be surprised" },
+      { lang: "es", translation: "sorprenderse" }
+    ],
+    tags: ["emotion"],
+    image: "😲"
+  },
+  {
+    japanese: "愛",
+    hiragana: "あい",
+    romaji: "ai",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "love" },
+      { lang: "es", translation: "amor" }
+    ],
+    tags: ["emotion"],
+    image: "❤️"
+  },
+  {
+    japanese: "希望",
+    hiragana: "きぼう",
+    romaji: "kibou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "hope" },
+      { lang: "es", translation: "esperanza" }
+    ],
+    tags: ["emotion"],
+    image: "🌟"
+  },
+  {
+    japanese: "心配",
+    hiragana: "しんぱい",
+    romaji: "shinpai",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "worry / concern" },
+      { lang: "es", translation: "preocupación" }
+    ],
+    tags: ["emotion"],
+    image: "😟"
+  },
+  {
+    japanese: "恥ずかしい",
+    hiragana: "はずかしい",
+    romaji: "hazukashii",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "embarrassed" },
+      { lang: "es", translation: "avergonzado" }
+    ],
+    tags: ["emotion"],
+    image: "😳"
+  },
+
+  // --- TECHNOLOGY ---
+  {
+    japanese: "コンピュータ",
+    hiragana: "コンピュータ",
+    romaji: "konpyuuta",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "computer" },
+      { lang: "es", translation: "computadora" }
+    ],
+    tags: ["technology"],
+    image: "💻"
+  },
+{
+    japanese: "電話",
+    hiragana: "でんわ",
+    romaji: "denwa",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "phone / telephone" },
+      { lang: "es", translation: "teléfono" }
+    ],
+    tags: ["work", "technology"],
+    image: "📱"
+  },
+  {
+    japanese: "インターネット",
+    hiragana: "インターネット",
+    romaji: "intaanetto",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "internet" },
+      { lang: "es", translation: "internet" }
+    ],
+    tags: ["technology"],
+    image: "🌐"
+  },
+  {
+    japanese: "メール",
+    hiragana: "メール",
+    romaji: "meeru",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "email" },
+      { lang: "es", translation: "correo electrónico" }
+    ],
+    tags: ["technology"],
+    image: "📧"
+  },
+  {
+    japanese: "カメラ",
+    hiragana: "カメラ",
+    romaji: "kamera",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "camera" },
+      { lang: "es", translation: "cámara" }
+    ],
+    tags: ["technology"],
+    image: "📷"
+  },
+  {
+    japanese: "テレビ",
+    hiragana: "テレビ",
+    romaji: "terebi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "television / TV" },
+      { lang: "es", translation: "televisión" }
+    ],
+    tags: ["technology"],
+    image: "📺"
+  },
+  {
+    japanese: "ラジオ",
+    hiragana: "ラジオ",
+    romaji: "rajio",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "radio" },
+      { lang: "es", translation: "radio" }
+    ],
+    tags: ["technology"],
+    image: "📻"
+  },
+  {
+    japanese: "時計",
+    hiragana: "とけい",
+    romaji: "tokei",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "clock / watch" },
+      { lang: "es", translation: "reloj" }
+    ],
+    tags: ["technology"],
+    image: "⏰"
+  },
+  {
+    japanese: "電源",
+    hiragana: "でんげん",
+    romaji: "dengen",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "power source / switch" },
+      { lang: "es", translation: "encendido" }
+    ],
+    tags: ["technology"],
+    image: "🔌"
+  },
+  {
+    japanese: "画面",
+    hiragana: "がめん",
+    romaji: "gamen",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "screen / display" },
+      { lang: "es", translation: "pantalla" }
+    ],
+    tags: ["technology"],
+    image: "🖥️"
+  },
+
+  // --- MUSIC INSTRUMENTS ---
+  {
+    japanese: "ギター",
+    hiragana: "ギター",
+    romaji: "gitaa",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "guitar" },
+      { lang: "es", translation: "guitarra" }
+    ],
+    tags: ["music"],
+    image: "🎸"
+  },
+  {
+    japanese: "ピアノ",
+    hiragana: "ピアノ",
+    romaji: "piano",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "piano" },
+      { lang: "es", translation: "piano" }
+    ],
+    tags: ["music"],
+    image: "🎹"
+  },
+  {
+    japanese: "ドラム",
+    hiragana: "ドラム",
+    romaji: "doramu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "drums" },
+      { lang: "es", translation: "batería" }
+    ],
+    tags: ["music"],
+    image: "🥁"
+  },
+  {
+    japanese: "バイオリン",
+    hiragana: "バイオリン",
+    romaji: "baiorin",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "violin" },
+      { lang: "es", translation: "violín" }
+    ],
+    tags: ["music"],
+    image: "🎻"
+  },
+  {
+    japanese: "歌",
+    hiragana: "うた",
+    romaji: "uta",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "song" },
+      { lang: "es", translation: "canción" }
+    ],
+    tags: ["music"],
+    image: "🎤"
+  },
+  {
+    japanese: "歌手",
+    hiragana: "かしゅ",
+    romaji: "kashu",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "singer" },
+      { lang: "es", translation: "cantante" }
+    ],
+    tags: ["music"],
+    image: "🎤"
+  },
+
+  // --- SHOPPING / MONEY ---
+  {
+    japanese: "店",
+    hiragana: "みせ",
+    romaji: "mise",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "shop / store" },
+      { lang: "es", translation: "tienda" }
+    ],
+    tags: ["shopping"],
+    image: "🏪"
+  },
+  {
+    japanese: "市場",
+    hiragana: "いちば",
+    romaji: "ichiba",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "market" },
+      { lang: "es", translation: "mercado" }
+    ],
+    tags: ["shopping"],
+    image: "🏪"
+  },
+  {
+    japanese: "商品",
+    hiragana: "しょうひん",
+    romaji: "shouhin",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "product / merchandise" },
+      { lang: "es", translation: "producto" }
+    ],
+    tags: ["shopping"],
+    image: "📦"
+  },
+  {
+    japanese: "価格",
+    hiragana: "かかく",
+    romaji: "kakaku",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "price" },
+      { lang: "es", translation: "precio" }
+    ],
+    tags: ["shopping"],
+    image: "🏷️"
+  },
+  {
+    japanese: "贅沢",
+    hiragana: "ぜいたく",
+    romaji: "zeitaku",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "luxury" },
+      { lang: "es", translation: "lujo" }
+    ],
+    tags: ["shopping"],
+    image: "💎"
+  },
+  {
+    japanese: "無料",
+    hiragana: "むりょう",
+    romaji: "muryou",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "free (no cost)" },
+      { lang: "es", translation: "gratis" }
+    ],
+    tags: ["shopping"],
+    image: "🆓"
+  },
+  {
+    japanese: "お金",
+    hiragana: "おかね",
+    romaji: "okane",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "money" },
+      { lang: "es", translation: "dinero" }
+    ],
+    tags: ["shopping"],
+    image: "💴"
+  },
+  {
+    japanese: "切手",
+    hiragana: "きって",
+    romaji: "kitte",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "postage stamp" },
+      { lang: "es", translation: "sello" }
+    ],
+    tags: ["shopping"],
+    image: "📮"
+  },
+  {
+    japanese: "手紙",
+    hiragana: "てがみ",
+    romaji: "tegami",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "letter" },
+      { lang: "es", translation: "carta" }
+    ],
+    tags: ["shopping"],
+    image: "💌"
+  },
+  {
+    japanese: "包み",
+    hiragana: "つつみ",
+    romaji: "tsutsumi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "package / wrapping" },
+      { lang: "es", translation: "paquete" }
+    ],
+    tags: ["shopping"],
+    image: "📦"
+  },
+
+  // --- DIRECTIONS ---
+  {
+    japanese: "上",
+    hiragana: "うえ",
+    romaji: "ue",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "up / above" },
+      { lang: "es", translation: "arriba" }
+    ],
+    tags: ["direction"],
+    image: "⬆️"
+  },
+  {
+    japanese: "下",
+    hiragana: "した",
+    romaji: "shita",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "down / below" },
+      { lang: "es", translation: "abajo" }
+    ],
+    tags: ["direction"],
+    image: "⬇️"
+  },
+  {
+    japanese: "左",
+    hiragana: "ひだり",
+    romaji: "hidari",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "left" },
+      { lang: "es", translation: "izquierda" }
+    ],
+    tags: ["direction"],
+    image: "⬅️"
+  },
+  {
+    japanese: "右",
+    hiragana: "みぎ",
+    romaji: "migi",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "right" },
+      { lang: "es", translation: "derecha" }
+    ],
+    tags: ["direction"],
+    image: "➡️"
+  },
+  {
+    japanese: "前",
+    hiragana: "まえ",
+    romaji: "mae",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "front / before" },
+      { lang: "es", translation: "delante / antes" }
+    ],
+    tags: ["direction"],
+    image: "👆"
+  },
+  {
+    japanese: "後",
+    hiragana: "うしろ",
+    romaji: "ushiro",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "back / behind" },
+      { lang: "es", translation: "detrás" }
+    ],
+    tags: ["direction"],
+    image: "👇"
+  },
+  {
+    japanese: "中",
+    hiragana: "なか",
+    romaji: "naka",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "inside / middle" },
+      { lang: "es", translation: "dentro / medio" }
+    ],
+    tags: ["direction"],
+    image: "🔄"
+  },
+  {
+    japanese: "外",
+    hiragana: "そと",
+    romaji: "soto",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "outside" },
+      { lang: "es", translation: "fuera" }
+    ],
+    tags: ["direction"],
+    image: "🔵"
+  },
+  {
+    japanese: "近く",
+    hiragana: "ちかく",
+    romaji: "chikaku",
+    type: "Noun",
+    translation: [
+      { lang: "en", translation: "near / nearby" },
+      { lang: "es", translation: "cerca" }
+    ],
+    tags: ["direction"],
+    image: "📍"
+  },
+  {
+    japanese: "遠い",
+    hiragana: "とおい",
+    romaji: "tooi",
+    type: "Adjective",
+    translation: [
+      { lang: "en", translation: "far" },
+      { lang: "es", translation: "lejos" }
+    ],
+    tags: ["direction"],
+    image: "📍"
   }
 ];
