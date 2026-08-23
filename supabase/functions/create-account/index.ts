@@ -9,6 +9,8 @@ const corsHeaders = {
 const json = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
+const fail = (code: string, status = 400) => json({ error: code }, status);
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
@@ -39,8 +41,11 @@ Deno.serve(async (request) => {
     .select("user_id")
     .ilike("username", username)
     .maybeSingle();
-  if (profileLookupError) return json({ error: "Account creation unavailable" }, 500);
-  if (existingProfile) return json({ error: "Account creation unavailable" }, 400);
+  if (profileLookupError) {
+    console.error("create-account profile lookup failed", profileLookupError.message);
+    return fail("database_not_ready", 500);
+  }
+  if (existingProfile) return fail("username_taken");
 
   const { data: created, error: createError } = await admin.auth.admin.createUser({
     email: recoveryEmail,
@@ -48,7 +53,10 @@ Deno.serve(async (request) => {
     email_confirm: true,
     user_metadata: { username },
   });
-  if (createError || !created.user) return json({ error: "Account creation unavailable" }, 400);
+  if (createError || !created.user) {
+    console.error("create-account Auth user creation failed", createError?.message ?? "missing user");
+    return fail("account_creation_unavailable");
+  }
 
   const { data: activated, error: activationError } = await admin.rpc("activate_account_for_user", {
     p_user_id: created.user.id,
@@ -56,11 +64,17 @@ Deno.serve(async (request) => {
     p_username: username,
   });
 
-  if (activationError || activated !== true) {
+  if (activationError) {
+    console.error("create-account activation RPC failed", activationError.message);
     await admin.auth.admin.deleteUser(created.user.id);
-    return json({ error: "Account creation unavailable" }, 400);
+    return fail("database_not_ready", 500);
+  }
+
+  if (activated !== true) {
+    console.warn("create-account invite rejected or already used");
+    await admin.auth.admin.deleteUser(created.user.id);
+    return fail("invite_invalid_or_used");
   }
 
   return json({ ok: true });
 });
-

@@ -201,6 +201,7 @@
       "required": "Completa todos los campos.",
       "invalidKey": "La clave de invitación no es válida.",
       "usedKey": "La clave de invitación ya se ha utilizado.",
+      "databaseNotReady": "El servicio de cuentas aún no está completamente configurado. Inténtalo más tarde.",
       "createFailed": "No se pudo crear la cuenta. Comprueba tus datos y la clave de invitación.",
       "signInAfterCreate": "La cuenta se creó, pero no se pudo iniciar sesión automáticamente. Inicia sesión manualmente.",
       "invalidLogin": "Nombre de usuario o contraseña no válidos."

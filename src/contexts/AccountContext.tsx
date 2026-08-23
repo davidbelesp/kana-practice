@@ -142,7 +142,20 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     if (password.length < 8) return { error: "auth.errors.passwordLength" };
     if (!recoveryEmail.trim() || !inviteKey.trim()) return { error: "auth.errors.required" };
     const { error: functionError } = await supabase.functions.invoke("create-account", { body: { username: normalizedUsername, recoveryEmail: recoveryEmail.trim(), password, inviteKey: inviteKey.trim() } });
-    if (functionError) return { error: "auth.errors.createFailed" };
+    if (functionError) {
+      let serverCode = "";
+      const response = (functionError as { context?: unknown }).context;
+      if (response instanceof Response) {
+        try {
+          const payload = await response.clone().json() as { error?: string };
+          serverCode = payload.error ?? "";
+        } catch { /* Keep the generic message when the response is not JSON. */ }
+      }
+      if (serverCode === "username_taken") return { error: "auth.errors.usernameTaken" };
+      if (serverCode === "invite_invalid_or_used") return { error: "auth.errors.invalidKey" };
+      if (serverCode === "database_not_ready") return { error: "auth.errors.databaseNotReady" };
+      return { error: "auth.errors.createFailed" };
+    }
     const { data, error: signInError } = await supabase.auth.signInWithPassword({ email: recoveryEmail.trim(), password });
     if (signInError || !data.user) return { error: "auth.errors.signInAfterCreate" };
     setUser(data.user);

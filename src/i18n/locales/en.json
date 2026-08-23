@@ -202,6 +202,7 @@
       "required": "Please complete every field.",
       "invalidKey": "That invitation key is invalid.",
       "usedKey": "That invitation key has already been used.",
+      "databaseNotReady": "The account service is not fully configured yet. Please try again later.",
       "createFailed": "We could not create that account. Check your details and invitation key.",
       "signInAfterCreate": "Account created, but automatic sign-in failed. Please log in.",
       "invalidLogin": "Invalid username or password."
