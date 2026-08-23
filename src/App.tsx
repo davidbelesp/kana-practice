@@ -6,6 +6,7 @@ import { Settings } from "./pages/Settings";
 import "./App.css";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import { SettingsProvider, useSettings } from "./contexts/SettingsContext";
+import { AccountProvider } from "./contexts/AccountContext";
 
 const Quiz = lazy(() => import("./pages/Quiz").then(m => ({ default: m.Quiz })));
 const Stats = lazy(() => import("./pages/Stats").then(m => ({ default: m.Stats })));
@@ -15,6 +16,8 @@ const KanjiQuiz = lazy(() => import("./pages/KanjiQuiz").then(m => ({ default: m
 const Vocabulary = lazy(() => import("./pages/Vocabulary").then(m => ({ default: m.Vocabulary })));
 const VocabularyQuiz = lazy(() => import("./pages/VocabularyQuiz").then(m => ({ default: m.VocabularyQuiz })));
 const Numbers = lazy(() => import("./pages/Numbers").then(m => ({ default: m.Numbers })));
+const Login = lazy(() => import("./pages/Login").then(m => ({ default: m.Login })));
+const CreateAccount = lazy(() => import("./pages/CreateAccount").then(m => ({ default: m.CreateAccount })));
 
 const PageLoader = () => (
   <div className="container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
@@ -23,12 +26,15 @@ const PageLoader = () => (
 );
 
 function App() {
+  const basename = import.meta.env.BASE_URL === "/" ? undefined : import.meta.env.BASE_URL.replace(/\/$/, "");
   return (
     <SettingsProvider>
-      <Router>
-        <NotificationProvider>
-          <SettingsContextConsumer />
-        </NotificationProvider>
+      <Router basename={basename}>
+        <AccountProvider>
+          <NotificationProvider>
+            <SettingsContextConsumer />
+          </NotificationProvider>
+        </AccountProvider>
       </Router>
     </SettingsProvider>
   );
@@ -48,6 +54,8 @@ const SettingsContextConsumer = () => {
           <Route path="/canvas" element={<FreeCanvas />} />
           <Route path="/kanji" element={<KanjiPage />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/vocabulary" element={<Vocabulary />} />
           <Route path="/vocabulary-quiz" element={<VocabularyQuiz />} />
           <Route path="/numbers" element={<Numbers />} />

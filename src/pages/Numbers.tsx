@@ -3,7 +3,8 @@ import { ArrowRight, Check, Headphones, Keyboard, ListChecks, RotateCw, SkipForw
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { numberToJapanese, checkNumberAnswer } from "../utils/numberToJapanese";
-import { saveNumberResult } from "../utils/statsManager";
+import { digitGroup, saveNumberResult } from "../utils/statsManager";
+import { recordCompletedSession, recordItemResults } from "../utils/progressRepository";
 import { useSettings } from "../contexts/SettingsContext";
 import { useNotification } from "../contexts/NotificationContext";
 import { AppShell } from "../components/ui/AppShell";
@@ -55,6 +56,11 @@ export const Numbers = () => {
   const [choices, setChoices] = useState<number[]>([]);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sessionStartedAtRef = useRef(Date.now());
+  const sessionIdRef = useRef(`numbers-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  const latestSessionRef = useRef({ mode: questionMode, attempts, score });
+  const finalizedSessionRef = useRef<string | null>(null);
+  latestSessionRef.current = { mode: questionMode, attempts, score };
   const japanese = useMemo(() => numberToJapanese(number), [number]);
 
   const buildChoices = useCallback((n: number) => shuffle([n, ...generateDistractors(n, numbersMin, numbersMax)]), [numbersMin, numbersMax]);
@@ -84,7 +90,21 @@ export const Numbers = () => {
     if (correct) setScore((value) => value + 1);
     setStatus(correct ? "correct" : "incorrect");
     saveNumberResult(number, correct);
+    recordItemResults("numbers", [{ itemId: `range-${digitGroup(number)}`, correct }]);
   }, [number]);
+
+  const finalizeSession = useCallback(() => {
+    if (!questionMode || attempts === 0 || finalizedSessionRef.current === sessionIdRef.current) return;
+    recordCompletedSession({ id: sessionIdRef.current, domain: "numbers", mode: questionMode, source: "/numbers", startedAt: sessionStartedAtRef.current, total: attempts, correct: score });
+    finalizedSessionRef.current = sessionIdRef.current;
+  }, [attempts, questionMode, score]);
+
+  useEffect(() => () => {
+    const latest = latestSessionRef.current;
+    if (!latest.mode || latest.attempts === 0 || finalizedSessionRef.current === sessionIdRef.current) return;
+    recordCompletedSession({ id: sessionIdRef.current, domain: "numbers", mode: latest.mode, source: "/numbers", startedAt: sessionStartedAtRef.current, total: latest.attempts, correct: latest.score });
+    finalizedSessionRef.current = sessionIdRef.current;
+  }, []);
 
   const handleSubmit = useCallback(() => {
     if (!questionMode) return;
@@ -117,13 +137,17 @@ export const Numbers = () => {
 
   const activeMode = modeOptions.find(({ id }) => id === questionMode);
   const chooseMode = useCallback((mode: QuestionMode) => {
+    finalizeSession();
     setScore(0);
     setAttempts(0);
     setStatus(null);
     setInput("");
     setSelectedChoice(null);
     setQuestionMode(mode);
-  }, []);
+    sessionStartedAtRef.current = Date.now();
+    sessionIdRef.current = `numbers-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    finalizedSessionRef.current = null;
+  }, [finalizeSession]);
 
   if (!questionMode) {
     return (
@@ -158,9 +182,9 @@ export const Numbers = () => {
   }
 
   return (
-    <QuizWorkspace title={t("numbers.title")} sourceLabel="NUMBER LAB" sourceDetail={t("numbers.subtitle")} questionIndex={attempts} total={Math.max(attempts + 1, 1)} score={score} attempts={attempts} remaining={0} railContent={<><span className="quiz-rail-context-label">{t("numbers.activeMode")}</span><strong className="quiz-rail-context-value">{activeMode?.label}</strong><button className="btn-text numbers-change-mode" onClick={() => setQuestionMode(null)}>{t("numbers.changeMode")}</button><span className="quiz-rail-context-label">{t("numbers.range", { min: numbersMin.toLocaleString(), max: numbersMax.toLocaleString() })}</span></>} backTo="/" backLabel={t("common.back")}>
+      <QuizWorkspace title={t("numbers.title")} sourceLabel="NUMBER LAB" sourceDetail={t("numbers.subtitle")} questionIndex={attempts} total={Math.max(attempts + 1, 1)} score={score} attempts={attempts} remaining={0} railContent={<><span className="quiz-rail-context-label">{t("numbers.activeMode")}</span><strong className="quiz-rail-context-value">{activeMode?.label}</strong><button className="btn-text numbers-change-mode" onClick={() => { finalizeSession(); setQuestionMode(null); }}>{t("numbers.changeMode")}</button><span className="quiz-rail-context-label">{t("numbers.range", { min: numbersMin.toLocaleString(), max: numbersMax.toLocaleString() })}</span></>} backTo="/" backLabel={t("common.back")}>
       <div className="numbers-container numbers-studio-page">
-        <div className="numbers-mode-panel glass-panel numbers-inline-mode"><span className="section-kicker">{t("numbers.activeMode")}</span><strong>{activeMode?.label}</strong><button className="btn-text numbers-change-mode" onClick={() => setQuestionMode(null)}>{t("numbers.changeMode")}</button></div>
+        <div className="numbers-mode-panel glass-panel numbers-inline-mode"><span className="section-kicker">{t("numbers.activeMode")}</span><strong>{activeMode?.label}</strong><button className="btn-text numbers-change-mode" onClick={() => { finalizeSession(); setQuestionMode(null); }}>{t("numbers.changeMode")}</button></div>
 
         <main className="numbers-workspace">
           <div className={classNames("numbers-card glass-panel", status)}>

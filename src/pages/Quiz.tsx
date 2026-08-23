@@ -7,6 +7,7 @@ import { QuizWorkspace } from "../components/quiz/QuizWorkspace";
 import { useQuizSession } from "../components/quiz/useQuizSession";
 import { generateQuizDeck } from "../utils/questionGenerator";
 import { saveStatResultsBatch, saveQuizHistory } from "../utils/statsManager";
+import { recordCompletedSession, recordItemResults } from "../utils/progressRepository";
 import { type QuizQuestion } from "../types/QuizTypes";
 import { useSettings } from "../contexts/SettingsContext";
 import "./Quiz.css";
@@ -23,6 +24,8 @@ export const Quiz = () => {
   const state = location.state as QuizState | null;
   const { settings } = useSettings();
   const pendingStatsRef = useRef<Array<{ char: string; isCorrect: boolean }>>([]);
+  const sessionStartedAtRef = useRef(Date.now());
+  const sessionIdRef = useRef(`kana-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 
   useEffect(() => {
     if (!state?.selectedChars?.length) navigate("/", { replace: true });
@@ -52,12 +55,15 @@ export const Quiz = () => {
   const [userAnswer, setUserAnswer] = useState<string | string[]>("");
 
   const finishSession = useCallback(({ score, attempts }: { score: number; attempts: number }) => {
-    if (pendingStatsRef.current.length > 0) {
-      saveStatResultsBatch(pendingStatsRef.current);
+    const results = pendingStatsRef.current;
+    if (results.length > 0) {
+      saveStatResultsBatch(results);
       pendingStatsRef.current = [];
     }
     saveQuizHistory(score, attempts - score);
-  }, []);
+    recordItemResults("kana", results.map(({ char, isCorrect }) => ({ itemId: char, correct: isCorrect })));
+    recordCompletedSession({ id: sessionIdRef.current, domain: "kana", mode: "mixed", source: state?.from ?? "/practice", startedAt: sessionStartedAtRef.current, total: attempts, correct: score });
+  }, [state?.from]);
 
   const session = useQuizSession({ total, onFinished: finishSession });
   const currentQuestion = deck[session.questionIndex] ?? null;

@@ -690,6 +690,40 @@
     margin-top: 62px;
 }
 
+.dashboard-recommendation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid var(--studio-border);
+    border-radius: 18px;
+    background: linear-gradient(110deg, var(--studio-panel), var(--accent-soft));
+    color: var(--studio-text);
+    text-decoration: none;
+    transition: transform .2s ease, border-color .2s ease;
+}
+
+.dashboard-recommendation:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-primary);
+}
+
+.dashboard-recommendation h2 {
+    margin: .35rem 0 .25rem;
+}
+
+.dashboard-recommendation p {
+    margin: 0;
+    color: var(--studio-muted);
+}
+
+.dashboard-recommendation-arrow {
+    color: var(--accent-primary);
+    font-size: 1.6rem;
+}
+
 .progress-panel,
 .number-panel {
     min-height: 198px;

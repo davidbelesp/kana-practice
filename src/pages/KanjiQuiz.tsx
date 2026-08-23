@@ -7,7 +7,8 @@ import { useQuizSession } from "../components/quiz/useQuizSession";
 import { kanjiLevels } from "../data/kanjiManifest";
 import type { KanjiChar } from "../data/kanjiTypes";
 import { generateKanjiQuizDeck } from "../utils/kanjiQuestionGenerator";
-import { saveStatResultsBatch, saveQuizHistory } from "../utils/statsManager";
+import { saveQuizHistory } from "../utils/statsManager";
+import { recordCompletedSession, recordItemResults } from "../utils/progressRepository";
 import { type QuizQuestion } from "../types/QuizTypes";
 import { useSettings } from "../contexts/SettingsContext";
 import "./Quiz.css";
@@ -22,6 +23,8 @@ export const KanjiQuiz = () => {
   const { settings } = useSettings();
   const selectedChars = state?.selectedChars ?? [];
   const pendingStatsRef = useRef<Array<{ char: string; isCorrect: boolean }>>([]);
+  const sessionStartedAtRef = useRef(Date.now());
+  const sessionIdRef = useRef(`kanji-${Date.now()}-${Math.random().toString(36).slice(2)}`);
   const [pool, setPool] = useState<KanjiChar[]>([]);
   const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading");
   const [deck, setDeck] = useState<QuizQuestion[]>([]);
@@ -65,11 +68,10 @@ export const KanjiQuiz = () => {
   }, [pool, settings.enabledQuestionTypes, translateKanji]);
 
   const finishSession = useCallback(({ score, attempts }: { score: number; attempts: number }) => {
-    if (pendingStatsRef.current.length > 0) {
-      saveStatResultsBatch(pendingStatsRef.current);
-      pendingStatsRef.current = [];
-    }
     saveQuizHistory(score, attempts - score);
+    recordItemResults("kanji", pendingStatsRef.current.map(({ char, isCorrect }) => ({ itemId: char, correct: isCorrect })));
+    pendingStatsRef.current = [];
+    recordCompletedSession({ id: sessionIdRef.current, domain: "kanji", mode: "mixed", source: "/kanji", startedAt: sessionStartedAtRef.current, total: attempts, correct: score });
   }, []);
   const session = useQuizSession({ total, onFinished: finishSession });
   const currentQuestion = deck[session.questionIndex] ?? null;

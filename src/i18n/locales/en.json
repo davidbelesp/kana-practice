@@ -56,7 +56,8 @@
       "appearance": "Appearance",
       "quiz": "Quiz",
       "practice": "Practice",
-      "general": "General"
+      "general": "General",
+      "account": "Account"
     },
     "appearance": {
       "title": "Appearance Settings",
@@ -142,7 +143,69 @@
       "weakestCount": "Weakest Character Count",
       "weakestDesc": "How many characters to include when practicing 'Weakest' sets"
     }
+    ,"account": {
+      "title": "Private account",
+      "description": "Keep your progress available on every device while staying offline-first.",
+      "notConfigured": "Accounts are not configured for this deployment yet. Guest progress continues to work locally.",
+      "signedInAs": "Signed in as",
+      "email": "Email address",
+      "emailDescription": "Your recovery email is used for password recovery by the owner.",
+      "inviteKey": "Owner invite key",
+      "inviteDescription": "Required only when creating a new account.",
+      "invitePlaceholder": "Paste your owner key",
+      "guestDescription": "Your learning data is currently stored locally. Create an account to sync it across devices.",
+      "signOut": "Sign out",
+      "syncNow": "Sync now",
+      "export": "Export JSON",
+      "exportGuest": "Export local data",
+      "lastSynced": "Last synced {{date}}",
+      "deleteTitle": "Delete cloud account",
+      "deleteDescription": "Permanently remove cloud progress and sessions. Local content is not affected until confirmed.",
+      "deleteButton": "Delete account",
+      "deleteConfirm": "Delete your cloud account and all synced progress? This cannot be undone.",
+      "sync": { "offline": "Local only", "idle": "Ready to sync", "syncing": "Syncing", "synced": "Synced", "error": "Sync error" }
+    }
 
+  },
+  "auth": {
+    "kicker": "PRIVATE STUDIO ACCESS",
+    "loginTitle": "Log in",
+    "loginHeading": "Welcome back.",
+    "loginDescription": "Continue your Japanese practice with your saved progress and settings.",
+    "loginSubtitle": "Use your username and password to continue.",
+    "createTitle": "Create account",
+    "createHeading": "Make your progress portable.",
+    "createDescription": "Create a private Studio account and keep your learning history available wherever you practice.",
+    "createSubtitle": "An owner-issued invite key is required for beta access.",
+    "notConfigured": "Accounts are not configured for this deployment yet. Guest progress continues to work locally.",
+    "username": "Username",
+    "recoveryEmail": "Recovery email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "inviteKey": "Invite key",
+    "invitePlaceholder": "Owner-issued key",
+    "inviteInfoLabel": "About the invite key",
+    "inviteInfo": "This key is needed to create a new account, only given by owner. Contact contact@davidbelesp.com for beta-access.",
+    "passwordMismatch": "Passwords do not match.",
+    "loginAction": "Log in",
+    "createAction": "Create account",
+    "working": "Please wait…",
+    "noAccount": "Need a Studio account?",
+    "haveAccount": "Already have an account?",
+    "passwordRecovery": "Password recovery is handled by the owner for now.",
+    "invalidLogin": "Invalid username or password.",
+    "errors": {
+      "notConfigured": "Accounts are not configured for this deployment yet.",
+      "invalidUsername": "Use 3–24 lowercase letters, numbers, underscores, or hyphens for your username.",
+      "usernameTaken": "That username is already taken.",
+      "passwordLength": "Password must be at least 8 characters.",
+      "required": "Please complete every field.",
+      "invalidKey": "That invitation key is invalid.",
+      "usedKey": "That invitation key has already been used.",
+      "createFailed": "We could not create that account. Check your details and invitation key.",
+      "signInAfterCreate": "Account created, but automatic sign-in failed. Please log in.",
+      "invalidLogin": "Invalid username or password."
+    }
   },
   "quiz": {
     "title": "Practice session",
@@ -196,6 +259,7 @@
     "overallAccuracy": "Overall accuracy",
     "questionsAnswered": "Questions answered",
     "bestStreak": "Best active streak",
+    "currentStreak": "Current streak",
     "recentActivity": "Recent activity",
     "kanaMastery": "Kana mastery",
     "hiragana": "Hiragana",
@@ -204,6 +268,18 @@
     "practiceWeakest": "Practice weakest",
     "masteredCharacters": "Mastered characters",
     "numbersProgress": "Numbers progress",
+    "domainProgress": "Progress by path",
+    "kanjiMastery": "Kanji mastery",
+    "vocabularyProgress": "Vocabulary progress",
+    "wordsMastered": "words mastered",
+    "wordsPracticed": "{{count}} entries practiced",
+    "vocabularyNoData": "Start a filtered vocabulary quiz to build entry-level progress.",
+    "grammarProgress": "Grammar path",
+    "grammarComingSoon": "Grammar lessons will appear here when the course is ready.",
+    "masteredShort": "mastered",
+    "openDomain": "Open",
+    "openRecommendation": "Start this session",
+    "digitGroup": "{{group}} digit range",
     "recentSessions": "Recent sessions",
     "nextSession": "Your next best session",
     "nextSessionDescription": "Start with the characters that will improve your recall fastest.",
@@ -229,6 +305,18 @@
       "correct": "Correct",
       "wrong": "Wrong"
     }
+  },
+  "recommendations": {
+    "kanaTitle": "Train Kana",
+    "kanaDescription": "Refresh the characters that need another focused pass.",
+    "kanjiTitle": "Train Kanji",
+    "kanjiDescription": "Keep your JLPT path moving with a small character set.",
+    "vocabularyTitle": "Train Vocabulary",
+    "vocabularyDescription": "Open the library and turn recent words into recall.",
+    "numbersTitle": "Train Numbers",
+    "numbersDescription": "Practice a number direction before it gets rusty.",
+    "grammarTitle": "Train Grammar",
+    "grammarDescription": "Grammar exercises will be available in a future course path."
   },
   "kanji": {
     "title": "Kanji Compendium",
@@ -461,7 +549,10 @@
     "noteLineOne": "Small steps.",
     "noteLineTwo": "Sharp memory.",
     "localSynced": "LOCAL PROGRESS SYNCED",
-    "more": "More"
+    "more": "More",
+    "signIn": "Sign In",
+    "login": "Log in",
+    "accountAvatar": "Account for {{username}}"
   },
   "numbers": {
     "title": "Numbers",

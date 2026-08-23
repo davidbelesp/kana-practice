@@ -1,0 +1,8 @@
+project_id = "cjkzobwxaxsifxhqjbyv"
+
+# Account creation starts from a guest browser, so the Edge Function must be
+# reachable before a user has a Supabase session. The invite key and all
+# account validation still happen server-side in the function.
+[functions.create-account]
+verify_jwt = false
+

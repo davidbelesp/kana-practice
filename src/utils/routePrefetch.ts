@@ -34,6 +34,8 @@ const routeLoaders: Record<string, () => Promise<unknown>> = {
     import("../pages/VocabularyQuiz"),
     import("../services/vocabularySearchClient").then(({ prefetchVocabularySearch }) => prefetchVocabularySearch()),
   ]),
+  "/login": () => import("../pages/Login"),
+  "/create-account": () => import("../pages/CreateAccount"),
 };
 
 export const prefetchRoute = (path: string) => {

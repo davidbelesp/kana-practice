@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { prefetchRoute } from "../../utils/routePrefetch";
+import { useAccount } from "../../contexts/AccountContext";
 import {
   ArrowLeft,
   BarChart3,
@@ -67,11 +68,14 @@ const ShellChrome: React.FC<AppShellChromeProps> = ({
   backLabel,
 }) => {
   const { t } = useTranslation();
+  const { user, username } = useAccount();
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const close = useCallback(() => setIsOpen(false), []);
   const isFocus = mode === "focus";
+  const accountLabel = username ?? user?.email ?? t("nav.accountAvatar");
+  const accountInitial = (username?.[0] ?? user?.email?.[0] ?? "?").toUpperCase();
 
   useEffect(() => { setIsOpen(false); }, [location.pathname]);
   useEffect(() => {
@@ -120,7 +124,10 @@ const ShellChrome: React.FC<AppShellChromeProps> = ({
         <div className="navbar-center">{centerSlot}</div>
         <div className="navbar-right">
           {(backTo || isFocus) && <button className="btn-secondary navbar-back-btn" onClick={() => backTo ? navigate(backTo) : navigate(-1)} aria-label={backLabel ?? t("common.back")}><ArrowLeft size={16} strokeWidth={1.8} /><span>{backLabel ?? t("common.back")}</span></button>}
-          {!isFocus && <Link to="/settings" className="btn-icon" aria-label={t("common.settings")}><Settings size={17} strokeWidth={1.8} /></Link>}
+          {!isFocus && <>
+            {!user ? <div className="navbar-account-guest"><Link to="/create-account" className="navbar-account-link" onMouseEnter={() => prefetchRoute("/create-account")} onFocus={() => prefetchRoute("/create-account")}>{t("nav.signIn")}</Link><Link to="/login" className="navbar-account-link navbar-account-link-muted" onMouseEnter={() => prefetchRoute("/login")} onFocus={() => prefetchRoute("/login")}>{t("nav.login")}</Link></div> : <Link to="/settings?tab=account" className="account-avatar" aria-label={t("nav.accountAvatar", { username: accountLabel })} title={accountLabel}>{accountInitial}</Link>}
+            <Link to="/settings" className="btn-icon" aria-label={t("common.settings")}><Settings size={17} strokeWidth={1.8} /></Link>
+          </>}
         </div>
       </nav>
 
@@ -129,7 +136,12 @@ const ShellChrome: React.FC<AppShellChromeProps> = ({
           <div className={`navbar-overlay ${isOpen ? "visible" : ""}`} onClick={close} aria-hidden="true" />
           <aside className={`navbar-drawer ${isOpen ? "open" : ""}`} aria-label={t("nav.navigation")} aria-hidden={!isOpen}>
             <div className="drawer-header"><Brand onClick={close} /><button className="btn-icon" onClick={close} aria-label={t("nav.closeMenu")}><X size={19} /></button></div>
-            <nav className="drawer-nav">{links.map(({ to, label, Icon, active }) => <Link key={to} to={to} onMouseEnter={() => prefetchRoute(to)} onFocus={() => prefetchRoute(to)} className={`drawer-link ${active ? "active" : ""}`} onClick={close}><Icon size={17} /><span>{label}</span></Link>)}</nav>
+            <nav className="drawer-nav">{links.map(({ to, label, Icon, active }) => <Link key={to} to={to} onMouseEnter={() => prefetchRoute(to)} onFocus={() => prefetchRoute(to)} className={`drawer-link ${active ? "active" : ""}`} onClick={close}><Icon size={17} /><span>{label}</span></Link>)}
+              <div className="drawer-account-actions">
+                {user ? <Link to="/settings?tab=account" className="drawer-account-link" onClick={close}><span className="account-avatar account-avatar-small">{accountInitial}</span><span>{accountLabel}</span></Link> : <><Link to="/create-account" className="drawer-link" onClick={close} onMouseEnter={() => prefetchRoute("/create-account")} onFocus={() => prefetchRoute("/create-account")}>{t("nav.signIn")}</Link><Link to="/login" className="drawer-link" onClick={close} onMouseEnter={() => prefetchRoute("/login")} onFocus={() => prefetchRoute("/login")}>{t("nav.login")}</Link></>}
+                <Link to="/settings" className="drawer-link" onClick={close}><Settings size={17} /><span>{t("common.settings")}</span></Link>
+              </div>
+            </nav>
           </aside>
           <nav className="mobile-dock" aria-label={t("nav.navigation")}>
             {[links[0], links[1], links[2], links[6]].map(({ to, label, Icon, active }) => <Link key={to} to={to} onMouseEnter={() => prefetchRoute(to)} onFocus={() => prefetchRoute(to)} className={active ? "active" : ""}><Icon size={18} /><span>{label}</span></Link>)}

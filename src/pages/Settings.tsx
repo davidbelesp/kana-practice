@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   useSettings,
@@ -10,10 +11,11 @@ import {
 } from "../contexts/SettingsContext";
 import type { QuestionType } from "../types/QuizTypes";
 import { AppShell } from "../components/ui/AppShell";
-import { ClipboardList, Palette, Zap, Settings as SettingsIcon, type LucideIcon } from "lucide-react";
+import { ClipboardList, Palette, Zap, Settings as SettingsIcon, UserRound, type LucideIcon } from "lucide-react";
+import { useAccount } from "../contexts/AccountContext";
 import "./Settings.css";
 
-type TabId = "quiz" | "appearance" | "practice" | "general";
+type TabId = "quiz" | "appearance" | "practice" | "general" | "account";
 
 interface Tab {
   id: TabId;
@@ -26,6 +28,7 @@ const TABS: Tab[] = [
   { id: "appearance", labelKey: "settings.tabs.appearance", Icon: Palette },
   { id: "practice", labelKey: "settings.tabs.practice", Icon: Zap },
   { id: "general", labelKey: "settings.tabs.general", Icon: SettingsIcon },
+  { id: "account", labelKey: "settings.tabs.account", Icon: UserRound },
 ];
 
 const THEME_OPTIONS: { id: AppSettings["theme"]; labelKey: string; gradient: string }[] = [
@@ -53,7 +56,13 @@ export const Settings = () => {
   const { t } = useTranslation();
 
   const { settings, updateSetting, resetSettings } = useSettings();
+  const { configured, user, username, syncStatus, lastSyncedAt, error: accountError, signOut, syncNow, exportAccountData, deleteCloudAccount } = useAccount();
   const [activeTab, setActiveTab] = useState<TabId>("quiz");
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("tab") === "account") setActiveTab("account");
+  }, [searchParams]);
 
   const QUESTION_TYPE_META: Record<QuestionType, { label: string; desc: string; emoji: string }> = {
     "single-choice-romaji": {
@@ -485,6 +494,22 @@ export const Settings = () => {
                   </button>
                 </div>
               </div>
+            </section>
+          )}
+          {activeTab === "account" && (
+            <section className="settings-section account-settings-section">
+              <div className="section-title-row"><h2>{t("settings.account.title")}</h2></div>
+              <p className="setting-desc account-intro">{t("settings.account.description")}</p>
+              {!configured ? <div className="account-notice">{t("settings.account.notConfigured")}</div> : user ? <>
+                <div className="account-profile-card"><div><span className="setting-label">{t("settings.account.signedInAs")}</span><strong>{username ?? user.email}</strong><small>{user.email}</small></div><span className={`account-sync-status ${syncStatus}`}>{t(`settings.account.sync.${syncStatus}`)}</span></div>
+                {lastSyncedAt && <p className="setting-desc">{t("settings.account.lastSynced", { date: new Date(lastSyncedAt).toLocaleString() })}</p>}
+                {accountError && <div className="account-error">{accountError}</div>}
+                <div className="account-actions"><button className="btn-primary" onClick={() => void syncNow()} disabled={syncStatus === "syncing"}>{t("settings.account.syncNow")}</button><button className="btn-secondary" onClick={exportAccountData}>{t("settings.account.export")}</button><button className="btn-text" onClick={() => void signOut()}>{t("settings.account.signOut")}</button></div>
+                <div className="setting-row setting-row--danger"><div className="setting-info"><span className="setting-label">{t("settings.account.deleteTitle")}</span><span className="setting-desc">{t("settings.account.deleteDescription")}</span></div><div className="setting-control"><button className="btn-secondary" onClick={() => { if (window.confirm(t("settings.account.deleteConfirm"))) void deleteCloudAccount(); }}>{t("settings.account.deleteButton")}</button></div></div>
+              </> : <>
+                <div className="account-notice">{t("settings.account.guestDescription")}</div>
+                <div className="account-actions"><Link className="btn-primary" to="/create-account">{t("auth.createAction")}</Link><Link className="btn-secondary" to="/login">{t("auth.loginAction")}</Link><button className="btn-text" onClick={exportAccountData}>{t("settings.account.exportGuest")}</button></div>
+              </>}
             </section>
           )}
         </main>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowUpRight, BarChart3, BookMarked, BookOpen, Brush, ChevronRight, Layers, Target, Trophy } from "lucide-react";
 import { getAggregates, getMasteredKana } from "../utils/statsManager";
+import { getTrainingRecommendations, useProgressSnapshot } from "../utils/progressRepository";
 import { AppShell } from "../components/ui/AppShell";
 import "./Index.css";
 
@@ -16,9 +17,15 @@ const sessions = [
 export const Index: React.FC = () => {
   const { t } = useTranslation();
   const aggregates = useMemo(() => getAggregates(), []);
+  const progressSnapshot = useProgressSnapshot();
+  const recommendations = useMemo(() => getTrainingRecommendations(), [progressSnapshot.updatedAt]);
   const mastered = useMemo(() => getMasteredKana(), []);
   const totalAnswered = aggregates.totalCorrect + aggregates.totalWrong;
-  const weeklyGoal = Math.min(100, Math.round((aggregates.totalQuizzes / 7) * 100));
+  const unifiedTotals = useMemo(() => Object.values(progressSnapshot.sessions).reduce((total, session) => ({ correct: total.correct + session.correct, incorrect: total.incorrect + session.incorrect }), { correct: 0, incorrect: 0 }), [progressSnapshot.sessions]);
+  const trackedAnswered = unifiedTotals.correct + unifiedTotals.incorrect || totalAnswered;
+  const trackedAccuracy = trackedAnswered ? Math.round((unifiedTotals.correct / trackedAnswered) * 100) : aggregates.globalAccuracy;
+  const trackedSessions = Object.keys(progressSnapshot.sessions).length || aggregates.totalQuizzes;
+  const weeklyGoal = Math.min(100, Math.round((trackedSessions / 7) * 100));
 
   return (
     <AppShell title="Overview" className="index-container app-dashboard">
@@ -34,10 +41,10 @@ export const Index: React.FC = () => {
         </section>
 
         <section className="metric-row" aria-label="Learning summary">
-          <div className="metric-card metric-highlight"><div className="metric-icon"><Target size={17} /></div><div><span className="metric-label">ACCURACY</span><strong>{aggregates.globalAccuracy}%</strong></div><span className="metric-trend">{totalAnswered ? `${totalAnswered} answers` : "Start today"}</span></div>
+          <div className="metric-card metric-highlight"><div className="metric-icon"><Target size={17} /></div><div><span className="metric-label">ACCURACY</span><strong>{trackedAccuracy}%</strong></div><span className="metric-trend">{trackedAnswered ? `${trackedAnswered} answers` : "Start today"}</span></div>
           <div className="metric-card"><div className="metric-icon"><Trophy size={17} /></div><div><span className="metric-label">MASTERED</span><strong>{mastered.length}</strong></div><span className="metric-trend">kana</span></div>
-          <div className="metric-card"><div className="metric-icon"><BarChart3 size={17} /></div><div><span className="metric-label">SESSIONS</span><strong>{aggregates.totalQuizzes}</strong></div><span className="metric-trend">all time</span></div>
-          <div className="goal-card"><div className="goal-top"><span className="metric-label">WEEKLY RHYTHM</span><strong>{weeklyGoal}%</strong></div><div className="goal-track"><span style={{ width: `${weeklyGoal}%` }} /></div><span className="goal-caption">{aggregates.totalQuizzes ? "Keep the momentum going" : "One session is a great start"}</span></div>
+          <div className="metric-card"><div className="metric-icon"><BarChart3 size={17} /></div><div><span className="metric-label">SESSIONS</span><strong>{trackedSessions}</strong></div><span className="metric-trend">all time</span></div>
+          <div className="goal-card"><div className="goal-top"><span className="metric-label">WEEKLY RHYTHM</span><strong>{weeklyGoal}%</strong></div><div className="goal-track"><span style={{ width: `${weeklyGoal}%` }} /></div><span className="goal-caption">{trackedSessions ? "Keep the momentum going" : "One session is a great start"}</span></div>
         </section>
 
         <section className="session-section">
@@ -46,9 +53,10 @@ export const Index: React.FC = () => {
         </section>
 
         <section className="bottom-grid">
-          <Link to="/stats" className="progress-panel"><div className="panel-heading"><div><span className="section-kicker">KEEP GOING</span><h2>Your progress</h2></div><ArrowUpRight size={18} /></div><div className="progress-bars">{["Hiragana", "Katakana", "Kanji"].map((label, index) => { const values = [Math.min(100, mastered.length * 5), Math.min(100, Math.max(8, aggregates.globalAccuracy)), Math.min(100, mastered.length * 2)]; return <div className="progress-item" key={label}><div><span>{label}</span><strong>{values[index]}%</strong></div><div className="progress-track"><span style={{ width: `${values[index]}%` }} /></div></div>; })}</div></Link>
+          <Link to="/stats" className="progress-panel"><div className="panel-heading"><div><span className="section-kicker">KEEP GOING</span><h2>Your progress</h2></div><ArrowUpRight size={18} /></div><div className="progress-bars">{["Hiragana", "Katakana", "Kanji"].map((label, index) => { const domainItems = Object.values(progressSnapshot.items).filter((item) => item.domain === (index === 2 ? "kanji" : "kana")); const values = index === 0 ? Math.min(100, domainItems.filter((item) => item.itemId.charCodeAt(0) < 0x30a0 && item.masteryScore >= 85).length * 5) : index === 1 ? Math.min(100, domainItems.filter((item) => item.itemId.charCodeAt(0) >= 0x30a0 && item.masteryScore >= 85).length * 5) : Math.min(100, domainItems.filter((item) => item.masteryScore >= 85).length * 2); return <div className="progress-item" key={label}><div><span>{label}</span><strong>{values}%</strong></div><div className="progress-track"><span style={{ width: `${values}%` }} /></div></div>; })}</div></Link>
           <Link to="/numbers" className="number-panel"><div className="number-panel-copy"><span className="section-kicker">NEW ROUTE</span><h2>Make numbers<br /><em>second nature.</em></h2><span className="text-link">Try numbers <ChevronRight size={15} /></span></div><div className="number-decoration" aria-hidden="true"><span>一</span><span>二</span><span>三</span></div></Link>
         </section>
+        {recommendations[0] && <Link to={recommendations[0].actionPath} className="dashboard-recommendation"><div><span className="section-kicker">NEXT BEST SESSION</span><h2>{t(recommendations[0].titleKey)}</h2><p>{t(recommendations[0].descriptionKey)}</p></div><span className="dashboard-recommendation-arrow">↗</span></Link>}
       </div>
     </AppShell>
   );

@@ -56,7 +56,8 @@
       "appearance": "Apariencia",
       "quiz": "Quiz",
       "practice": "Práctica",
-      "general": "General"
+      "general": "General",
+      "account": "Cuenta"
     },
     "appearance": {
       "title": "Ajustes de Apariencia",
@@ -142,6 +143,68 @@
       "weakestCount": "Cantidad de Caracteres Débiles",
       "weakestDesc": "Cuántos caracteres incluir al practicar los 'Más Débiles'"
     }
+    ,"account": {
+      "title": "Cuenta privada",
+      "description": "Mantén tu progreso disponible en todos tus dispositivos sin perder el modo offline.",
+      "notConfigured": "Las cuentas aún no están configuradas en esta instalación. El progreso local seguirá funcionando.",
+      "signedInAs": "Sesión iniciada como",
+      "email": "Correo electrónico",
+      "emailDescription": "Tu correo de recuperación sirve para que el propietario pueda ayudarte a recuperar la contraseña.",
+      "inviteKey": "Clave de invitación del propietario",
+      "inviteDescription": "Solo es necesaria al crear una cuenta nueva.",
+      "invitePlaceholder": "Pega la clave del propietario",
+      "guestDescription": "Tus datos de aprendizaje están guardados localmente. Crea una cuenta para sincronizarlos entre dispositivos.",
+      "signOut": "Cerrar sesión",
+      "syncNow": "Sincronizar ahora",
+      "export": "Exportar JSON",
+      "exportGuest": "Exportar datos locales",
+      "lastSynced": "Última sincronización: {{date}}",
+      "deleteTitle": "Eliminar cuenta en la nube",
+      "deleteDescription": "Elimina permanentemente el progreso y las sesiones sincronizadas.",
+      "deleteButton": "Eliminar cuenta",
+      "deleteConfirm": "¿Eliminar tu cuenta y todo el progreso sincronizado? Esta acción no se puede deshacer.",
+      "sync": { "offline": "Solo local", "idle": "Lista para sincronizar", "syncing": "Sincronizando", "synced": "Sincronizado", "error": "Error de sincronización" }
+    }
+  },
+  "auth": {
+    "kicker": "ACCESO PRIVADO AL ESTUDIO",
+    "loginTitle": "Iniciar sesión",
+    "loginHeading": "Qué bueno verte.",
+    "loginDescription": "Continúa tu práctica de japonés con tu progreso y ajustes guardados.",
+    "loginSubtitle": "Usa tu nombre de usuario y contraseña para continuar.",
+    "createTitle": "Crear cuenta",
+    "createHeading": "Lleva tu progreso contigo.",
+    "createDescription": "Crea una cuenta privada del Studio y conserva tu historial de aprendizaje donde practiques.",
+    "createSubtitle": "Se necesita una clave del propietario para acceder a la beta.",
+    "notConfigured": "Las cuentas aún no están configuradas. El progreso de invitado seguirá funcionando localmente.",
+    "username": "Nombre de usuario",
+    "recoveryEmail": "Correo de recuperación",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "inviteKey": "Clave de invitación",
+    "invitePlaceholder": "Clave del propietario",
+    "inviteInfoLabel": "Información sobre la clave",
+    "inviteInfo": "Esta clave es necesaria para crear una cuenta nueva y solo la proporciona el propietario. Contacta con contact@davidbelesp.com para acceder a la beta.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "loginAction": "Iniciar sesión",
+    "createAction": "Crear cuenta",
+    "working": "Espera un momento…",
+    "noAccount": "¿Necesitas una cuenta del Studio?",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "passwordRecovery": "Por ahora, el propietario gestiona la recuperación de contraseñas.",
+    "invalidLogin": "Nombre de usuario o contraseña no válidos.",
+    "errors": {
+      "notConfigured": "Las cuentas aún no están configuradas para esta instalación.",
+      "invalidUsername": "Usa entre 3 y 24 letras minúsculas, números, guiones bajos o guiones para tu nombre de usuario.",
+      "usernameTaken": "Ese nombre de usuario ya está ocupado.",
+      "passwordLength": "La contraseña debe tener al menos 8 caracteres.",
+      "required": "Completa todos los campos.",
+      "invalidKey": "La clave de invitación no es válida.",
+      "usedKey": "La clave de invitación ya se ha utilizado.",
+      "createFailed": "No se pudo crear la cuenta. Comprueba tus datos y la clave de invitación.",
+      "signInAfterCreate": "La cuenta se creó, pero no se pudo iniciar sesión automáticamente. Inicia sesión manualmente.",
+      "invalidLogin": "Nombre de usuario o contraseña no válidos."
+    }
   },
   "quiz": {
     "title": "Sesión de práctica",
@@ -194,6 +257,7 @@
     "overallAccuracy": "Precisión general",
     "questionsAnswered": "Preguntas respondidas",
     "bestStreak": "Mejor racha activa",
+    "currentStreak": "Racha actual",
     "recentActivity": "Actividad reciente",
     "kanaMastery": "Dominio de kana",
     "hiragana": "Hiragana",
@@ -202,6 +266,18 @@
     "practiceWeakest": "Practicar los más débiles",
     "masteredCharacters": "Caracteres dominados",
     "numbersProgress": "Progreso de números",
+    "domainProgress": "Progreso por ruta",
+    "kanjiMastery": "Dominio de Kanji",
+    "vocabularyProgress": "Progreso de vocabulario",
+    "wordsMastered": "palabras dominadas",
+    "wordsPracticed": "{{count}} entradas practicadas",
+    "vocabularyNoData": "Empieza un quiz de vocabulario filtrado para crear progreso por entrada.",
+    "grammarProgress": "Ruta de gramática",
+    "grammarComingSoon": "Las lecciones de gramática aparecerán aquí cuando el curso esté listo.",
+    "masteredShort": "dominados",
+    "openDomain": "Abrir",
+    "openRecommendation": "Empezar esta sesión",
+    "digitGroup": "Rango de {{group}} dígitos",
     "recentSessions": "Sesiones recientes",
     "nextSession": "Tu próxima mejor sesión",
     "nextSessionDescription": "Empieza con los caracteres que mejorarán tu recuerdo más rápido.",
@@ -227,6 +303,18 @@
       "correct": "Correctos",
       "wrong": "Errados"
     }
+  },
+  "recommendations": {
+    "kanaTitle": "Entrenar Kana",
+    "kanaDescription": "Repasa los caracteres que necesitan otra sesión concentrada.",
+    "kanjiTitle": "Entrenar Kanji",
+    "kanjiDescription": "Continúa tu ruta JLPT con un conjunto pequeño de caracteres.",
+    "vocabularyTitle": "Entrenar vocabulario",
+    "vocabularyDescription": "Abre la biblioteca y convierte palabras recientes en recuerdo.",
+    "numbersTitle": "Entrenar números",
+    "numbersDescription": "Practica una dirección numérica antes de que se oxide.",
+    "grammarTitle": "Entrenar gramática",
+    "grammarDescription": "Los ejercicios de gramática estarán disponibles en una ruta futura."
   },
   "kanji": {
     "title": "Compendio de Kanji",
@@ -459,7 +547,10 @@
     "noteLineOne": "Pequeños pasos.",
     "noteLineTwo": "Memoria precisa.",
     "localSynced": "PROGRESO LOCAL SINCRONIZADO",
-    "more": "Más"
+    "more": "Más",
+    "signIn": "Crear cuenta",
+    "login": "Iniciar sesión",
+    "accountAvatar": "Cuenta de {{username}}"
   },
   "numbers": {
     "title": "Números",

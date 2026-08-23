@@ -12,6 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.112.3",
     "classnames": "^2.5.1",
     "i18next": "^26.4.0",
     "i18next-browser-languagedetector": "^8.2.1",

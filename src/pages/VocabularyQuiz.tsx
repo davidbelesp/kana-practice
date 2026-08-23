@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { QuizWorkspace } from "../components/quiz/QuizWorkspace";
 import { useSettings } from "../contexts/SettingsContext";
 import { saveQuizHistory } from "../utils/statsManager";
+import { recordCompletedSession, recordItemResults } from "../utils/progressRepository";
 import { generateVocabularyQuizDeck } from "../utils/vocabularyQuiz";
 import { resolveVocabularyEntriesById } from "../services/vocabularySearchClient";
 import type { VocabularyItem } from "../types/Vocabulary";
@@ -25,6 +26,9 @@ export const VocabularyQuiz = () => {
   const [finished, setFinished] = useState(false);
   const [deckSeed, setDeckSeed] = useState(0);
   const historySavedRef = useRef(false);
+  const sessionStartedAtRef = useRef(Date.now());
+  const answerResultsRef = useRef<Array<{ itemId: string; correct: boolean }>>([]);
+  const sessionIdRef = useRef(`vocabulary-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 
   const currentLanguage = i18n.language.split("-")[0];
   const entryIds = state?.entryIds ?? [];
@@ -71,6 +75,8 @@ export const VocabularyQuiz = () => {
   const finish = () => {
     if (!historySavedRef.current) {
       saveQuizHistory(score, Math.max(deck.length - score, 0));
+      recordItemResults("vocabulary", answerResultsRef.current);
+      recordCompletedSession({ id: sessionIdRef.current, domain: "vocabulary", mode: "multiple-choice", source: "/vocabulary", startedAt: sessionStartedAtRef.current, total: deck.length, correct: score });
       historySavedRef.current = true;
     }
     setFinished(true);
@@ -79,6 +85,7 @@ export const VocabularyQuiz = () => {
   const handleAnswer = (answer: string) => {
     if (selectedAnswer !== null || !currentQuestion) return;
     setSelectedAnswer(answer);
+    answerResultsRef.current.push({ itemId: currentQuestion.entryId, correct: answer === currentQuestion.correctAnswer });
     if (answer === currentQuestion.correctAnswer) setScore((value) => value + 1);
   };
 

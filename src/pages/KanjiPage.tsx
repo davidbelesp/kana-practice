@@ -17,7 +17,8 @@ import {
   type KanjiSearchLoadResult,
   type KanjiSearchRecord,
 } from "../data/kanjiSearch";
-import { getKanaStats, getMasteredStatus, saveMasteredStatus, type KanaStat } from "../utils/statsManager";
+import type { KanaStat } from "../utils/statsManager";
+import { useProgressSnapshot } from "../utils/progressRepository";
 import "./KanjiPage.css";
 
 const LEVEL_BATCH_SIZE = 48;
@@ -96,13 +97,13 @@ export const KanjiPage: React.FC = () => {
   const [searchError, setSearchError] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchActiveIndex, setSearchActiveIndex] = useState(-1);
+  const progressSnapshot = useProgressSnapshot();
 
   const selectedCharsSet = useMemo(() => new Set(selectedChars), [selectedChars]);
   const knownKanjiSet = useMemo<Set<string>>(() => new Set(allKanjiCharacters), []);
   const masteredCount = useMemo(
-    () => Object.keys(masteredKanas).filter((char) => knownKanjiSet.has(char)).length
-      + Object.entries(stats).filter(([char, stat]) => knownKanjiSet.has(char) && stat.streak >= 100 && !masteredKanas[char]).length,
-    [knownKanjiSet, masteredKanas, stats],
+    () => Object.values(stats).filter((stat) => knownKanjiSet.has(stat.char) && (stat.streak >= 100 || stat.correct > 0 && stat.correct / Math.max(1, stat.correct + stat.incorrect) >= .85)).length,
+    [knownKanjiSet, stats],
   );
 
   const ensureSearchIndex = useCallback(() => {
@@ -161,13 +162,13 @@ export const KanjiPage: React.FC = () => {
   }, [ensureSearchIndex, searchQuery]);
 
   useEffect(() => {
-    const currentStats = getKanaStats();
-    setStats(currentStats);
-    Object.values(currentStats).forEach((stat) => {
-      if (stat.streak >= 100) saveMasteredStatus(stat.char);
+    const currentStats: Record<string, KanaStat> = {};
+    Object.values(progressSnapshot.items).filter((item) => item.domain === "kanji").forEach((item) => {
+      currentStats[item.itemId] = { char: item.itemId, correct: item.correct, incorrect: item.incorrect, streak: item.streak, lastPlayed: item.lastTrainedAt };
     });
-    setMasteredKanas(getMasteredStatus());
-  }, []);
+    setStats(currentStats);
+    setMasteredKanas(Object.fromEntries(Object.values(currentStats).filter((stat) => stat.streak >= 100).map((stat) => [stat.char, true])));
+  }, [progressSnapshot.items, progressSnapshot.updatedAt]);
 
   useEffect(() => () => {
     revealTimersRef.current.forEach((timer) => window.clearTimeout(timer));
