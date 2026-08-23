@@ -162,3 +162,163 @@
     padding: 0.6rem 1rem !important;
   }
 }
+
+/* Kana Practice workspace */
+.home-container {
+  max-width: 1440px;
+}
+
+.practice-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin: .25rem 0 1.5rem;
+}
+
+.practice-hero .section-kicker {
+  display: block;
+  margin-bottom: .55rem;
+  color: var(--accent-primary);
+  font: .68rem "DM Mono", monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.practice-hero h1 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  letter-spacing: -.08em;
+}
+
+.practice-hero p {
+  max-width: 520px;
+  margin-top: .7rem;
+  color: var(--studio-muted);
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.practice-summary {
+  display: flex;
+  gap: .6rem;
+}
+
+.practice-summary>div {
+  display: flex;
+  min-width: 110px;
+  flex-direction: column;
+  gap: .2rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--studio-panel-raised) 42%, transparent);
+}
+
+.practice-summary strong {
+  color: var(--accent-primary);
+  font: 1.7rem/1 "DM Mono", monospace;
+}
+
+.practice-summary span {
+  color: var(--studio-muted);
+  font: .62rem "DM Mono", monospace;
+  text-transform: uppercase;
+}
+
+.home-container .controls {
+  top: 16px;
+  justify-content: space-between;
+  margin: 0 0 1.5rem;
+  padding: .7rem .85rem;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--studio-panel) 95%, transparent);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .16);
+}
+
+.home-container .selection-info {
+  position: static;
+  transform: none;
+  padding: 0 .7rem;
+  border: 0;
+  background: transparent;
+}
+
+.home-container .selection-info .count {
+  color: var(--studio-muted);
+  font: .72rem "DM Mono", monospace;
+}
+
+.home-container .actions {
+  justify-content: flex-end;
+}
+
+.home-container .actions .btn-icon {
+  width: auto;
+  min-height: 36px;
+  height: 36px;
+  padding: 0 .75rem;
+  gap: .45rem;
+  border-radius: 999px;
+  font-size: .72rem;
+}
+
+.home-container .actions .btn-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.home-container .start-btn {
+  min-height: 36px;
+  border-radius: 999px;
+  padding: .55rem 1rem;
+  font-size: .75rem;
+}
+
+@media (max-width: 720px) {
+  .practice-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-top: .1rem;
+  }
+
+  .practice-summary {
+    width: 100%;
+  }
+
+  .practice-summary>div {
+    flex: 1;
+  }
+
+  .home-container .controls {
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+    margin-bottom: 1rem;
+  }
+
+  .home-container .selection-info {
+    width: 100%;
+    padding: .15rem .35rem .5rem;
+    text-align: center;
+  }
+
+  .home-container .controls {
+    flex-direction: column;
+    gap: .45rem;
+  }
+
+  .home-container .actions {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .home-container .actions .btn-icon {
+    flex: 1 1 auto;
+  }
+
+  .home-container .start-btn {
+    flex: 1 1 100%;
+    order: 5;
+  }
+}

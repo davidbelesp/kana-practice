@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import classNames from "classnames";
 import { HiraganaTable } from "../components/HiraganaTable";
 import { hiraganaData, katakanaData } from "../data/kana";
 import {
@@ -11,8 +10,10 @@ import {
   saveMasteredStatus,
   type KanaStat,
 } from "../utils/statsManager";
-import { NavBar } from "../components/ui/NavBar";
+import { AppShell } from "../components/ui/AppShell";
+import { prefetchRoute } from "../utils/routePrefetch";
 import { IconButton } from "../components/ui/IconButton";
+import { StudioSegmentedSwitch } from "../components/ui/StudioSegmentedSwitch";
 import { CheckSquare, TrendingDown, Eraser } from "lucide-react";
 import "./Home.css";
 
@@ -50,6 +51,11 @@ export const Home = () => {
   const currentChars = useMemo(
     () => currentData.filter((k) => !k.isEmpty).map((k) => k.char),
     [currentData],
+  );
+
+  const masteredCount = useMemo(
+    () => currentChars.filter((char) => masteredKanas[char] || (stats[char]?.streak ?? 0) >= 100).length,
+    [currentChars, masteredKanas, stats],
   );
 
   const handleToggleChar = useCallback((char: string) => {
@@ -96,34 +102,33 @@ export const Home = () => {
   }, [navigate, selectedChars]);
 
   return (
-    <>
-      <NavBar title={t("home.title")}>
-        <div className="tab-switch">
-          <div className={classNames("tab-slider", activeTab)} />
-          <button
-            className={classNames("tab-btn", {
-              active: activeTab === "hiragana",
-            })}
-            onClick={() => setActiveTab("hiragana")}
-          >
-            {t("home.tabs.hiragana")}
-          </button>
-          <button
-            className={classNames("tab-btn", {
-              active: activeTab === "katakana",
-            })}
-            onClick={() => setActiveTab("katakana")}
-          >
-            {t("home.tabs.katakana")}
-          </button>
-        </div>
-      </NavBar>
+    <AppShell title={t("home.title")} centerSlot={
+      <StudioSegmentedSwitch
+        value={activeTab}
+        onChange={setActiveTab}
+        ariaLabel={t("home.title")}
+        sliderClassName={activeTab}
+        options={[
+          { value: "hiragana", label: t("home.tabs.hiragana") },
+          { value: "katakana", label: t("home.tabs.katakana") },
+        ]}
+      />
+    }>
       <div className="home-container container">
+        <header className="practice-hero">
+          <div>
+            <span className="section-kicker">DAILY FOUNDATIONS</span>
+            <h1>{t("home.title")}</h1>
+            <p>{t("home.subtitle")}. {t("home.description")}</p>
+          </div>
+          <div className="practice-summary" aria-label="Practice summary">
+            <div><strong>{masteredCount}</strong><span>{t("home.summary.mastered")}</span></div>
+            <div><strong>{currentChars.length}</strong><span>{t("home.summary.available")}</span></div>
+          </div>
+        </header>
         <div className="controls glass-panel">
           <div className="selection-info">
-            <span className="count" >
-              {selectedChars.length}
-            </span>
+            <span className="count">{t("home.controls.selected", { count: selectedChars.length })}</span>
           </div>
           <div className="actions">
             <IconButton
@@ -144,6 +149,8 @@ export const Home = () => {
             <button
               className="btn-primary start-btn"
               onClick={handleStartQuiz}
+              onMouseEnter={() => prefetchRoute("/quiz")}
+              onFocus={() => prefetchRoute("/quiz")}
               disabled={selectedChars.length < 3}
             >
               {t("home.controls.startQuiz")}{" "}
@@ -161,6 +168,6 @@ export const Home = () => {
           masteredKanas={masteredKanas}
         />
       </div>
-    </>
+    </AppShell>
   );
 };

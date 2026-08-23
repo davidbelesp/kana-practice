@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "dictionary:build": "node scripts/build-dictionary.mjs",
+    "kanji:build": "node scripts/build-kanji-levels.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

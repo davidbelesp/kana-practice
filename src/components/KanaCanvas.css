@@ -132,3 +132,71 @@
   from { transform: scale(0.6); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
+.studio-shell-focus .kana-canvas-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.studio-shell-focus .canvas-area {
+  width: 100%;
+}
+
+.studio-shell-focus .canvas-wrapper,
+.studio-shell-focus .canvas-controls {
+  width: min(100%, 400px);
+  box-sizing: border-box;
+}
+
+.studio-shell-focus .canvas-wrapper {
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.studio-shell-focus .canvas-wrapper > div:not(.ghost-overlay) {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.studio-shell-focus .canvas-wrapper svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 420px) {
+  .studio-shell-focus .canvas-wrapper,
+  .studio-shell-focus .canvas-controls {
+    width: min(100%, calc(100vw - 2rem));
+  }
+}
+
+/* Studio feedback treatment */
+.studio-shell .status-badges {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+}
+
+.studio-shell .score-badge {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .35rem .7rem;
+  border: 1px solid var(--accent-primary);
+  border-radius: 999px;
+  background: var(--accent-primary) !important;
+  color: var(--accent-foreground);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-primary) 18%, transparent);
+  font: 700 .7rem/1 "DM Mono", monospace;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.studio-shell .passing-indicator {
+  border: 1px solid var(--accent-primary);
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: var(--accent-foreground);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+}

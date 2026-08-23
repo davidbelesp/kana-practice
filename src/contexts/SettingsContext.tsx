@@ -14,6 +14,12 @@ export type Theme = "default" | "blue" | "green" | "orange" | "custom";
 export interface CustomThemeColors {
   primary: string;   // hex color
   secondary: string; // hex color
+  background: string;
+  surface: string;
+  surfaceRaised: string;
+  text: string;
+  mutedText: string;
+  border: string;
 }
 
 export const ALL_QUESTION_TYPES: QuestionType[] = [
@@ -53,7 +59,16 @@ export const DEFAULT_SETTINGS: AppSettings = {
   showRomaji: false,
   enabledQuestionTypes: [...ALL_QUESTION_TYPES],
   theme: "default",
-  customTheme: { primary: "#c85bff", secondary: "#ff4fa6" },
+  customTheme: {
+    primary: "#d7f36b",
+    secondary: "#f2a35d",
+    background: "#101111",
+    surface: "#191b1b",
+    surfaceRaised: "#222525",
+    text: "#ede8db",
+    mutedText: "#8d918b",
+    border: "#3a403b",
+  },
   animationsEnabled: true,
   masteryThreshold: 100,
   weakestCharCount: 10,
@@ -64,6 +79,13 @@ export const DEFAULT_SETTINGS: AppSettings = {
 
 const STORAGE_KEY = "app_settings";
 
+export const THEME_PALETTES: Record<Exclude<Theme, "custom">, CustomThemeColors> = {
+  default: { ...DEFAULT_SETTINGS.customTheme },
+  blue: { ...DEFAULT_SETTINGS.customTheme, primary: "#8cc6d9", secondary: "#d7f36b" },
+  green: { ...DEFAULT_SETTINGS.customTheme, primary: "#a7d45d", secondary: "#d7f36b" },
+  orange: { ...DEFAULT_SETTINGS.customTheme, primary: "#f2a35d", secondary: "#e88982" },
+};
+
 function loadSettings(): AppSettings {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -73,7 +95,11 @@ function loadSettings(): AppSettings {
       if (!Array.isArray(parsed.enabledQuestionTypes) || parsed.enabledQuestionTypes.length === 0) {
         parsed.enabledQuestionTypes = [...ALL_QUESTION_TYPES];
       }
-      return { ...DEFAULT_SETTINGS, ...parsed };
+      return {
+        ...DEFAULT_SETTINGS,
+        ...parsed,
+        customTheme: { ...DEFAULT_SETTINGS.customTheme, ...(parsed.customTheme ?? {}) },
+      };
     }
   } catch {
     /* ignore */
@@ -95,11 +121,50 @@ export function makeGradientFromHex(primary: string, secondary: string) {
 }
 
 /** Convert a hex color to r, g, b components as a string "r, g, b" */
-export function hexToRgbString(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
+export function hexToRgbString(hex: string, fallback = "#d7f36b"): string {
+  const normalized = /^#[0-9a-f]{6}$/i.test(hex) ? hex : fallback;
+  const r = parseInt(normalized.slice(1, 3), 16);
+  const g = parseInt(normalized.slice(3, 5), 16);
+  const b = parseInt(normalized.slice(5, 7), 16);
   return `${r}, ${g}, ${b}`;
+}
+
+function hexToRgb(hex: string): [number, number, number] {
+  const normalized = /^#[0-9a-f]{6}$/i.test(hex) ? hex : "#d7f36b";
+  return [
+    parseInt(normalized.slice(1, 3), 16),
+    parseInt(normalized.slice(3, 5), 16),
+    parseInt(normalized.slice(5, 7), 16),
+  ];
+}
+
+export function getReadableForeground(background: string): string {
+  const [r, g, b] = hexToRgb(background).map((channel) => channel / 255);
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return luminance > 0.58 ? "#151716" : "#ede8db";
+}
+
+function applyPalette(palette: CustomThemeColors) {
+  const root = document.documentElement;
+  root.style.setProperty("--studio-bg", palette.background);
+  root.style.setProperty("--studio-panel", palette.surface);
+  root.style.setProperty("--studio-panel-raised", palette.surfaceRaised);
+  root.style.setProperty("--studio-text", palette.text);
+  root.style.setProperty("--studio-muted", palette.mutedText);
+  root.style.setProperty("--studio-border", palette.border);
+  root.style.setProperty("--accent-primary", palette.primary);
+  root.style.setProperty("--accent-secondary", palette.secondary);
+  root.style.setProperty("--accent-foreground", getReadableForeground(palette.primary));
+  root.style.setProperty("--accent-primary-rgb", hexToRgbString(palette.primary));
+  root.style.setProperty("--accent-secondary-rgb", hexToRgbString(palette.secondary));
+  root.style.setProperty("--accent-soft", `rgba(${hexToRgbString(palette.primary)}, 0.13)`);
+  root.style.setProperty("--paper-bg", palette.background);
+  root.style.setProperty("--paper-card", palette.surface);
+  root.style.setProperty("--paper-card-hover", palette.surfaceRaised);
+  root.style.setProperty("--ink-black", palette.text);
+  root.style.setProperty("--ink-soft", palette.text);
+  root.style.setProperty("--ink-muted", palette.mutedText);
+  root.style.setProperty("--glass-border", `rgba(${hexToRgbString(palette.border)}, 0.72)`);
 }
 
 interface SettingsContextValue {
@@ -117,20 +182,11 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (settings.theme === "custom") {
       document.documentElement.setAttribute("data-theme", "custom");
-      const { primary, secondary } = settings.customTheme;
-      document.documentElement.style.setProperty(
-        "--accent-primary-rgb",
-        hexToRgbString(primary),
-      );
-      document.documentElement.style.setProperty(
-        "--accent-secondary-rgb",
-        hexToRgbString(secondary),
-      );
+      applyPalette(settings.customTheme);
     } else {
       document.documentElement.setAttribute("data-theme", settings.theme);
-      // Clear any inline custom vars when switching back to a preset
-      document.documentElement.style.removeProperty("--accent-primary-rgb");
-      document.documentElement.style.removeProperty("--accent-secondary-rgb");
+      const palette = THEME_PALETTES[settings.theme as Exclude<Theme, "custom">];
+      applyPalette(palette);
     }
   }, [settings.theme, settings.customTheme]);
 

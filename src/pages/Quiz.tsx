@@ -1,13 +1,14 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { allKanaData } from "../data/kana";
 import { QuizCard } from "../components/QuizCard";
+import { QuizWorkspace } from "../components/quiz/QuizWorkspace";
+import { useQuizSession } from "../components/quiz/useQuizSession";
 import { generateQuizDeck } from "../utils/questionGenerator";
 import { saveStatResultsBatch, saveQuizHistory } from "../utils/statsManager";
 import { type QuizQuestion } from "../types/QuizTypes";
 import { useSettings } from "../contexts/SettingsContext";
-import { BackButton } from "../components/ui/BackButton";
 import "./Quiz.css";
 
 interface QuizState {
@@ -19,179 +20,154 @@ export const Quiz = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const state = location.state as QuizState;
+  const state = location.state as QuizState | null;
   const { settings } = useSettings();
   const pendingStatsRef = useRef<Array<{ char: string; isCorrect: boolean }>>([]);
 
-  const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
-  const [userAnswer, setUserAnswer] = useState<string | string[]>("");
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [score, setScore] = useState(0);
-  const [attempts, setAttempts] = useState(0);
-  const [isFinished, setIsFinished] = useState(false);
-
-  const selectedCharsSet = useMemo(
-    () => new Set(state?.selectedChars),
-    [state?.selectedChars]
-  );
-
-  const deck = useMemo(() => {
-    const p = allKanaData.filter((k) => selectedCharsSet.has(k.char));
-    const count = Math.min(settings.questionsPerQuiz, p.length * 3);
-    return generateQuizDeck(p, count, settings.enabledQuestionTypes);
-  }, [selectedCharsSet, settings.questionsPerQuiz, settings.enabledQuestionTypes]);
-
-  const maxQuestions = deck.length;
-
   useEffect(() => {
-    if (!state?.selectedChars || state.selectedChars.length === 0) {
-      navigate("/");
-    } else if (deck.length > 0) {
-      const next = deck[0];
-      setCurrentQuestion(next);
-      setUserAnswer(next.type === "sequence-order" ? [] : "");
-    } else {
-      setIsFinished(true);
+    if (!state?.selectedChars?.length) navigate("/", { replace: true });
+  }, [navigate, state?.selectedChars?.length]);
+
+  const selectedChars = state?.selectedChars ?? [];
+  const selectedCharsSet = useMemo(() => new Set(selectedChars), [selectedChars]);
+  const pool = useMemo(() => allKanaData.filter((kana) => selectedCharsSet.has(kana.char)), [selectedCharsSet]);
+  const total = Math.min(settings.questionsPerQuiz, pool.length * 3);
+
+  const buildQuestion = useCallback((previous: QuizQuestion[]) => {
+    const usedPrompts = new Set(previous.map((question) => question.prompt));
+    let fallback: QuizQuestion | undefined;
+    for (let attempt = 0; attempt < 30; attempt += 1) {
+      const question = generateQuizDeck(pool, 1, settings.enabledQuestionTypes)[0];
+      if (!question) continue;
+      fallback ??= question;
+      if (!usedPrompts.has(question.prompt)) return question;
     }
-  }, [state, navigate, deck]);
+    return fallback ?? null;
+  }, [pool, settings.enabledQuestionTypes]);
 
-  const nextQuestion = () => {
-    if (attempts >= maxQuestions) {
-      finishQuiz();
-      return;
-    }
+  const [deck, setDeck] = useState<QuizQuestion[]>(() => {
+    const first = generateQuizDeck(pool, 1, settings.enabledQuestionTypes)[0];
+    return first ? [first] : [];
+  });
+  const [userAnswer, setUserAnswer] = useState<string | string[]>("");
 
-    const next = deck[attempts];
-    setCurrentQuestion(next);
-    setUserAnswer(next.type === "sequence-order" ? [] : "");
-    setIsCorrect(null);
-  };
-
-  const handleSubmit = (submission?: string | string[]) => {
-    if (isCorrect !== null) {
-      nextQuestion();
-      return;
-    }
-
-    if (!currentQuestion) return;
-    const answerToCheck = submission !== undefined ? submission : userAnswer;
-
-    let correct = false;
-    if (currentQuestion.type === "sequence-order") {
-      const expected = currentQuestion.correctAnswer as string[];
-      const actual = answerToCheck as string[];
-      if (
-        expected.length === actual.length &&
-        expected.every((v, i) => v === actual[i])
-      ) {
-        correct = true;
-      }
-    } else {
-      correct = answerToCheck === currentQuestion.correctAnswer;
-    }
-
-    // Save Stats
-    if (currentQuestion.targets) {
-      const results = currentQuestion.targets.map((char) => ({
-        char,
-        isCorrect: correct,
-      }));
-      pendingStatsRef.current.push(...results);
-    }
-
-    if (submission !== undefined) {
-      setUserAnswer(submission);
-    }
-
-    setIsCorrect(correct);
-    setAttempts((p) => p + 1);
-    if (correct) setScore((p) => p + 1);
-  };
-
-  const finishQuiz = () => {
+  const finishSession = useCallback(({ score, attempts }: { score: number; attempts: number }) => {
     if (pendingStatsRef.current.length > 0) {
       saveStatResultsBatch(pendingStatsRef.current);
       pendingStatsRef.current = [];
     }
     saveQuizHistory(score, attempts - score);
-    setIsFinished(true);
-  };
+  }, []);
 
-  if (isFinished) {
-    return (
-      <div className="quiz-container container results-screen">
-        <div className="glass-panel results-card">
-          <h2>{t("quiz.results.title")}</h2>
-          <div className="final-score">
-            {score} / {attempts}
-          </div>
-          <p>
-            {t("quiz.results.accuracy")}: {attempts > 0 ? Math.round((score / attempts) * 100) : 0}%
-          </p>
-          <div className="actions">
-            <button className="btn-primary" onClick={() => navigate(state?.from ?? "/")}>
-              {t("common.back")}
-            </button>
-            <button className="btn-text" onClick={() => navigate("/stats")}>
-              {t("quiz.results.viewStats")}
-            </button>
-          </div>
-        </div>
+  const session = useQuizSession({ total, onFinished: finishSession });
+  const currentQuestion = deck[session.questionIndex] ?? null;
+
+  const nextQuestion = useCallback(() => {
+    if (session.feedback === null) return;
+    if (session.questionIndex + 1 < total) {
+      const next = buildQuestion(deck);
+      if (next) setDeck((current) => [...current, next]);
+      setUserAnswer(next?.type === "sequence-order" ? [] : "");
+    }
+    session.advance();
+  }, [buildQuestion, deck, session, total]);
+
+  const handleSubmit = useCallback((submission?: string | string[]) => {
+    if (session.feedback !== null) {
+      nextQuestion();
+      return;
+    }
+    if (!currentQuestion) return;
+    const answerToCheck = submission !== undefined ? submission : userAnswer;
+    let correct = false;
+    if (currentQuestion.type === "sequence-order") {
+      const expected = currentQuestion.correctAnswer as string[];
+      const actual = answerToCheck as string[];
+      correct = expected.length === actual.length && expected.every((value, index) => value === actual[index]);
+    } else {
+      correct = answerToCheck === currentQuestion.correctAnswer;
+    }
+
+    pendingStatsRef.current.push(...currentQuestion.targets.map((char) => ({ char, isCorrect: correct })));
+    if (submission !== undefined) setUserAnswer(submission);
+    session.submitAnswer(correct);
+  }, [currentQuestion, nextQuestion, session, userAnswer]);
+
+  const handleOverride = useCallback(() => {
+    if (session.feedback !== false || !currentQuestion) return;
+    pendingStatsRef.current.push(...currentQuestion.targets.map((char) => ({ char, isCorrect: true })));
+    session.overrideAnswer();
+  }, [currentQuestion, session]);
+
+  if (!state?.selectedChars?.length) return null;
+
+  const railContent = (
+    <>
+      <span className="quiz-rail-context-label">{t("quiz.selectedPool")}</span>
+      <strong className="quiz-rail-context-value">{selectedChars.length} {t("quiz.characters")}</strong>
+      <div className="quiz-rail-context-list">
+        {selectedChars.slice(0, 12).map((character) => <span key={character}>{character}</span>)}
+        {selectedChars.length > 12 && <span>+{selectedChars.length - 12}</span>}
       </div>
+    </>
+  );
+
+  if (session.phase === "results") {
+    return (
+      <QuizWorkspace
+        title={t("quiz.title")}
+        sourceLabel={t("quiz.kicker")}
+        sourceDetail={t("quiz.results.subtitle")}
+        questionIndex={total}
+        total={total}
+        score={session.score}
+        attempts={session.attempts}
+        railContent={railContent}
+        backTo={state.from ?? "/practice"}
+        backLabel={t("quiz.quit")}
+      >
+        <section className="quiz-results-panel glass-panel">
+          <span className="quiz-results-kicker">{t("quiz.results.title")}</span>
+          <div className="quiz-results-score">{session.score}<span>/ {session.attempts}</span></div>
+          <p>{t("quiz.results.accuracy")}: {session.attempts > 0 ? Math.round((session.score / session.attempts) * 100) : 0}%</p>
+          <div className="quiz-results-actions">
+            <button className="btn-primary" onClick={() => navigate(state.from ?? "/practice")}>{t("common.back")}</button>
+            <button className="btn-secondary" onClick={() => navigate("/stats")}>{t("quiz.results.viewStats")}</button>
+          </div>
+        </section>
+      </QuizWorkspace>
     );
   }
 
-  const handleOverride = () => {
-    if (isCorrect === false && currentQuestion) {
-      setIsCorrect(true);
-      setScore((p) => p + 1);
-      if (currentQuestion.targets) {
-        const results = currentQuestion.targets.map((char) => ({
-          char,
-          isCorrect: true,
-        }));
-        pendingStatsRef.current.push(...results);
-      }
-    }
-  };
+  if (!currentQuestion) {
+    return (
+      <QuizWorkspace title={t("quiz.title")} sourceLabel={t("quiz.kicker")} total={total} questionIndex={0} score={0} attempts={0} railContent={railContent} backTo={state.from ?? "/practice"} backLabel={t("quiz.quit")}>
+        <section className="quiz-loading-panel glass-panel"><div className="quiz-loading-orb" /><span>{t("common.loading")}</span></section>
+      </QuizWorkspace>
+    );
+  }
 
-  if (!currentQuestion) return <div className="loading">{t("common.loading")}</div>;
   return (
-    <div className="quiz-container container">
-      <header className="quiz-header">
-        <BackButton to="/" label={t("quiz.quit")} />
-        <div className="score-display">
-          {t("quiz.results.score")}: {score} / {attempts}
-        </div>
-      </header>
-      <main className="quiz-main">
-        <div className="quiz-content-wrapper">
-          <div className="quiz-progress-section">
-            <div className="progress-info">
-              <span>
-                {t("quiz.questionProgress", { current: attempts + 1, total: maxQuestions })}
-              </span>
-              <span>{t("quiz.remaining", { count: maxQuestions - attempts })}</span>
-            </div>
-            <div className="progress-track">
-              <div
-                className="progress-fill"
-                style={{
-                  width: `${Math.min((attempts / maxQuestions) * 100, 100)}%`,
-                }}
-              />
-            </div>
-          </div>
-          <QuizCard
-            question={currentQuestion}
-            userAnswer={userAnswer}
-            isCorrect={isCorrect}
-            onAnswer={setUserAnswer}
-            onSubmit={handleSubmit}
-            onOverride={handleOverride}
-          />
-        </div>
-      </main>
-    </div>
+    <QuizWorkspace
+      title={t("quiz.title")}
+      sourceLabel={t("quiz.kicker")}
+      sourceDetail={t("quiz.subtitle")}
+      questionIndex={session.questionIndex}
+      total={total}
+      score={session.score}
+      attempts={session.attempts}
+      railContent={railContent}
+      backTo={state.from ?? "/practice"}
+      backLabel={t("quiz.quit")}
+    >
+      <QuizCard
+        question={currentQuestion}
+        userAnswer={userAnswer}
+        isCorrect={session.feedback}
+        onAnswer={setUserAnswer}
+        onSubmit={handleSubmit}
+        onOverride={handleOverride}
+      />
+    </QuizWorkspace>
   );
 };

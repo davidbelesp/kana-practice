@@ -6,9 +6,10 @@ import {
   ALL_QUESTION_TYPES,
   makeGradientFromHex,
   type AppSettings,
+  type CustomThemeColors,
 } from "../contexts/SettingsContext";
 import type { QuestionType } from "../types/QuizTypes";
-import { BackButton } from "../components/ui/BackButton";
+import { AppShell } from "../components/ui/AppShell";
 import { ClipboardList, Palette, Zap, Settings as SettingsIcon, type LucideIcon } from "lucide-react";
 import "./Settings.css";
 
@@ -28,10 +29,21 @@ const TABS: Tab[] = [
 ];
 
 const THEME_OPTIONS: { id: AppSettings["theme"]; labelKey: string; gradient: string }[] = [
-  { id: "default", labelKey: "settings.appearance.purple", gradient: "linear-gradient(135deg, #c85bff, #ff4fa6)" },
-  { id: "blue", labelKey: "settings.appearance.blue", gradient: "linear-gradient(135deg, #3b82f6, #06b6d4)" },
-  { id: "green", labelKey: "settings.appearance.green", gradient: "linear-gradient(135deg, #10b981, #84cc16)" },
-  { id: "orange", labelKey: "settings.appearance.orange", gradient: "linear-gradient(135deg, #f97316, #eab308)" },
+  { id: "default", labelKey: "settings.appearance.default", gradient: "linear-gradient(135deg, #d7f36b, #f2a35d)" },
+  { id: "blue", labelKey: "settings.appearance.blue", gradient: "linear-gradient(135deg, #8cc6d9, #d7f36b)" },
+  { id: "green", labelKey: "settings.appearance.green", gradient: "linear-gradient(135deg, #a7d45d, #d7f36b)" },
+  { id: "orange", labelKey: "settings.appearance.orange", gradient: "linear-gradient(135deg, #f2a35d, #e88982)" },
+];
+
+const PALETTE_FIELDS: Array<{ key: keyof CustomThemeColors; labelKey: string; descriptionKey: string }> = [
+  { key: "primary", labelKey: "settings.appearance.primary", descriptionKey: "settings.appearance.primaryDesc" },
+  { key: "secondary", labelKey: "settings.appearance.secondary", descriptionKey: "settings.appearance.secondaryDesc" },
+  { key: "background", labelKey: "settings.appearance.background", descriptionKey: "settings.appearance.backgroundDesc" },
+  { key: "surface", labelKey: "settings.appearance.surface", descriptionKey: "settings.appearance.surfaceDesc" },
+  { key: "surfaceRaised", labelKey: "settings.appearance.surfaceRaised", descriptionKey: "settings.appearance.surfaceRaisedDesc" },
+  { key: "text", labelKey: "settings.appearance.text", descriptionKey: "settings.appearance.textDesc" },
+  { key: "mutedText", labelKey: "settings.appearance.mutedText", descriptionKey: "settings.appearance.mutedTextDesc" },
+  { key: "border", labelKey: "settings.appearance.border", descriptionKey: "settings.appearance.borderDesc" },
 ];
 
 
@@ -89,7 +101,7 @@ export const Settings = () => {
   };
 
   /*  Custom theme helpers  */
-  const updateCustomColor = (key: "primary" | "secondary", hex: string) => {
+  const updateCustomColor = (key: keyof CustomThemeColors, hex: string) => {
     updateSetting("customTheme", { ...settings.customTheme, [key]: hex });
     // Auto-switch to custom theme when user edits colors
     if (settings.theme !== "custom") {
@@ -98,9 +110,9 @@ export const Settings = () => {
   };
 
   return (
-    <div className="settings-page">
+    <AppShell title={t("common.settings")}>
+      <div className="settings-page">
       <header className="settings-header">
-        <BackButton to="/" />
         <h1>{t("common.settings")}</h1>
       </header>
 
@@ -301,7 +313,10 @@ export const Settings = () => {
 
               <div className={`custom-theme-editor ${settings.theme === "custom" ? "visible" : ""}`}>
                 <div className="cte-header">
-                  <span className="cte-title">{t("settings.appearance.customColors")}</span>
+                  <div>
+                    <span className="cte-title">{t("settings.appearance.customColors")}</span>
+                    <p>{t("settings.appearance.customColorsDesc")}</p>
+                  </div>
                   <div
                     className="cte-preview"
                     style={{
@@ -312,38 +327,28 @@ export const Settings = () => {
                     }}
                   />
                 </div>
-                <div className="cte-pickers">
-                  <label className="color-picker-label">
-                    <span className="color-dot" style={{ background: settings.customTheme.primary }} />
-                    <span className="color-picker-name">{t("settings.appearance.primary")}</span>
-                    <div className="color-picker-wrapper">
-                      <input
-                        type="color"
-                        value={settings.customTheme.primary}
-                        onChange={(e) => updateCustomColor("primary", e.target.value)}
-                        className="color-input"
-                        aria-label="Primary colour"
-                      />
-                      <span className="color-hex">{settings.customTheme.primary.toUpperCase()}</span>
-                    </div>
-                  </label>
-
-                  <div className="cte-divider">→</div>
-
-                  <label className="color-picker-label">
-                    <span className="color-dot" style={{ background: settings.customTheme.secondary }} />
-                    <span className="color-picker-name">{t("settings.appearance.secondary")}</span>
-                    <div className="color-picker-wrapper">
-                      <input
-                        type="color"
-                        value={settings.customTheme.secondary}
-                        onChange={(e) => updateCustomColor("secondary", e.target.value)}
-                        className="color-input"
-                        aria-label="Secondary colour"
-                      />
-                      <span className="color-hex">{settings.customTheme.secondary.toUpperCase()}</span>
-                    </div>
-                  </label>
+                <div className="palette-editor-grid">
+                  {PALETTE_FIELDS.map(({ key, labelKey, descriptionKey }) => (
+                    <label className="palette-field" key={key}>
+                      <span className="palette-field-heading">
+                        <span className="color-dot" style={{ background: settings.customTheme[key] }} />
+                        <span>
+                          <strong>{t(labelKey)}</strong>
+                          <small>{t(descriptionKey)}</small>
+                        </span>
+                      </span>
+                      <span className="color-picker-wrapper">
+                        <input
+                          type="color"
+                          value={settings.customTheme[key]}
+                          onChange={(e) => updateCustomColor(key, e.target.value)}
+                          className="color-input"
+                          aria-label={t(labelKey)}
+                        />
+                        <span className="color-hex">{settings.customTheme[key].toUpperCase()}</span>
+                      </span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
@@ -484,6 +489,7 @@ export const Settings = () => {
           )}
         </main>
       </div>
-    </div>
+      </div>
+    </AppShell>
   );
 };

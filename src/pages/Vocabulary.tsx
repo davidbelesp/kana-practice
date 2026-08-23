@@ -1,202 +1,255 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { NavBar } from "../components/ui/NavBar";
+import React, { useCallback, useDeferredValue, useEffect, useRef, useState } from "react";
+import { ArrowUp, ArrowUpDown, Check, Copy, LayoutGrid, List, Play, Search, SlidersHorizontal, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { vocabularyData } from "../data/vocabulary";
+import { useNavigate } from "react-router-dom";
+import { AppShell } from "../components/ui/AppShell";
 import { useNotification } from "../contexts/NotificationContext";
-import { useDebounce } from "../hooks/useDebounce";
-import type { VocabularyItem } from "../types/Vocabulary";
-
-// Components
-import { ThemeCard } from "../components/Vocabulary/ThemeCard";
-import { WordCard } from "../components/Vocabulary/WordCard";
-import { TagSelector } from "../components/Vocabulary/TagSelector";
-import { SearchBar } from "../components/Vocabulary/SearchBar";
-
+import { prefetchRoute } from "../utils/routePrefetch";
+import { CATEGORY_SECTIONS, DICTIONARY_CATEGORIES, type DictionaryCategoryId } from "../data/dictionaryCategories";
+import { searchVocabulary, type VocabularySearchResponse, type VocabularySortMode } from "../services/vocabularySearchClient";
+import type { Translation, VocabularyItem } from "../types/Vocabulary";
 import "./Vocabulary.css";
 
-const langFlags: Record<string, string> = {
-  en: "🇺🇸",
-  es: "🇪🇸",
-  fr: "🇫🇷",
-  it: "🇮🇹",
-  de: "🇩🇪",
-  ja: "🇯🇵"
-};
+type Density = "cards" | "rows";
+const BATCH_SIZE = 50;
+const langFlags: Record<string, string> = { en: "EN", es: "ES" };
+
+const getTranslation = (translations: Translation[], language: string) =>
+  translations.find((entry) => entry.lang === language) ??
+  translations.find((entry) => entry.lang === "en") ??
+  translations[0];
+
+const getCategory = (id: string) => DICTIONARY_CATEGORIES.find((category) => category.id === id);
 
 export const Vocabulary: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const { showNotification } = useNotification();
+  const [visibleResults, setVisibleResults] = useState<VocabularyItem[]>([]);
+  const [searchState, setSearchState] = useState<"loading" | "ready" | "error">("loading");
+  const [matchingEntryIds, setMatchingEntryIds] = useState<string[]>([]);
+  const [totalResults, setTotalResults] = useState(0);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
+  const [query, setQuery] = useState("");
+  const [activeCategories, setActiveCategories] = useState<DictionaryCategoryId[]>([]);
+  const [density, setDensity] = useState<Density>("cards");
+  const [sortMode, setSortMode] = useState<VocabularySortMode>("relevance");
+  const [filtersOpen, setFiltersOpen] = useState(() => typeof window === "undefined" || window.innerWidth > 900);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [visibleLimit, setVisibleLimit] = useState(BATCH_SIZE);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const latestSearchRef = useRef(0);
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [textQuery, setTextQuery] = useState("");
-  const debouncedTextQuery = useDebounce(textQuery, 200);
-
-  const themes = useMemo(() => {
-    const themeSet = new Set<string>();
-    vocabularyData.forEach(item => {
-      item.tags.forEach(tag => themeSet.add(tag));
-    });
-    return Array.from(themeSet);
+  useEffect(() => {
+    const handleScroll = () => setShowBackToTop(window.scrollY > 360);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const themeCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    themes.forEach(theme => {
-      counts[theme] = 0;
-    });
-    vocabularyData.forEach(item => {
-      item.tags.forEach(tag => {
-        if (counts[tag] !== undefined) {
-          counts[tag]++;
-        }
-      });
-    });
-    return counts;
-  }, [themes]);
+  const currentLanguage = i18n.language.split("-")[0];
+  const deferredQuery = useDeferredValue(query);
+  const hasMore = visibleResults.length < totalResults;
 
-  const filteredVocabulary = useMemo(() => {
-    let base = vocabularyData;
+  useEffect(() => {
+    setVisibleLimit(BATCH_SIZE);
+  }, [activeCategories, deferredQuery, sortMode]);
 
-    if (selectedTags.length > 0) {
-      base = base.filter(item => selectedTags.every(tag => item.tags.includes(tag)));
-    }
+  useEffect(() => {
+    const searchId = ++latestSearchRef.current;
+    setSearchState("loading");
 
-    const query = debouncedTextQuery.trim().toLowerCase();
-    if (query) {
-      base = base.filter(item => {
-        return (
-          item.japanese.toLowerCase().includes(query) ||
-          item.hiragana.toLowerCase().includes(query) ||
-          item.romaji.toLowerCase().includes(query) ||
-          item.tags.some(tag => tag.toLowerCase().includes(query)) ||
-          item.translation.some(tr => tr.translation.toLowerCase().includes(query))
-        );
-      });
-    }
-
-    return base;
-  }, [selectedTags, debouncedTextQuery]);
-
-  const isFiltering = selectedTags.length > 0 || debouncedTextQuery.trim() !== "";
-
-  const handleTagToggle = useCallback((tag: string) => {
-    if (typeof tag !== 'string') return;
-    setSelectedTags(prev =>
-      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-    );
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-  const handleTagAdd = useCallback((tag: string) => {
-    if (typeof tag !== 'string') return;
-    setSelectedTags(prev => (prev.includes(tag) ? prev : [...prev, tag]));
-  }, []);
-
-  const handleTagRemove = useCallback((tag: string) => {
-    if (typeof tag !== 'string') return;
-    setSelectedTags(prev => prev.filter(t => t !== tag));
-  }, []);
-
-  const handleClearAll = useCallback(() => {
-    setSelectedTags([]);
-    setTextQuery("");
-  }, []);
-
-  const handleSelectWord = useCallback((item: VocabularyItem) => {
-    setTextQuery(item.romaji);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      showNotification(t("canvas.copySuccess"), "success");
+    searchVocabulary({
+      query: deferredQuery,
+      categories: activeCategories,
+      sortMode,
+      language: currentLanguage,
+      limit: visibleLimit,
+    }).then((response: VocabularySearchResponse) => {
+      if (searchId !== latestSearchRef.current) return;
+      if (response.status === "error") {
+        setSearchState("error");
+        return;
+      }
+      setVisibleResults(response.visibleEntries);
+      setMatchingEntryIds(response.matchingEntryIds);
+      setTotalResults(response.total);
+      setTotalEntries(response.totalEntries);
+      setCategoryCounts(response.categoryCounts);
+      setSearchState("ready");
     }).catch(() => {
-      showNotification(t("canvas.copyError"), "error");
+      if (searchId === latestSearchRef.current) setSearchState("error");
     });
-  }, [t, showNotification]);
+  }, [activeCategories, currentLanguage, deferredQuery, sortMode, visibleLimit]);
 
-  const subtitle = useMemo(() => {
-    if (!isFiltering) return t("vocabulary.subtitle");
-    if (selectedTags.length === 1 && !debouncedTextQuery.trim()) {
-      const tag = selectedTags[0];
-      if (typeof tag !== 'string') return t("vocabulary.subtitle");
-      return t(`vocabulary.categories.${tag}`, { defaultValue: tag });
-    }
-    return t("vocabulary.subtitle");
-  }, [isFiltering, selectedTags, debouncedTextQuery, t]);
+  const loadMore = useCallback(() => {
+    setVisibleLimit((current) => Math.min(current + BATCH_SIZE, totalResults));
+  }, [totalResults]);
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target || !hasMore || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver((observations) => {
+      if (observations.some((observation) => observation.isIntersecting)) loadMore();
+    }, { rootMargin: "480px 0px" });
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [hasMore, loadMore]);
+
+  const toggleCategory = useCallback((category: DictionaryCategoryId) => {
+    setActiveCategories((current) => current.includes(category)
+      ? current.filter((value) => value !== category)
+      : [...current, category]);
+  }, []);
+
+  const clearSearch = useCallback(() => {
+    setQuery("");
+    setActiveCategories([]);
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+  }, []);
+
+  const copyWord = useCallback((text: string) => {
+    navigator.clipboard.writeText(text).then(
+      () => showNotification(t("canvas.copySuccess"), "success"),
+      () => showNotification(t("canvas.copyError"), "error"),
+    );
+  }, [showNotification, t]);
+
+  const quizEntryIds = matchingEntryIds;
+  const canStartQuiz = quizEntryIds.length >= 4;
+
+  const startVocabularyQuiz = useCallback(() => {
+    if (!canStartQuiz) return;
+    navigate("/vocabulary-quiz", { state: { entryIds: quizEntryIds, from: "/vocabulary" } });
+  }, [canStartQuiz, navigate, quizEntryIds]);
+
+  const renderEntry = (item: VocabularyItem, index: number) => {
+    const translation = getTranslation(item.translation, currentLanguage);
+    const example = item.examples?.[0];
+    const exampleTranslation = example ? getTranslation(example.translation, currentLanguage) : undefined;
+    return (
+      <article
+        className="dictionary-entry"
+        key={item.id ?? `${item.japanese}-${item.romaji}`}
+        style={{ animationDelay: `${Math.min(index, 11) * 32}ms` }}
+      >
+        <div className="dictionary-entry-main">
+          <div className="dictionary-entry-top">
+            <span className="dictionary-type">{item.type}</span>
+            {item.jlpt && <span className="dictionary-jlpt">{item.jlpt}</span>}
+            {item.loanword && <span className="dictionary-jlpt">カナ</span>}
+          </div>
+          <button className="dictionary-japanese" onClick={() => copyWord(item.japanese)} title={t("canvas.copyTitle")}>{item.japanese}</button>
+          <div className="dictionary-reading">{item.hiragana} <span>/ {item.romaji || "—"}</span></div>
+          <div className="dictionary-meaning"><span>{langFlags[translation?.lang ?? ""] ?? "JP"}</span>{translation?.translation}</div>
+          {example && <div className="dictionary-example"><span>{example.japanese}</span><small>{exampleTranslation?.translation}</small></div>}
+        </div>
+        <div className="dictionary-entry-side" aria-label={t("vocabulary.secondaryInfo")}>
+          {item.image && <span className="dictionary-emoji">{item.image}</span>}
+          <button className="btn-icon dictionary-copy" onClick={() => copyWord(item.japanese)} aria-label={t("canvas.copyTitle")}><Copy size={16} /></button>
+          <div className="dictionary-tags">{(item.categories ?? ["other"]).slice(0, 3).map((category) => <span key={category}>{t(getCategory(category)?.labelKey ?? "vocabulary.taxonomy.other")}</span>)}</div>
+        </div>
+      </article>
+    );
+  };
 
   return (
-    <>
-      <NavBar title={t("vocabulary.title")} />
-      <div className="container vocabulary-container">
-        <header className="home-header">
-          <h1 className="title">{t("vocabulary.title")}</h1>
-          <p className="subtitle">{subtitle}</p>
+    <AppShell title={t("vocabulary.title")} className="vocabulary-shell">
+      <div className="container dictionary-container">
+        <header className="dictionary-hero">
+          <div>
+            <span className="section-kicker">REFERENCE LIBRARY</span>
+            <h1>{t("vocabulary.title")}</h1>
+            <p>{t("vocabulary.subtitle")}. {t("vocabulary.searchScope")}</p>
+          </div>
+          <div className="dictionary-stat"><strong>{totalEntries || "—"}</strong><span>{t("vocabulary.entries")}</span></div>
+        </header>
 
-          <div className="vocabulary-controls">
-          <SearchBar
-            allTags={themes}
-            selectedTags={selectedTags}
-            textQuery={textQuery}
-            vocabulary={vocabularyData}
-            placeholder={t("vocabulary.search")}
-            onTextChange={setTextQuery}
-            onAddTag={handleTagAdd}
-            onRemoveTag={handleTagRemove}
-            onSelectWord={handleSelectWord}
-            onClearAll={handleClearAll}
-          />
-
-        </div>
-
-        {themes.length > 0 && (
-          <TagSelector
-            tags={themes}
-            activeTags={selectedTags}
-            onTagToggle={handleTagToggle}
-          />
-        )}
-      </header>
-
-      {!isFiltering ? (
-        <div className="vocabulary-grid">
-          {themes.map(theme => (
-            <ThemeCard
-              key={theme}
-              theme={theme}
-              count={themeCounts[theme]}
-              onClick={handleTagAdd}
-            />
-          ))}
-          <ThemeCard
-            theme="coming-soon"
-            count={0}
-            onClick={() => {}}
-            isComingSoon
-          />
-        </div>
-      ) : (
-        <div className="word-grid">
-          {filteredVocabulary.map(item => (
-            <WordCard
-              key={`${item.japanese}-${item.romaji}-${item.tags.join('-')}`}
-              item={item}
-              langFlags={langFlags}
-              activeTags={selectedTags}
-              onTagClick={handleTagToggle}
-              onCopy={handleCopy}
-              copyTitle={t("canvas.copyTitle")}
-            />
-          ))}
-          {filteredVocabulary.length === 0 && (
-            <div className="no-results glass-panel">
-              <div className="no-results-icon">∅</div>
-              <p>{t("vocabulary.noResults")}</p>
+        <section className="dictionary-command glass-panel">
+          <div className="dictionary-search-line">
+            <Search size={18} aria-hidden="true" />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("vocabulary.searchNew")} aria-label={t("vocabulary.searchNew")} />
+            {query && <button className="btn-icon dictionary-clear" onClick={() => setQuery("")} aria-label={t("common.clear")}><X size={16} /></button>}
+          </div>
+          <div className="dictionary-toolbar">
+            <button className={`btn-secondary filter-toggle ${filtersOpen ? "active" : ""}`} onClick={() => setFiltersOpen((open) => !open)}><SlidersHorizontal size={16} />{t("vocabulary.filters")} {activeCategories.length > 0 && <span>{activeCategories.length}</span>}</button>
+            <label className="dictionary-sort"><ArrowUpDown size={15} /><span>{t("vocabulary.sort")}</span><select value={sortMode} onChange={(event) => setSortMode(event.target.value as VocabularySortMode)} aria-label={t("vocabulary.sort")}><option value="relevance">{t("vocabulary.sortRelevance")}</option><option value="japanese">{t("vocabulary.sortJapanese")}</option><option value="difficulty">{t("vocabulary.sortDifficulty")}</option><option value="category">{t("vocabulary.sortCategory")}</option></select></label>
+            <div className="density-switch" role="group" aria-label={t("vocabulary.viewMode")}>
+              <button className={density === "cards" ? "active" : ""} onClick={() => setDensity("cards")} aria-label={t("vocabulary.cardsView")} aria-pressed={density === "cards"}><LayoutGrid size={16} /></button>
+              <button className={density === "rows" ? "active" : ""} onClick={() => setDensity("rows")} aria-label={t("vocabulary.rowsView")} aria-pressed={density === "rows"}><List size={16} /></button>
             </div>
-          )}
+          </div>
+        </section>
+
+        {(query || activeCategories.length > 0) && (
+          <div className="dictionary-active-pills" aria-label={t("vocabulary.activeFilters")}>
+            {activeCategories.map((categoryId) => {
+              const category = getCategory(categoryId);
+              return <button key={categoryId} onClick={() => toggleCategory(categoryId)}>{t(category?.labelKey ?? "vocabulary.taxonomy.other")} <X size={13} /></button>;
+            })}
+            {query && <span className="dictionary-query-pill">“{query}” <button onClick={() => setQuery("")} aria-label={t("common.clear")}><X size={13} /></button></span>}
+            <button className="btn-text" onClick={clearSearch}>{t("vocabulary.clearFilters")}</button>
+          </div>
+        )}
+
+        {filtersOpen && <button className="dictionary-scrim" onClick={() => setFiltersOpen(false)} aria-label={t("common.close")} />}
+
+        <div className={`dictionary-layout ${filtersOpen ? "filters-open" : ""}`}>
+          <aside className="dictionary-filters glass-panel">
+            <div className="dictionary-filter-heading"><div><span className="section-kicker">FILTER BY</span><h2>{t("vocabulary.categoriesTitle")}</h2></div><button className="btn-icon mobile-filter-close" onClick={() => setFiltersOpen(false)} aria-label={t("common.close")}><X size={16} /></button></div>
+            <button className={`dictionary-filter-btn ${activeCategories.length === 0 ? "active" : ""}`} onClick={() => setActiveCategories([])}><span>{t("vocabulary.allWords")}</span><strong>{totalEntries}</strong></button>
+            {CATEGORY_SECTIONS.map((section) => (
+              <div className="dictionary-category-section" key={section.id}>
+                <h3>{t(section.labelKey)}</h3>
+                {DICTIONARY_CATEGORIES.filter((category) => category.section === section.id).map((category) => (
+                  <button key={category.id} className={`dictionary-filter-btn ${activeCategories.includes(category.id) ? "active" : ""}`} onClick={() => toggleCategory(category.id)} title={t(category.descriptionKey)}>
+                    <span>{t(category.labelKey)}</span><strong>{categoryCounts[category.id] ?? 0}</strong>
+                  </button>
+                ))}
+              </div>
+            ))}
+            <button className={`dictionary-back-to-top ${showBackToTop ? "is-visible" : ""}`} onClick={scrollToTop} disabled={!showBackToTop} aria-label={t("vocabulary.backToTop")}>
+              <ArrowUp size={15} aria-hidden="true" />
+              <span>{t("vocabulary.backToTop")}</span>
+            </button>
+          </aside>
+
+          <main className="dictionary-results-area">
+            <div className="dictionary-results-head"><span>{searchState === "loading" ? t("vocabulary.loading") : t("vocabulary.showing", { count: visibleResults.length, total: totalResults })}</span>{(query || activeCategories.length > 0) && <span className="dictionary-active-filter"><Check size={13} />{t("vocabulary.filtered")}</span>}</div>
+            {searchState === "loading" && visibleResults.length === 0 && <div className="dictionary-results dictionary-skeleton" aria-label={t("vocabulary.loading")} aria-busy="true">{Array.from({ length: 12 }, (_, index) => <div className="dictionary-skeleton-card" key={index} />)}</div>}
+            {searchState === "error" && <div className="dictionary-empty glass-panel"><span>!</span><h2>{t("vocabulary.loadError")}</h2><p>{t("vocabulary.loadErrorHint")}</p></div>}
+            {searchState === "ready" && totalResults === 0 && <div className="dictionary-empty glass-panel"><span>∅</span><h2>{t("vocabulary.noResults")}</h2><p>{t("vocabulary.emptyHint")}</p><button className="btn-primary" onClick={clearSearch}>{t("vocabulary.clearFilters")}</button></div>}
+            {searchState === "ready" && totalResults > 0 && <>
+              <div className={`dictionary-results density-${density}`}>
+                {visibleResults.map(renderEntry)}
+              </div>
+              <div ref={loadMoreRef} className="dictionary-load-more">
+                {hasMore && <button className="btn-secondary" onClick={loadMore}>{t("vocabulary.loadMore", { count: Math.min(BATCH_SIZE, totalResults - visibleResults.length) })}</button>}
+                {hasMore && <span>{t("vocabulary.moreAvailable", { count: totalResults - visibleResults.length })}</span>}
+                {!hasMore && totalResults > BATCH_SIZE && <span>{t("vocabulary.allLoaded")}</span>}
+              </div>
+            </>}
+          </main>
         </div>
-      )}
       </div>
-    </>
+      <button
+        className={`vocabulary-quiz-fab ${canStartQuiz ? "" : "is-disabled"}`}
+        onClick={startVocabularyQuiz}
+        onMouseEnter={() => prefetchRoute("/vocabulary-quiz")}
+        onFocus={() => prefetchRoute("/vocabulary-quiz")}
+        disabled={!canStartQuiz}
+        title={canStartQuiz ? t("vocabulary.startQuiz") : t("vocabulary.quiz.minimumWords")}
+        aria-label={canStartQuiz ? t("vocabulary.startQuiz") : t("vocabulary.quiz.minimumWords")}
+      >
+        <Play size={17} fill="currentColor" aria-hidden="true" />
+        <span className="vocabulary-quiz-fab-label">{canStartQuiz ? t("vocabulary.startQuiz") : t("vocabulary.quiz.minimumWords")}</span>
+        <strong>{quizEntryIds.length}</strong>
+      </button>
+    </AppShell>
   );
 };

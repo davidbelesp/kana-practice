@@ -1,156 +1,299 @@
 .kanji-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(245, 236, 215, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  backdrop-filter: none;
-  padding: 1rem;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: color-mix(in srgb, var(--studio-bg) 78%, transparent);
+  backdrop-filter: blur(14px);
+  animation: kanjiModalOverlayIn .2s ease both;
 }
 
 .kanji-modal-content {
-  background: var(--paper-card);
-  border: var(--border-ink);
-  box-shadow: 8px 8px 0 0 var(--ink-black);
-  border-radius: 0;
-  width: 100%;
-  max-width: 450px;
-  position: relative;
-  overflow: hidden;
-  animation: modalPop 0.2s ease-out;
-}
-
-@keyframes modalPop {
-  0% { transform: scale(0.94) translate(4px, 4px); opacity: 0; }
-  100% { transform: scale(1) translate(0, 0); opacity: 1; }
-}
-
-.kanji-modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1.25rem;
-  background: var(--paper-card);
-  border: var(--border-ink);
-  border-radius: 0;
-  color: var(--ink-black);
-  font-size: 1.5rem;
-  cursor: pointer;
-  line-height: 1;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 2px 2px 0 0 var(--ink-black);
-  transition: box-shadow 0.08s, transform 0.08s;
-}
-
-.kanji-modal-close:hover {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 0 var(--ink-black);
+  width: min(100%, 620px);
+  max-height: min(760px, calc(100dvh - 2.5rem));
+  overflow: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  background: var(--studio-panel);
+  color: var(--studio-text);
+  box-shadow: var(--shadow-card-hover);
+  animation: kanjiModalIn .26s cubic-bezier(.2, .8, .2, 1) both;
+  scrollbar-color: var(--accent-primary) transparent;
 }
 
 .kanji-modal-header {
-  padding: 2rem;
-  text-align: center;
-  border-bottom: 2px solid var(--ink-black);
-  background: var(--paper-bg);
+  padding: 1.15rem 1.25rem 1.35rem;
+  border-bottom: 1px solid var(--glass-border);
+  background: radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent-primary) 12%, transparent), transparent 44%);
 }
 
-.kanji-large-display {
-  font-size: 6rem;
+.kanji-modal-topline,
+.kanji-modal-header-actions,
+.kanji-modal-hero,
+.kanji-readings-heading {
+  display: flex;
+  align-items: center;
+}
+
+.kanji-modal-topline,
+.kanji-readings-heading {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.kanji-modal-eyebrow,
+.kanji-modal-label {
+  color: var(--studio-muted);
+  font: .65rem "DM Mono", monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.kanji-modal-header-actions {
+  gap: .55rem;
+}
+
+.kanji-modal-level {
+  padding: .35rem .6rem;
+  border: 1px solid color-mix(in srgb, var(--accent-primary) 40%, var(--glass-border));
+  border-radius: 999px;
+  color: var(--accent-primary);
+  font: .65rem "DM Mono", monospace;
+}
+
+.kanji-modal-close {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  background: var(--studio-panel-raised);
+  color: var(--studio-text);
+  cursor: pointer;
+  font-size: 1.35rem;
   line-height: 1;
-  margin: 0 0 1rem 0;
-  color: var(--ink-black);
-  font-weight: 800;
+  transition: transform .2s ease, border-color .2s ease, color .2s ease, background .2s ease;
 }
 
-.kanji-meaning {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--ink-black);
+.kanji-modal-close:hover,
+.kanji-modal-close:focus-visible {
+  border-color: var(--accent-primary);
+  background: var(--accent-soft);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.kanji-modal-hero {
+  gap: 1.2rem;
+  margin-top: 1.4rem;
+}
+
+.kanji-modal-character {
+  display: flex;
+  width: 104px;
+  height: 104px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: .15rem;
+  padding: .4rem;
+  border: 1px solid color-mix(in srgb, var(--accent-primary) 40%, var(--glass-border));
+  border-radius: 30px;
+  background: color-mix(in srgb, var(--accent-primary) 10%, var(--studio-panel-raised));
+  color: var(--accent-primary);
+  cursor: copy;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 4.8rem;
+  line-height: 1;
+  user-select: none;
+  -webkit-user-select: none;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-primary) 8%, transparent);
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+
+.kanji-modal-character:hover,
+.kanji-modal-character:focus-visible {
+  border-color: var(--accent-primary);
+  background: color-mix(in srgb, var(--accent-primary) 16%, var(--studio-panel-raised));
+  transform: translateY(-3px);
+}
+
+.kanji-modal-character small {
+  color: var(--studio-muted);
+  font: .55rem "DM Mono", monospace;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.kanji-modal-hero h2 {
+  margin-top: .35rem;
+  color: var(--studio-text);
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  letter-spacing: -.05em;
   text-transform: capitalize;
 }
 
 .kanji-modal-body {
-  padding: 2rem;
+  display: grid;
+  gap: 1.2rem;
+  padding: 1.25rem;
 }
 
-.info-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.25rem;
-  font-size: 1.1rem;
+.kanji-modal-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
 }
 
-.info-label {
-  color: var(--ink-muted);
-  width: 100px;
-  font-weight: 700;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.kanji-modal-info-card,
+.reading-column {
+  display: grid;
+  gap: .55rem;
+  min-width: 0;
+  padding: .9rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--studio-panel-raised) 56%, transparent);
 }
 
-.info-value.radical {
-  font-size: 1.5rem;
-  color: var(--ink-black);
-  font-weight: 700;
-  background: var(--paper-bg);
-  padding: 0.15rem 0.75rem;
-  border: var(--border-ink-thin);
-  border-radius: 0;
+.kanji-modal-info-card strong {
+  color: var(--studio-text);
+  font-size: 1.15rem;
+}
+
+.kanji-modal-radical {
+  color: var(--accent-primary) !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem !important;
+}
+
+.kanji-readings-line {
+  height: 1px;
+  flex: 1;
+  background: var(--glass-border);
 }
 
 .readings-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  margin-top: 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
 }
 
 .reading-column {
-  background: var(--paper-bg);
-  padding: 1rem;
-  border: var(--border-ink-thin);
-  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.reading-column::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: var(--accent-primary);
+  content: "";
+}
+
+.reading-column--onyomi::before {
+  background: var(--accent-secondary);
 }
 
 .reading-title {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  margin: 0 0 0.75rem 0;
-  padding-bottom: 0.4rem;
-  border-bottom: 2px solid var(--ink-black);
+  margin: 0;
+  color: var(--studio-text);
+  font-size: .78rem;
+  letter-spacing: -.01em;
 }
 
-.kunyomi-title { color: #a8261c; }
-.onyomi-title { color: #1d3a8a; }
-
 .reading-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .reading-list li {
-  font-size: 1.05rem;
-  color: var(--ink-black);
-  font-weight: 500;
+  padding: .35rem .55rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  color: var(--studio-text);
+  font-size: .92rem;
 }
 
 .no-reading {
-  color: var(--ink-muted);
-  font-style: italic;
-  font-size: 0.9rem;
+  color: var(--studio-muted);
+  font-size: .9rem;
+}
+
+@keyframes kanjiModalOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes kanjiModalIn {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 600px) {
+  .kanji-modal-overlay {
+    align-items: end;
+    padding: 0;
+  }
+
+  .kanji-modal-content {
+    width: 100%;
+    max-height: min(88dvh, 720px);
+    border-right: 0;
+    border-bottom: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    animation-name: kanjiModalSheetIn;
+  }
+
+  .kanji-modal-character {
+    width: 82px;
+    height: 82px;
+    border-radius: 24px;
+    font-size: 3.8rem;
+  }
+
+  .kanji-modal-body,
+  .kanji-modal-header {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .kanji-modal-info-grid,
+  .readings-container {
+    grid-template-columns: 1fr;
+  }
+
+  .kanji-modal-hero {
+    gap: .8rem;
+  }
+
+  .kanji-modal-hero h2 {
+    font-size: 1.2rem;
+  }
+}
+
+@keyframes kanjiModalSheetIn {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kanji-modal-overlay,
+  .kanji-modal-content,
+  .kanji-modal-close {
+    animation: none;
+    transition: none;
+  }
 }

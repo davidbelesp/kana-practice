@@ -13,6 +13,7 @@ const FreeCanvas = lazy(() => import("./pages/FreeCanvas").then(m => ({ default:
 const KanjiPage = lazy(() => import("./pages/KanjiPage").then(m => ({ default: m.KanjiPage })));
 const KanjiQuiz = lazy(() => import("./pages/KanjiQuiz").then(m => ({ default: m.KanjiQuiz })));
 const Vocabulary = lazy(() => import("./pages/Vocabulary").then(m => ({ default: m.Vocabulary })));
+const VocabularyQuiz = lazy(() => import("./pages/VocabularyQuiz").then(m => ({ default: m.VocabularyQuiz })));
 const Numbers = lazy(() => import("./pages/Numbers").then(m => ({ default: m.Numbers })));
 
 const PageLoader = () => (
@@ -48,6 +49,7 @@ const SettingsContextConsumer = () => {
           <Route path="/kanji" element={<KanjiPage />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/vocabulary" element={<Vocabulary />} />
+          <Route path="/vocabulary-quiz" element={<VocabularyQuiz />} />
           <Route path="/numbers" element={<Numbers />} />
         </Routes>
       </Suspense>

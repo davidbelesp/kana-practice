@@ -3882,7 +3882,7 @@ export const vocabularyData: VocabularyItem[] = [
     tags: ["technology"],
     image: "💻"
   },
-{
+  {
     japanese: "電話",
     hiragana: "でんわ",
     romaji: "denwa",

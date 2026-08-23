@@ -18,6 +18,12 @@ interface KanaCanvasProps {
   targetChar: string;
   onVerify: (accuracy: number) => void;
   isRevealed: boolean;
+  variant?: "quiz" | "free";
+  showFeedback?: boolean;
+  autoRecognize?: boolean;
+  onRecognized?: (results: string[]) => void;
+  onRecognitionStateChange?: (state: "idle" | "recognizing" | "ready" | "error") => void;
+  onCleared?: () => void;
 }
 
 interface SketchPoint {
@@ -31,12 +37,23 @@ interface SketchPath {
 
 export interface KanaCanvasRef {
   check: () => void;
+  recognize: () => Promise<string[]>;
   clear: () => void;
   getPaths: () => Promise<SketchPath[]>;
 }
 
 export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
-  ({ targetChar, onVerify, isRevealed }, ref) => {
+  ({
+    targetChar,
+    onVerify,
+    isRevealed,
+    variant = "quiz",
+    showFeedback = true,
+    autoRecognize = true,
+    onRecognized,
+    onRecognitionStateChange,
+    onCleared,
+  }, ref) => {
     const { t } = useTranslation();
     const sketchRef = useRef<ReactSketchCanvasRef>(null);
     const [lastScore, setLastScore] = useState<number | null>(null);
@@ -44,19 +61,26 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
     const [isProcessing, setIsProcessing] = useState(false);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const targetCharRef = useRef(targetChar);
+    const strokeVersionRef = useRef(0);
+    const recognizedStrokeVersionRef = useRef(0);
+    const requestVersionRef = useRef(0);
 
     useEffect(() => {
       targetCharRef.current = targetChar;
     }, [targetChar]);
 
-    const runOcr = useCallback(async (): Promise<number> => {
-      if (!sketchRef.current) return 0;
+    const runRecognition = useCallback(async (): Promise<string[]> => {
+      if (!sketchRef.current) return [];
+      const requestVersion = ++requestVersionRef.current;
+      const strokeVersion = strokeVersionRef.current;
       setIsProcessing(true);
+      onRecognitionStateChange?.("recognizing");
 
       const paths = await sketchRef.current.exportPaths();
       if (!paths || paths.length === 0) {
         setIsProcessing(false);
-        return 0;
+        onRecognitionStateChange?.("ready");
+        return [];
       }
 
       const trace = paths.map((p: SketchPath) => {
@@ -71,7 +95,7 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
         return [strokeX, strokeY, strokeT];
       });
 
-      return new Promise<number>((resolve) => {
+      return new Promise<string[]>((resolve) => {
         handwriting.recognize(
           trace,
           {
@@ -79,66 +103,93 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
             numOfReturn: 10,
           },
           (results: string[]) => {
-            setIsProcessing(false);
-
-            if (results.includes(targetCharRef.current)) {
-              resolve(100);
-            } else {
-              resolve(0);
+            if (requestVersion !== requestVersionRef.current || strokeVersion !== strokeVersionRef.current) {
+              resolve([]);
+              return;
             }
+            setIsProcessing(false);
+            onRecognized?.(results);
+            onRecognitionStateChange?.("ready");
+            resolve(results);
           },
           (err: Error) => {
+            if (requestVersion !== requestVersionRef.current || strokeVersion !== strokeVersionRef.current) {
+              resolve([]);
+              return;
+            }
             console.error("OCR Error:", err.message);
             setIsProcessing(false);
-            resolve(0);
+            onRecognitionStateChange?.("error");
+            resolve([]);
           },
         );
       });
-    }, []);
+    }, [onRecognized, onRecognitionStateChange]);
+
+    const runOcr = useCallback(async (): Promise<number> => {
+      const results = await runRecognition();
+      return results.includes(targetCharRef.current) ? 100 : 0;
+    }, [runRecognition]);
 
     const handleClear = useCallback(() => {
       sketchRef.current?.clearCanvas();
+      strokeVersionRef.current += 1;
+      recognizedStrokeVersionRef.current = strokeVersionRef.current;
+      if (timerRef.current) clearTimeout(timerRef.current);
       setLastScore(null);
       setIsPassing(false);
-    }, []);
+      onRecognized?.([]);
+      onRecognitionStateChange?.("ready");
+      onCleared?.();
+    }, [onCleared, onRecognized, onRecognitionStateChange]);
 
     useImperativeHandle(ref, () => ({
       check: async () => {
         const score = await runOcr();
-        setLastScore(score);
-        setIsPassing(score >= 70);
+        if (showFeedback) {
+          setLastScore(score);
+          setIsPassing(score >= 70);
+        }
         onVerify(score);
       },
+      recognize: runRecognition,
       clear: handleClear,
       getPaths: async () => {
         const paths = await sketchRef.current?.exportPaths();
         return paths || [];
       },
-    }), [runOcr, handleClear, onVerify]);
+    }), [handleClear, onVerify, runOcr, runRecognition, showFeedback]);
 
     const handleStroke = useCallback(() => {
+      strokeVersionRef.current += 1;
+      const strokeVersion = strokeVersionRef.current;
+      if (!autoRecognize) return;
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(async () => {
-        const score = await runOcr();
+        if (recognizedStrokeVersionRef.current === strokeVersion) return;
+        recognizedStrokeVersionRef.current = strokeVersion;
+        const results = await runRecognition();
+        if (!showFeedback) return;
+        const score = results.includes(targetCharRef.current) ? 100 : 0;
         setLastScore(score);
         setIsPassing(score >= 70);
       }, 1000);
-    }, [runOcr]);
+    }, [autoRecognize, runRecognition, showFeedback]);
 
     const handleClearClick = useCallback(() => {
       handleClear();
     }, [handleClear]);
 
     return (
-      <div className="kana-canvas-container">
+      <div className={`kana-canvas-container canvas-variant-${variant}`}>
         <div className="canvas-wrapper">
           {isRevealed && <div className="ghost-overlay">{targetChar}</div>}
 
-          {isPassing && !isRevealed && (
+          {showFeedback && isPassing && !isRevealed && (
             <div className="passing-indicator" aria-live="polite">✓</div>
           )}
 
-          {isProcessing && !isPassing && !isRevealed && (
+          {showFeedback && isProcessing && !isPassing && !isRevealed && (
             <div className="processing-indicator" aria-live="polite">
               <div className="spinner"></div>
             </div>
@@ -153,7 +204,7 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
             width="400px"
             height="400px"
             strokeWidth={10}
-            strokeColor="#1a1a1a"
+            strokeColor={variant === "free" ? "#ffffff" : "#1a1a1a"}
             canvasColor="transparent"
             onChange={handleStroke}
           />
@@ -169,7 +220,7 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
             {t("common.clear")}
           </button>
 
-          <div className="status-badges" role="status" aria-live="polite">
+          {showFeedback && <div className="status-badges" role="status" aria-live="polite">
             {lastScore !== null && (
               <div
                 className="score-badge"
@@ -180,7 +231,7 @@ export const KanaCanvas = forwardRef<KanaCanvasRef, KanaCanvasProps>(
                 {lastScore > 70 ? t("quiz.actions.verified") : t("quiz.actions.unsure")}
               </div>
             )}
-          </div>
+          </div>}
         </div>
       </div>
     );

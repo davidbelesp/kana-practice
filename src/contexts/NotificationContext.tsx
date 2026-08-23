@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { Notification } from "../components/Notification";
 
@@ -16,6 +16,11 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [type, setType] = useState<NotificationType>("info");
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  }, []);
 
   const showNotification = useCallback(
     (msg: string, notificationType: NotificationType = "info") => {
@@ -23,9 +28,10 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       setType(notificationType);
       setIsVisible(true);
 
-      // Auto hide after 3 seconds
-      setTimeout(() => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
         setIsVisible(false);
+        timeoutRef.current = null;
       }, 3000);
     },
     [],

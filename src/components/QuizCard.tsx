@@ -1,11 +1,13 @@
-import { useRef, useState, useEffect, useCallback, memo } from "react";
+import { lazy, Suspense, useRef, useState, useEffect, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { Play, Eye, EyeOff } from "lucide-react";
 import type { QuizQuestion } from "../types/QuizTypes";
-import { KanaCanvas, type KanaCanvasRef } from "./KanaCanvas";
+import type { KanaCanvasRef } from "./KanaCanvas";
 import { speakJapanese } from "../utils/speechUtils";
 import "./QuizCard.css";
+
+const LazyKanaCanvas = lazy(() => import("./KanaCanvas").then((module) => ({ default: module.KanaCanvas })));
 
 interface QuizCardProps {
   question: QuizQuestion;
@@ -162,12 +164,14 @@ export const QuizCard = memo(({
 
   const renderDrawingArea = () => {
     return (
-      <KanaCanvas
-        ref={canvasRef}
-        targetChar={question.correctAnswer as string}
-        onVerify={handleDrawingParams}
-        isRevealed={isSubmitted}
-      />
+      <Suspense fallback={<div className="drawing-answer-loading">{t("quiz.actions.loadingDrawing")}</div>}>
+        <LazyKanaCanvas
+          ref={canvasRef}
+          targetChar={question.correctAnswer as string}
+          onVerify={handleDrawingParams}
+          isRevealed={isSubmitted}
+        />
+      </Suspense>
     );
   };
 
@@ -175,8 +179,8 @@ export const QuizCard = memo(({
     return (
       <div className="listening-area">
         <div className="listening-controls">
-          <button 
-            className="play-btn-large" 
+          <button
+            className="play-btn-large"
             onClick={handlePlayAudio}
             aria-label="Play audio"
           >
@@ -186,7 +190,7 @@ export const QuizCard = memo(({
             <span className="play-label">{t("quiz.actions.playAudio")}</span>
           </button>
 
-          <button 
+          <button
             className="btn-secondary hint-btn-side"
             onClick={() => setShowHint(!showHint)}
             title={showHint ? t("quiz.actions.hideHint") : t("quiz.actions.showHint")}
@@ -229,6 +233,7 @@ export const QuizCard = memo(({
       className={classNames("quiz-card glass-panel", {
         correct: isCorrect === true,
         incorrect: isCorrect === false,
+        "quiz-card--choice": !isSequence && !isDrawing,
       })}
     >
       <div className="quiz-question">
@@ -255,7 +260,7 @@ export const QuizCard = memo(({
             !isSubmitted &&
             (isSequence
               ? (userAnswer as string[]).length !==
-                (question.correctAnswer as string[]).length
+              (question.correctAnswer as string[]).length
               : isDrawing
                 ? false
                 : !userAnswer)

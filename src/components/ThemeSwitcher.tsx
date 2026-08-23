@@ -12,10 +12,10 @@ export const ThemeSwitcher = () => {
   const currentTheme = settings.theme;
 
   const themes: { id: Theme; labelKey: string; color: string }[] = [
-    { id: "default", labelKey: "purple", color: "linear-gradient(135deg, #c85bff, #ff4fa6)" },
-    { id: "blue", labelKey: "blue", color: "linear-gradient(135deg, #3b82f6, #06b6d4)" },
-    { id: "green", labelKey: "green", color: "linear-gradient(135deg, #10b981, #84cc16)" },
-    { id: "orange", labelKey: "orange", color: "linear-gradient(135deg, #f97316, #eab308)" },
+    { id: "default", labelKey: "purple", color: "linear-gradient(135deg, #d7f36b, #f2a35d)" },
+    { id: "blue", labelKey: "blue", color: "linear-gradient(135deg, #8cc6d9, #d7f36b)" },
+    { id: "green", labelKey: "green", color: "linear-gradient(135deg, #a7d45d, #d7f36b)" },
+    { id: "orange", labelKey: "orange", color: "linear-gradient(135deg, #f2a35d, #e88982)" },
   ];
 
   return (
