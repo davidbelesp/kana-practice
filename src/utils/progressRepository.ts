@@ -130,8 +130,11 @@ const writeSnapshot = (snapshot: ProgressSnapshot) => {
 
 export const getProgressSnapshot = (): ProgressSnapshot => readSnapshot();
 
-export const replaceProgressSnapshot = (snapshot: ProgressSnapshot) => {
-  writeSnapshot({ ...snapshot, version: 1, updatedAt: Date.now() });
+export const replaceProgressSnapshot = (snapshot: ProgressSnapshot, options?: { emitChange?: boolean }) => {
+  const next: ProgressSnapshot = { ...snapshot, version: 1, updatedAt: Date.now() };
+  snapshotCache = next;
+  if (canUseStorage()) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  if (options?.emitChange !== false) emitChange();
 };
 
 const SYNC_BASELINE_KEY = "progress_sync_baseline_v1";

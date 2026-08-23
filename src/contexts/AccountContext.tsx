@@ -198,7 +198,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     if (!localSettings && settingsResponse.data?.settings) window.localStorage.setItem("app_settings", JSON.stringify(settingsResponse.data.settings));
     const [itemUpsert, sessionUpsert, settingsUpsert] = await Promise.all([supabase.from("progress_items").upsert(itemRows, { onConflict: "user_id,domain,item_id" }), supabase.from("learning_sessions").upsert(sessionRows, { onConflict: "id" }), supabase.from("user_settings").upsert({ user_id: user.id, settings: settingsPayload, updated_at: new Date().toISOString() }, { onConflict: "user_id" })]);
     if (itemUpsert.error || sessionUpsert.error || settingsUpsert.error) { setSyncStatus("error"); setError(itemUpsert.error?.message ?? sessionUpsert.error?.message ?? settingsUpsert.error?.message); return; }
-    replaceProgressSnapshot(merged);
+    replaceProgressSnapshot(merged, { emitChange: false });
     setProgressSyncBaseline(merged);
     clearPendingProgressSync();
     setLastSyncedAt(Date.now());
@@ -210,6 +210,22 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     const handleOnline = () => { if (user) void syncNow(); };
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);
+  }, [syncNow, user]);
+  useEffect(() => {
+    if (!user) return undefined;
+    let timer: number | undefined;
+    const scheduleSync = () => {
+      if (typeof navigator !== "undefined" && !navigator.onLine) return;
+      if (timer) window.clearTimeout(timer);
+      timer = window.setTimeout(() => { void syncNow(); }, 1200);
+    };
+    window.addEventListener("kana-progress-updated", scheduleSync);
+    window.addEventListener("focus", scheduleSync);
+    return () => {
+      if (timer) window.clearTimeout(timer);
+      window.removeEventListener("kana-progress-updated", scheduleSync);
+      window.removeEventListener("focus", scheduleSync);
+    };
   }, [syncNow, user]);
 
   const exportAccountData = useCallback(() => {
