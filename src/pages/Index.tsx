@@ -2,8 +2,11 @@ import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowUpRight, BarChart3, BookMarked, BookOpen, Brush, ChevronRight, Layers, Target, Trophy } from "lucide-react";
+import { hiraganaData, katakanaData } from "../data/kana";
+import { totalKanjiCount } from "../data/kanjiManifest";
 import { getAggregates, getMasteredKana } from "../utils/statsManager";
 import { getTrainingRecommendations, useProgressSnapshot } from "../utils/progressRepository";
+import type { ProgressItem } from "../types/Progress";
 import { AppShell } from "../components/ui/AppShell";
 import "./Index.css";
 
@@ -13,6 +16,15 @@ const sessions = [
   { to: "/vocabulary", eyebrow: "03 / DAILY WORDS", titleKey: "index.cards.vocabulary", descKey: "index.cards.vocabularyDesc", Icon: BookMarked, tone: "blue", glyph: "言" },
   { to: "/canvas", eyebrow: "04 / HANDWRITING", titleKey: "index.cards.canvas", descKey: "index.cards.canvasDesc", Icon: Brush, tone: "pink", glyph: "書" },
 ] as const;
+
+type ProgressSegmentState = "mastered" | "started" | "left";
+
+const getSegmentState = (item?: ProgressItem): ProgressSegmentState => {
+  if (!item || item.correct + item.incorrect === 0) return "left";
+  return item.masteryScore >= 85 ? "mastered" : "started";
+};
+
+const kanaCatalog = (data: typeof hiraganaData) => data.filter((item) => !item.isEmpty).map((item) => item.char);
 
 export const Index: React.FC = () => {
   const { t } = useTranslation();
@@ -26,6 +38,24 @@ export const Index: React.FC = () => {
   const trackedAccuracy = trackedAnswered ? Math.round((unifiedTotals.correct / trackedAnswered) * 100) : aggregates.globalAccuracy;
   const trackedSessions = Object.keys(progressSnapshot.sessions).length || aggregates.totalQuizzes;
   const weeklyGoal = Math.min(100, Math.round((trackedSessions / 7) * 100));
+  const progressRows = useMemo(() => {
+    const items = Object.values(progressSnapshot.items);
+    const progressMap = new Map(items.map((item) => [`${item.domain}:${item.itemId}`, item]));
+    const buildKanaRow = (label: string, ids: string[]) => {
+      const segments = ids.map((id) => getSegmentState(progressMap.get(`kana:${id}`)));
+      return { label, segments };
+    };
+    const kanjiItems = items.filter((item) => item.domain === "kanji");
+    const kanjiSegments: ProgressSegmentState[] = [
+      ...kanjiItems.map(getSegmentState),
+      ...Array<ProgressSegmentState>(Math.max(0, totalKanjiCount - kanjiItems.length)).fill("left"),
+    ].slice(0, totalKanjiCount);
+    return [
+      buildKanaRow("Hiragana", kanaCatalog(hiraganaData)),
+      buildKanaRow("Katakana", kanaCatalog(katakanaData)),
+      { label: "Kanji", segments: kanjiSegments },
+    ];
+  }, [progressSnapshot.items]);
 
   return (
     <AppShell title="Overview" className="index-container app-dashboard">
@@ -53,7 +83,7 @@ export const Index: React.FC = () => {
         </section>
 
         <section className="bottom-grid">
-          <Link to="/stats" className="progress-panel"><div className="panel-heading"><div><span className="section-kicker">KEEP GOING</span><h2>Your progress</h2></div><ArrowUpRight size={18} /></div><div className="progress-bars">{["Hiragana", "Katakana", "Kanji"].map((label, index) => { const domainItems = Object.values(progressSnapshot.items).filter((item) => item.domain === (index === 2 ? "kanji" : "kana")); const values = index === 0 ? Math.min(100, domainItems.filter((item) => item.itemId.charCodeAt(0) < 0x30a0 && item.masteryScore >= 85).length * 5) : index === 1 ? Math.min(100, domainItems.filter((item) => item.itemId.charCodeAt(0) >= 0x30a0 && item.masteryScore >= 85).length * 5) : Math.min(100, domainItems.filter((item) => item.masteryScore >= 85).length * 2); return <div className="progress-item" key={label}><div><span>{label}</span><strong>{values}%</strong></div><div className="progress-track"><span style={{ width: `${values}%` }} /></div></div>; })}</div></Link>
+          <Link to="/stats" className="progress-panel"><div className="panel-heading"><div><span className="section-kicker">KEEP GOING</span><h2>Your progress</h2></div><ArrowUpRight size={18} /></div><div className="progress-bars">{progressRows.map(({ label, segments }) => { const masteredCount = segments.filter((state) => state === "mastered").length; return <div className="progress-item" key={label}><div><span>{label}</span><strong>{masteredCount}/{segments.length}</strong></div><div className={`progress-track progress-track-segmented ${segments.length > 200 ? "is-dense" : ""}`} aria-label={`${label}: ${masteredCount} mastered of ${segments.length}`}>{segments.map((state, index) => <span className={`progress-segment is-${state}`} key={`${label}-${index}`} aria-hidden="true" />)}</div></div>; })}</div></Link>
           <Link to="/numbers" className="number-panel"><div className="number-panel-copy"><span className="section-kicker">NEW ROUTE</span><h2>Make numbers<br /><em>second nature.</em></h2><span className="text-link">Try numbers <ChevronRight size={15} /></span></div><div className="number-decoration" aria-hidden="true"><span>一</span><span>二</span><span>三</span></div></Link>
         </section>
         {recommendations[0] && <Link to={recommendations[0].actionPath} className="dashboard-recommendation"><div><span className="section-kicker">NEXT BEST SESSION</span><h2>{t(recommendations[0].titleKey)}</h2><p>{t(recommendations[0].descriptionKey)}</p></div><span className="dashboard-recommendation-arrow">↗</span></Link>}

@@ -180,33 +180,35 @@
 
 .numbers-input {
   width: 100%;
-  padding: 0.9rem 1.1rem;
-  background: var(--paper-bg);
-  border: var(--border-ink);
-  border-radius: 0;
-  color: var(--ink-black);
-  font-size: 1.2rem;
+  min-height: 54px;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  background: color-mix(in srgb, var(--studio-panel-raised) 70%, transparent);
+  color: var(--studio-text);
+  font-size: 1rem;
   text-align: center;
   outline: none;
   font-family: inherit;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
   box-sizing: border-box;
-  box-shadow: 2px 2px 0 0 var(--ink-black);
 }
 
 .numbers-input:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 2px 2px 0 0 var(--accent-primary);
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .numbers-input.correct {
-  border-color: #2d6b3f;
-  box-shadow: 2px 2px 0 0 #2d6b3f;
+  border-color: #5cc77b !important;
+  background: color-mix(in srgb, #5cc77b 10%, var(--studio-panel-raised));
+  box-shadow: 0 0 0 3px color-mix(in srgb, #5cc77b 18%, transparent);
 }
 
 .numbers-input.incorrect {
-  border-color: #a8261c;
-  box-shadow: 2px 2px 0 0 #a8261c;
+  border-color: var(--accent-secondary) !important;
+  background: color-mix(in srgb, var(--accent-secondary) 10%, var(--studio-panel-raised));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-secondary) 18%, transparent);
 }
 
 .numbers-input:disabled {
@@ -272,7 +274,7 @@
 .numbers-studio-page .numbers-reading { color:var(--studio-text); font:clamp(1.8rem,5vw,2.8rem) Georgia,serif; }
 .numbers-studio-page .numbers-reading-hiragana { color:var(--accent-secondary); font-size:1rem; }
 .listen-btn { margin-top:.8rem; border-radius:999px; }
-.numbers-studio-page .numbers-input { min-height:54px; padding:.85rem 1rem; border-radius:var(--radius-md) !important; background:var(--studio-panel-raised); text-align:center; font-size:1rem; }
+.numbers-studio-page .numbers-input { width:100%; }
 .numbers-actions { display:flex; justify-content:center; gap:.6rem; }
 .numbers-studio-page .numbers-choices { grid-template-columns:repeat(2,1fr); gap:.65rem; }
 .numbers-studio-page .numbers-choice-btn { min-height:64px; padding:.85rem; font:1.35rem "DM Mono",monospace; }

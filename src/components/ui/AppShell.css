@@ -433,6 +433,8 @@
     height: 64px;
     padding: 0 12px;
     gap: 10px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
   }
 
   .navbar-hamburger {
@@ -451,6 +453,7 @@
     min-width: 0;
     flex: 1;
     display: block;
+    overflow: hidden;
   }
 
   .navbar-context span {
@@ -462,20 +465,28 @@
   .navbar-context strong {
     display: block;
     overflow: hidden;
-    font-size: 12px;
+    max-width: 100%;
+    font-size: clamp(10px, 3.1vw, 12px);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .navbar-center {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: static;
+    min-width: 0;
+    transform: none;
   }
 
   .navbar-center .tab-switch {
     transform: scale(.86);
     transform-origin: center;
+    max-width: 100%;
+  }
+
+  .navbar-center .tab-btn {
+    min-width: 0;
+    padding: .5rem .55rem;
+    font-size: .68rem;
   }
 
   .navbar-right {
@@ -498,18 +509,9 @@
     height: 38px;
   }
 
-  .navbar-account-guest {
-    gap: 7px;
-    margin-right: 0;
-  }
-
-  .navbar-account-link {
-    font-size: 10px;
-  }
-
-  .navbar-right .account-avatar {
-    width: 38px;
-    height: 38px;
+  .navbar-account-guest,
+  .navbar-right>.account-avatar {
+    display: none;
   }
 
   .navbar-drawer {

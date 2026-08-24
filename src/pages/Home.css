@@ -291,7 +291,7 @@
 
   .home-container .controls {
     position: sticky;
-    top: 12px;
+    top: calc(var(--navbar-height) + .5rem);
     z-index: 20;
     margin-bottom: 1rem;
   }

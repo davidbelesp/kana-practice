@@ -1,5 +1,5 @@
 import React, { useCallback, useDeferredValue, useEffect, useRef, useState } from "react";
-import { ArrowUp, ArrowUpDown, Check, Copy, LayoutGrid, List, Play, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUp, ArrowUpDown, Check, ChevronDown, Copy, LayoutGrid, List, Play, Search, SlidersHorizontal, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { AppShell } from "../components/ui/AppShell";
@@ -36,6 +36,7 @@ export const Vocabulary: React.FC = () => {
   const [density, setDensity] = useState<Density>("cards");
   const [sortMode, setSortMode] = useState<VocabularySortMode>("relevance");
   const [filtersOpen, setFiltersOpen] = useState(() => typeof window === "undefined" || window.innerWidth > 900);
+  const [openFilterSection, setOpenFilterSection] = useState<(typeof CATEGORY_SECTIONS)[number]["id"] | null>(CATEGORY_SECTIONS[0].id);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [visibleLimit, setVisibleLimit] = useState(BATCH_SIZE);
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -205,12 +206,22 @@ export const Vocabulary: React.FC = () => {
             <button className={`dictionary-filter-btn ${activeCategories.length === 0 ? "active" : ""}`} onClick={() => setActiveCategories([])}><span>{t("vocabulary.allWords")}</span><strong>{totalEntries}</strong></button>
             {CATEGORY_SECTIONS.map((section) => (
               <div className="dictionary-category-section" key={section.id}>
-                <h3>{t(section.labelKey)}</h3>
-                {DICTIONARY_CATEGORIES.filter((category) => category.section === section.id).map((category) => (
-                  <button key={category.id} className={`dictionary-filter-btn ${activeCategories.includes(category.id) ? "active" : ""}`} onClick={() => toggleCategory(category.id)} title={t(category.descriptionKey)}>
-                    <span>{t(category.labelKey)}</span><strong>{categoryCounts[category.id] ?? 0}</strong>
-                  </button>
-                ))}
+                <button
+                  className="dictionary-category-toggle"
+                  onClick={() => setOpenFilterSection((current) => current === section.id ? null : section.id)}
+                  aria-expanded={openFilterSection === section.id}
+                  aria-controls={`dictionary-filter-section-${section.id}`}
+                >
+                  <h3>{t(section.labelKey)}</h3>
+                  <ChevronDown size={15} aria-hidden="true" />
+                </button>
+                <div id={`dictionary-filter-section-${section.id}`} className="dictionary-category-options" hidden={openFilterSection !== section.id}>
+                  {DICTIONARY_CATEGORIES.filter((category) => category.section === section.id).map((category) => (
+                    <button key={category.id} className={`dictionary-filter-btn ${activeCategories.includes(category.id) ? "active" : ""}`} onClick={() => toggleCategory(category.id)} title={t(category.descriptionKey)}>
+                      <span>{t(category.labelKey)}</span><strong>{categoryCounts[category.id] ?? 0}</strong>
+                    </button>
+                  ))}
+                </div>
               </div>
             ))}
             <button className={`dictionary-back-to-top ${showBackToTop ? "is-visible" : ""}`} onClick={scrollToTop} disabled={!showBackToTop} aria-label={t("vocabulary.backToTop")}>

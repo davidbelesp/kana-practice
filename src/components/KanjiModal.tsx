@@ -78,7 +78,6 @@ export const KanjiModal: React.FC<KanjiModalProps> = ({ kanji, level, onClose })
           <div className="kanji-modal-hero">
             <button type="button" className="kanji-modal-character" onClick={() => void handleCopy()} aria-label={t("kanji.copyCharacter")}>
               <span aria-hidden="true">{kanji.char}</span>
-              <small>{t("kanji.copyHint")}</small>
             </button>
             <div>
               <p className="kanji-modal-label">{t("kanji.meaning")}</p>
