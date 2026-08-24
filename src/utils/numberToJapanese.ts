@@ -126,3 +126,8 @@ export function checkNumberAnswer(n: number, input: string): boolean {
   }
   return normalizeRomaji(trimmed) === buildRomaji(n);
 }
+
+export function checkNumericAnswer(n: number, input: string): boolean {
+  const normalized = input.trim().replace(/[\s,]/g, "");
+  return /^\d+$/.test(normalized) && Number(normalized) === n;
+}

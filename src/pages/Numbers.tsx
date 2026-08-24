@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, Check, Headphones, Keyboard, ListChecks, RotateCw, SkipForward, Volume2 } from "lucide-react";
+import { ArrowRight, Check, Headphones, Keyboard, Languages, ListChecks, RotateCw, SkipForward, Volume2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
-import { numberToJapanese, checkNumberAnswer } from "../utils/numberToJapanese";
+import { numberToJapanese, checkNumberAnswer, checkNumericAnswer } from "../utils/numberToJapanese";
 import { digitGroup, saveNumberResult } from "../utils/statsManager";
 import { recordCompletedSession, recordItemResults } from "../utils/progressRepository";
 import { useSettings } from "../contexts/SettingsContext";
@@ -11,7 +11,7 @@ import { AppShell } from "../components/ui/AppShell";
 import { QuizWorkspace } from "../components/quiz/QuizWorkspace";
 import "./Numbers.css";
 
-type QuestionMode = "typing" | "multiple-choice" | "listening" | "mixed";
+type QuestionMode = "typing" | "text-to-number" | "multiple-choice" | "listening" | "mixed";
 type RoundMode = Exclude<QuestionMode, "mixed">;
 type Status = "correct" | "incorrect" | null;
 
@@ -67,7 +67,7 @@ export const Numbers = () => {
 
   const resolveRoundMode = useCallback((mode: QuestionMode): RoundMode => {
     if (mode !== "mixed") return mode;
-    const modes: RoundMode[] = ["typing", "multiple-choice", "listening"];
+    const modes: RoundMode[] = ["typing", "text-to-number", "multiple-choice", "listening"];
     return modes[Math.floor(Math.random() * modes.length)];
   }, []);
 
@@ -79,11 +79,11 @@ export const Numbers = () => {
     setInput("");
     setSelectedChoice(null);
     setStatus(null);
-    setChoices(resolved === "typing" ? [] : buildChoices(next));
+    setChoices(resolved === "multiple-choice" || resolved === "listening" ? buildChoices(next) : []);
   }, [buildChoices, numbersMax, numbersMin, resolveRoundMode]);
 
   useEffect(() => { if (questionMode) startRound(questionMode); }, [questionMode, startRound]);
-  useEffect(() => { if (questionMode && status === null && roundMode === "typing") inputRef.current?.focus(); }, [number, questionMode, roundMode, status]);
+  useEffect(() => { if (questionMode && status === null && (roundMode === "typing" || roundMode === "text-to-number")) inputRef.current?.focus(); }, [number, questionMode, roundMode, status]);
 
   const finishAnswer = useCallback((correct: boolean) => {
     setAttempts((value) => value + 1);
@@ -110,8 +110,8 @@ export const Numbers = () => {
     if (!questionMode) return;
     if (status !== null) { startRound(questionMode); return; }
     if (!input.trim()) return;
-    finishAnswer(checkNumberAnswer(number, input));
-  }, [finishAnswer, input, number, questionMode, startRound, status]);
+    finishAnswer(roundMode === "text-to-number" ? checkNumericAnswer(number, input) : checkNumberAnswer(number, input));
+  }, [finishAnswer, input, number, questionMode, roundMode, startRound, status]);
 
   const handleChoiceSelect = useCallback((choice: number) => {
     if (status !== null) return;
@@ -128,11 +128,12 @@ export const Numbers = () => {
     window.speechSynthesis.speak(utterance);
   }, [japanese.hiragana, showNotification, t]);
 
-  const modeOptions: Array<{ id: QuestionMode; label: string; Icon: typeof Keyboard }> = [
-    { id: "mixed", label: t("numbers.modeMixed"), Icon: RotateCw },
-    { id: "typing", label: t("numbers.modeTyping"), Icon: Keyboard },
-    { id: "multiple-choice", label: t("numbers.modeChoice"), Icon: ListChecks },
-    { id: "listening", label: t("numbers.modeListening"), Icon: Headphones },
+  const modeOptions: Array<{ id: QuestionMode; label: string; descKey: string; Icon: typeof Keyboard }> = [
+    { id: "mixed", label: t("numbers.modeMixed"), descKey: "numbers.modeMixedDesc", Icon: RotateCw },
+    { id: "typing", label: t("numbers.modeTyping"), descKey: "numbers.modeTypingDesc", Icon: Keyboard },
+    { id: "text-to-number", label: t("numbers.modeTextToNumber"), descKey: "numbers.modeTextToNumberDesc", Icon: Languages },
+    { id: "multiple-choice", label: t("numbers.modeChoice"), descKey: "numbers.modeChoiceDesc", Icon: ListChecks },
+    { id: "listening", label: t("numbers.modeListening"), descKey: "numbers.modeListeningDesc", Icon: Headphones },
   ];
 
   const activeMode = modeOptions.find(({ id }) => id === questionMode);
@@ -167,10 +168,10 @@ export const Numbers = () => {
           </header>
 
           <section className="numbers-mode-grid" aria-label={t("numbers.chooseMode")}>
-            {modeOptions.map(({ id, label, Icon }) => (
+            {modeOptions.map(({ id, label, descKey, Icon }) => (
               <button key={id} className={`numbers-mode-card ${id === "mixed" ? "featured" : ""}`} onClick={() => chooseMode(id)}>
                 <span className="numbers-mode-card-icon"><Icon size={22} /></span>
-                <span className="numbers-mode-card-copy"><strong>{label}</strong><small>{t(`numbers.mode${id === "mixed" ? "Mixed" : id === "multiple-choice" ? "Choice" : id[0].toUpperCase() + id.slice(1)}Desc`)}</small></span>
+                <span className="numbers-mode-card-copy"><strong>{label}</strong><small>{t(descKey)}</small></span>
                 <ArrowRight size={17} className="numbers-mode-card-arrow" />
               </button>
             ))}
@@ -188,11 +189,11 @@ export const Numbers = () => {
 
         <main className="numbers-workspace">
           <div className={classNames("numbers-card glass-panel", status)}>
-            <div className="numbers-card-meta"><span>{t("numbers.roundMode", { mode: t(`numbers.mode${roundMode === "multiple-choice" ? "Choice" : roundMode[0].toUpperCase() + roundMode.slice(1)}`) })}</span><span>{t("numbers.range", { min: numbersMin.toLocaleString(), max: numbersMax.toLocaleString() })}</span></div>
+            <div className="numbers-card-meta"><span>{t("numbers.roundMode", { mode: t(roundMode === "multiple-choice" ? "numbers.modeChoice" : roundMode === "text-to-number" ? "numbers.modeTextToNumber" : `numbers.mode${roundMode[0].toUpperCase()}${roundMode.slice(1)}`) })}</span><span>{t("numbers.range", { min: numbersMin.toLocaleString(), max: numbersMax.toLocaleString() })}</span></div>
 
-            {roundMode === "typing" ? <>
-              <div className="numbers-question"><span className="question-type">{t("numbers.prompt")}</span><div className="numbers-display">{number.toLocaleString()}</div></div>
-              <input ref={inputRef} className={classNames("numbers-input", status)} type="text" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") handleSubmit(); }} placeholder={t("numbers.placeholder")} disabled={status !== null} autoComplete="off" autoCapitalize="none" />
+            {roundMode === "typing" || roundMode === "text-to-number" ? <>
+              <div className="numbers-question"><span className="question-type">{t(roundMode === "text-to-number" ? "numbers.promptTextToNumber" : "numbers.prompt")}</span>{roundMode === "typing" ? <div className="numbers-display">{number.toLocaleString()}</div> : <div className="numbers-reading-hiragana numbers-text-prompt">{japanese.hiragana}</div>}</div>
+              <input ref={inputRef} className={classNames("numbers-input", status)} type="text" inputMode={roundMode === "text-to-number" ? "numeric" : "text"} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") handleSubmit(); }} placeholder={t(roundMode === "text-to-number" ? "numbers.numberPlaceholder" : "numbers.placeholder")} disabled={status !== null} autoComplete="off" autoCapitalize="none" />
               <div className="numbers-actions"><button className="btn-primary" onClick={handleSubmit} disabled={status === null && !input.trim()}>{status !== null ? <><ArrowRight size={16} />{t("numbers.next")}</> : <><Check size={16} />{t("quiz.actions.check")}</>}</button>{status === null && <button className="btn-secondary" onClick={() => startRound(questionMode)}><SkipForward size={15} />{t("numbers.skip")}</button>}</div>
             </> : <>
               <div className="numbers-question"><span className="question-type">{roundMode === "listening" ? t("numbers.promptListening") : t("numbers.promptChoice")}</span><div className="numbers-reading">{japanese.romaji}</div><div className="numbers-reading-hiragana">{japanese.hiragana}</div>{roundMode === "listening" && <button className="btn-secondary listen-btn" onClick={readAloud}><Volume2 size={16} />{t("numbers.playAudio")}</button>}</div>
@@ -200,7 +201,7 @@ export const Numbers = () => {
               {status !== null && <button className="btn-primary" onClick={() => startRound(questionMode)}><ArrowRight size={16} />{t("numbers.next")}</button>}
             </>}
 
-            <div className="numbers-feedback" aria-live="polite">{status === "correct" && <div className="feedback correct"><Check size={17} />{t("quiz.feedback.correct")}</div>}{status === "incorrect" && <div className="feedback incorrect"><span>{t("quiz.feedback.incorrect")}</span><strong>{japanese.romaji}</strong><small>{japanese.hiragana}</small></div>}</div>
+            <div className="numbers-feedback" aria-live="polite">{status === "correct" && <div className="feedback correct"><Check size={17} />{t("quiz.feedback.correct")}</div>}{status === "incorrect" && <div className="feedback incorrect"><span>{t("quiz.feedback.incorrect")}</span><strong>{roundMode === "text-to-number" ? number.toLocaleString() : japanese.romaji}</strong>{roundMode !== "text-to-number" && <small>{japanese.hiragana}</small>}</div>}</div>
           </div>
         </main>
       </div>

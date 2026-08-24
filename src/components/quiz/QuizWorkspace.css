@@ -220,6 +220,7 @@
   width: 100%;
   max-width: none;
   margin-inline: auto;
+  min-height: auto;
 }
 
 .quiz-workspace-main .quiz-card {
