@@ -39,6 +39,8 @@ export const Vocabulary: React.FC = () => {
   const [openFilterSection, setOpenFilterSection] = useState<(typeof CATEGORY_SECTIONS)[number]["id"] | null>(CATEGORY_SECTIONS[0].id);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [visibleLimit, setVisibleLimit] = useState(BATCH_SIZE);
+  const [commandStuck, setCommandStuck] = useState(false);
+  const commandRef = useRef<HTMLElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const latestSearchRef = useRef(0);
 
@@ -47,6 +49,34 @@ export const Vocabulary: React.FC = () => {
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    let animationFrame = 0;
+
+    const updateStickyState = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(() => {
+        const command = commandRef.current;
+        if (!command) return;
+
+        const stickyTop = Number.parseFloat(window.getComputedStyle(command).top) || 0;
+        const isStuck = window.scrollY > 0
+          && command.getBoundingClientRect().top <= stickyTop + 1;
+
+        setCommandStuck((current) => current === isStuck ? current : isStuck);
+      });
+    };
+
+    updateStickyState();
+    window.addEventListener("scroll", updateStickyState, { passive: true });
+    window.addEventListener("resize", updateStickyState);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", updateStickyState);
+      window.removeEventListener("resize", updateStickyState);
+    };
   }, []);
 
   const currentLanguage = i18n.language.split("-")[0];
@@ -171,7 +201,10 @@ export const Vocabulary: React.FC = () => {
           <div className="dictionary-stat"><strong>{totalEntries || "—"}</strong><span>{t("vocabulary.entries")}</span></div>
         </header>
 
-        <section className="dictionary-command glass-panel">
+        <section
+          ref={commandRef}
+          className={`dictionary-command glass-panel${commandStuck ? " is-stuck" : ""}`}
+        >
           <div className="dictionary-search-line">
             <Search size={18} aria-hidden="true" />
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("vocabulary.searchNew")} aria-label={t("vocabulary.searchNew")} />

@@ -884,6 +884,20 @@
   overflow: visible;
 }
 
+.vocabulary-shell .studio-main>.dictionary-container {
+  animation-name: dictionary-route-enter;
+}
+
+@keyframes dictionary-route-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .vocabulary-shell .dictionary-command {
   top: calc(var(--navbar-height) + 12px);
   z-index: 35;
@@ -962,7 +976,12 @@
   position: sticky;
   top: var(--navbar-height);
   z-index: 25;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, .16);
+  box-shadow: none;
+  transition: box-shadow .2s ease;
+}
+
+.dictionary-command.is-stuck {
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 1);
 }
 
 .dictionary-search-line {
@@ -1610,8 +1629,8 @@
     padding: .25rem 0;
   }
 
-  .dictionary-results {
-    grid-template-columns: 1fr;
+  .dictionary-results.density-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .dictionary-entry {
@@ -1798,8 +1817,39 @@
 }
 
 @media (max-width: 640px) {
-  .dictionary-results {
-    grid-template-columns: 1fr;
+  .dictionary-results.density-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem;
+  }
+
+  .dictionary-results.density-cards .dictionary-entry {
+    min-height: 210px;
+    padding: .75rem;
+  }
+
+  .dictionary-results.density-cards .dictionary-japanese {
+    font-size: clamp(1.45rem, 8vw, 2rem);
+  }
+
+  .dictionary-results.density-cards .dictionary-entry-top {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: .25rem;
+    margin-bottom: .5rem;
+  }
+
+  .dictionary-results.density-cards .dictionary-meaning {
+    margin-top: .7rem;
+    font-size: .8rem;
+  }
+
+  .dictionary-results.density-cards .dictionary-example {
+    margin-top: .6rem;
+  }
+
+  .dictionary-results.density-cards .dictionary-entry-side {
+    gap: .35rem;
+    padding-top: .6rem;
   }
 
   .vocabulary-quiz-fab {

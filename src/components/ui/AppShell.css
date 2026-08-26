@@ -562,4 +562,8 @@
   .mobile-dock svg {
     stroke-width: 1.7;
   }
+
+  .mobile-dock span {
+    text-align: center;
+  }
 }
