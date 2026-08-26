@@ -34,6 +34,10 @@ const routeLoaders: Record<string, () => Promise<unknown>> = {
     import("../pages/VocabularyQuiz"),
     import("../services/vocabularySearchClient").then(({ prefetchVocabularySearch }) => prefetchVocabularySearch()),
   ]),
+  "/grammar": () => Promise.all([
+    import("../pages/Grammar"),
+    import("../data/grammar"),
+  ]),
   "/login": () => import("../pages/Login"),
   "/create-account": () => import("../pages/CreateAccount"),
 };

@@ -11,8 +11,8 @@
     "save": "Guardar",
     "reset": "Restablecer",
     "home": "Inicio",
-    "canvasClear": "Limpiar Lienzo"
-    ,"close": "Cerrar"
+    "canvasClear": "Limpiar Lienzo",
+    "close": "Cerrar"
   },
   "index": {
     "titlePrefix": "日本語の",
@@ -31,6 +31,8 @@
       "numbersDesc": "Aprende y practica la lectura de números japoneses y sistemas de conteo.",
       "vocabulary": "Vocabulario",
       "vocabularyDesc": "Aprende y practica la lectura de vocabulario japonés.",
+      "grammar": "Gramática",
+      "grammarDesc": "Comprende los patrones que convierten palabras japonesas en frases claras.",
       "settings": "Ajustes",
       "settingsDesc": "Personaliza la duración del quiz, el color de acento, los umbrales de dominio y más."
     },
@@ -40,7 +42,10 @@
     "title": "Práctica de Kana",
     "subtitle": "Selecciona caracteres para dominar",
     "description": "Elige un conjunto y desarrolla el reconocimiento con la repetición.",
-    "summary": { "mastered": "dominados", "available": "disponibles" },
+    "summary": {
+      "mastered": "dominados",
+      "available": "disponibles"
+    },
     "tabs": {
       "hiragana": "Hiragana",
       "katakana": "Katakana"
@@ -142,8 +147,8 @@
       "masteryDesc": "Cuánta XP necesita un carácter para considerarse 'Dominado'",
       "weakestCount": "Cantidad de Caracteres Débiles",
       "weakestDesc": "Cuántos caracteres incluir al practicar los 'Más Débiles'"
-    }
-    ,"account": {
+    },
+    "account": {
       "title": "Cuenta privada",
       "description": "Mantén tu progreso disponible en todos tus dispositivos sin perder el modo offline.",
       "notConfigured": "Las cuentas aún no están configuradas en esta instalación. El progreso local seguirá funcionando.",
@@ -163,7 +168,13 @@
       "deleteDescription": "Elimina permanentemente el progreso y las sesiones sincronizadas.",
       "deleteButton": "Eliminar cuenta",
       "deleteConfirm": "¿Eliminar tu cuenta y todo el progreso sincronizado? Esta acción no se puede deshacer.",
-      "sync": { "offline": "Solo local", "idle": "Lista para sincronizar", "syncing": "Sincronizando", "synced": "Sincronizado", "error": "Error de sincronización" }
+      "sync": {
+        "offline": "Solo local",
+        "idle": "Lista para sincronizar",
+        "syncing": "Sincronizando",
+        "synced": "Sincronizado",
+        "error": "Error de sincronización"
+      }
     }
   },
   "auth": {
@@ -206,6 +217,58 @@
       "signInAfterCreate": "La cuenta se creó, pero no se pudo iniciar sesión automáticamente. Inicia sesión manualmente.",
       "invalidLogin": "Nombre de usuario o contraseña no válidos."
     }
+  },
+  "grammar": {
+    "title": "Gramática",
+    "kicker": "LABORATORIO DE FRASES",
+    "heading": "Haz visible el significado.",
+    "subtitle": "Sigue una ruta independiente por la lectura, el sonido, el lenguaje cotidiano y la construcción activa de frases.",
+    "categoriesLabel": "Categorías de gramática",
+    "trackLabel": "CURSO",
+    "lesson": "Lección {{number}}",
+    "introduction": "Introducción",
+    "comingSoon": "Las lecciones se añadirán pronto",
+    "backToGrammar": "Volver a Gramática",
+    "backToLesson": "Volver a la lección",
+    "notFoundTitle": "Esa lección no está disponible",
+    "notFoundDescription": "Elige un curso y una lección de la biblioteca de Gramática para continuar.",
+    "practiceKicker": "GRUPOS DE PRÁCTICA",
+    "chooseSets": "Elige tus ejercicios",
+    "chooseSetsDescription": "Selecciona uno o más patrones. Puedes volver aquí y cambiar la mezcla cuando quieras.",
+    "exerciseCount": "{{count}} preguntas",
+    "partLabel": "Parte {{number}}",
+    "partsKicker": "MAPA DE LA LECCIÓN",
+    "partsIndex": "Partes",
+    "partQuestions": "{{count}} preguntas",
+    "selectedQuestions": "{{count}} preguntas seleccionadas",
+    "startExercises": "Empezar ejercicios",
+    "quizKicker": "GRAMÁTICA / RECUERDO",
+    "selectedSets": "Grupos seleccionados",
+    "question": "Pregunta {{current}} / {{total}}",
+    "questionsRemaining": "{{count}} restantes",
+    "difficulty": {
+      "introductory": "Introductorio",
+      "intermediate": "Intermedio",
+      "challenge": "Desafío"
+    },
+    "chooseParticle": "Elige la palabra o partícula que falta",
+    "correct": "Correcto",
+    "incorrect": "Aún no",
+    "correctAnswer": "Respuesta correcta: {{answer}}",
+    "next": "Siguiente pregunta",
+    "finish": "Terminar lección",
+    "quitQuiz": "Salir del quiz",
+    "resultsTitle": "Lección completada",
+    "resultsAccuracy": "Has respondido correctamente el {{percent}}%.",
+    "tryAgain": "Intentarlo de nuevo",
+    "noExercises": "No hay ejercicios seleccionados",
+    "grammarPath": "RUTA DE GRAMÁTICA",
+    "exercisesMastered": "ejercicios dominados",
+    "mixedReview": "Repaso mixto",
+    "referenceKicker": "REFERENCIA",
+    "kanaReference": "Tabla de referencia de {{script}}",
+    "kanaReferenceDescription": "Caracteres de {{script}} con sus lecturas romanizadas",
+    "kanaColumn": "Posición {{position}}"
   },
   "quiz": {
     "title": "Sesión de práctica",
@@ -291,6 +354,10 @@
     "wordsPracticed": "{{count}} entradas practicadas",
     "vocabularyNoData": "Empieza un quiz de vocabulario filtrado para crear progreso por entrada.",
     "grammarProgress": "Ruta de gramática",
+    "grammarPath": "RUTA DE GRAMÁTICA",
+    "grammarExercisesMastered": "ejercicios dominados",
+    "grammarExercisesPracticed": "{{count}} ejercicios practicados",
+    "grammarNoData": "Empieza una lección de Fundamentos para crear progreso de gramática.",
     "grammarComingSoon": "Las lecciones de gramática aparecerán aquí cuando el curso esté listo.",
     "masteredShort": "dominados",
     "openDomain": "Abrir",
@@ -332,7 +399,7 @@
     "numbersTitle": "Entrenar números",
     "numbersDescription": "Practica una dirección numérica antes de que se oxide.",
     "grammarTitle": "Entrenar gramática",
-    "grammarDescription": "Los ejercicios de gramática estarán disponibles en una ruta futura."
+    "grammarDescription": "Construye patrones de frases con una lección de gramática concentrada."
   },
   "kanji": {
     "title": "Compendio de Kanji",
@@ -371,10 +438,13 @@
     "copyCharacter": "Copiar este kanji",
     "copyHint": "Haz clic para copiar",
     "copySuccess": "Kanji copiado al portapapeles",
-    "copyError": "No se pudo copiar el kanji"
-    ,"loadError": "No se pudo cargar este nivel de Kanji"
-    ,"loading": "Cargando los Kanji seleccionados..."
-    ,"quiz": {"kicker": "RUTA KANJI", "subtitle": "Practica significados y lecturas de tu selección JLPT."}
+    "copyError": "No se pudo copiar el kanji",
+    "loadError": "No se pudo cargar este nivel de Kanji",
+    "loading": "Cargando los Kanji seleccionados...",
+    "quiz": {
+      "kicker": "RUTA KANJI",
+      "subtitle": "Practica significados y lecturas de tu selección JLPT."
+    }
   },
   "practice": {
     "dakuon": "Dakuon (Sonoros)",
@@ -587,11 +657,11 @@
     "prompt": "¿Cómo se lee este número?",
     "promptChoice": "¿Qué número es este?",
     "promptListening": "Escucha y elige el número",
-  "modeTyping": "Escribir Respuesta",
-  "modeTypingDesc": "Escribe tú mismo la lectura japonesa.",
-  "modeTextToNumber": "Texto → número",
-  "modeTextToNumberDesc": "Lee el número japonés y escribe sus cifras.",
-  "modeChoice": "Opción Múltiple",
+    "modeTyping": "Escribir Respuesta",
+    "modeTypingDesc": "Escribe tú mismo la lectura japonesa.",
+    "modeTextToNumber": "Texto → número",
+    "modeTextToNumberDesc": "Lee el número japonés y escribe sus cifras.",
+    "modeChoice": "Opción Múltiple",
     "modeChoiceDesc": "Elige el número correcto entre cuatro opciones.",
     "modeListening": "Escuchar",
     "modeListeningDesc": "Escucha japonés e identifica el número.",
@@ -599,9 +669,10 @@
     "range": "{{min}}–{{max}}",
     "playAudio": "Reproducir audio japonés",
     "audioUnavailable": "El audio no está disponible en este navegador.",
-  "placeholder": "ej. ni sen nana hyaku o にせんなな",
-  "numberPlaceholder": "p. ej., 264412",
+    "placeholder": "ej. ni sen nana hyaku o にせんなな",
+    "numberPlaceholder": "p. ej., 264412",
     "next": "Siguiente número",
-    "skip": "Saltar"
+    "skip": "Saltar",
+    "promptTextToNumber": "¿Qué número es este?"
   }
 }

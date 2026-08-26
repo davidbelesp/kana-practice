@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, BarChart3, BookMarked, BookOpen, Brush, ChevronRight, Layers, Target, Trophy } from "lucide-react";
+import { ArrowUpRight, BarChart3, BookMarked, BookOpen, Brush, ChevronRight, Layers, Sparkles, Target, Trophy } from "lucide-react";
 import { hiraganaData, katakanaData } from "../data/kana";
 import { totalKanjiCount } from "../data/kanjiManifest";
 import { getAggregates, getMasteredKana } from "../utils/statsManager";
@@ -15,6 +15,7 @@ const sessions = [
   { to: "/kanji", eyebrow: "02 / JLPT PATH", titleKey: "index.cards.kanji", descKey: "index.cards.kanjiDesc", Icon: Layers, tone: "orange", glyph: "学" },
   { to: "/vocabulary", eyebrow: "03 / DAILY WORDS", titleKey: "index.cards.vocabulary", descKey: "index.cards.vocabularyDesc", Icon: BookMarked, tone: "blue", glyph: "言" },
   { to: "/canvas", eyebrow: "04 / HANDWRITING", titleKey: "index.cards.canvas", descKey: "index.cards.canvasDesc", Icon: Brush, tone: "pink", glyph: "書" },
+  { to: "/grammar", eyebrow: "05 / SENTENCE LAB", titleKey: "index.cards.grammar", descKey: "index.cards.grammarDesc", Icon: Sparkles, tone: "violet", glyph: "文" },
 ] as const;
 
 type ProgressSegmentState = "mastered" | "started" | "left";

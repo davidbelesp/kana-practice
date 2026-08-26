@@ -16,6 +16,8 @@ const KanjiQuiz = lazy(() => import("./pages/KanjiQuiz").then(m => ({ default: m
 const Vocabulary = lazy(() => import("./pages/Vocabulary").then(m => ({ default: m.Vocabulary })));
 const VocabularyQuiz = lazy(() => import("./pages/VocabularyQuiz").then(m => ({ default: m.VocabularyQuiz })));
 const Numbers = lazy(() => import("./pages/Numbers").then(m => ({ default: m.Numbers })));
+const Grammar = lazy(() => import("./pages/Grammar").then(m => ({ default: m.Grammar })));
+const GrammarQuiz = lazy(() => import("./pages/GrammarQuiz").then(m => ({ default: m.GrammarQuiz })));
 const Login = lazy(() => import("./pages/Login").then(m => ({ default: m.Login })));
 const CreateAccount = lazy(() => import("./pages/CreateAccount").then(m => ({ default: m.CreateAccount })));
 
@@ -59,6 +61,9 @@ const SettingsContextConsumer = () => {
           <Route path="/vocabulary" element={<Vocabulary />} />
           <Route path="/vocabulary-quiz" element={<VocabularyQuiz />} />
           <Route path="/numbers" element={<Numbers />} />
+          <Route path="/grammar" element={<Grammar />} />
+          <Route path="/grammar/:trackId/:lessonId" element={<Grammar />} />
+          <Route path="/grammar/:trackId/:lessonId/practice" element={<GrammarQuiz />} />
         </Routes>
       </Suspense>
     </div>

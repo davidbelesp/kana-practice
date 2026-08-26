@@ -559,7 +559,7 @@
 
 .session-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 10px;
 }
 
@@ -607,6 +607,10 @@
 
 .tone-orange {
     --card-accent: var(--studio-orange);
+}
+
+.tone-violet {
+    --card-accent: #c394ff;
 }
 
 .tone-blue {

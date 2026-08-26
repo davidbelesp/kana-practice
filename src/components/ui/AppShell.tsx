@@ -27,6 +27,7 @@ const NAV_LINKS = [
   { to: "/kanji", labelKey: "kanji.title", Icon: Layers },
   { to: "/numbers", labelKey: "numbers.title", Icon: Hash },
   { to: "/canvas", labelKey: "canvas.title", Icon: PenLine },
+  { to: "/grammar", labelKey: "grammar.title", Icon: Sparkles },
   { to: "/stats", labelKey: "stats.title", Icon: BarChart3 },
 ] as const;
 

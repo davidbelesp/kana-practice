@@ -11,8 +11,8 @@
     "save": "Save",
     "reset": "Reset",
     "home": "Home",
-    "canvasClear": "Clear Canvas"
-    ,"close": "Close"
+    "canvasClear": "Clear Canvas",
+    "close": "Close"
   },
   "index": {
     "titlePrefix": "日本語の",
@@ -31,6 +31,8 @@
       "numbersDesc": "Learn and practice reading Japanese numbers and counting systems.",
       "vocabulary": "Vocabulary",
       "vocabularyDesc": "Learn and practice reading Japanese vocabulary.",
+      "grammar": "Grammar",
+      "grammarDesc": "Understand the patterns that turn Japanese words into clear sentences.",
       "settings": "Settings",
       "settingsDesc": "Customise quiz length, accent colour, mastery thresholds, and more."
     },
@@ -40,7 +42,10 @@
     "title": "Kana Practice",
     "subtitle": "Select characters to master",
     "description": "Choose a focused set and build recognition through repetition.",
-    "summary": { "mastered": "mastered", "available": "available" },
+    "summary": {
+      "mastered": "mastered",
+      "available": "available"
+    },
     "tabs": {
       "hiragana": "Hiragana",
       "katakana": "Katakana"
@@ -74,8 +79,8 @@
       "animations": "Animations",
       "animationsDesc": "Smooth transitions and card effects",
       "accentColorDesc": "Choose a theme color for the entire application",
-      "customColors": "Custom Colors"
-      ,"customColorsDesc": "Tune the surfaces, text, borders, and accents used across the entire Studio.",
+      "customColors": "Custom Colors",
+      "customColorsDesc": "Tune the surfaces, text, borders, and accents used across the entire Studio.",
       "primaryDesc": "Main actions and selected states",
       "secondaryDesc": "Supporting highlights and metadata",
       "background": "Background",
@@ -142,8 +147,8 @@
       "masteryDesc": "How much XP a character needs to be considered 'Mastered'",
       "weakestCount": "Weakest Character Count",
       "weakestDesc": "How many characters to include when practicing 'Weakest' sets"
-    }
-    ,"account": {
+    },
+    "account": {
       "title": "Private account",
       "description": "Keep your progress available on every device while staying offline-first.",
       "notConfigured": "Accounts are not configured for this deployment yet. Guest progress continues to work locally.",
@@ -163,9 +168,14 @@
       "deleteDescription": "Permanently remove cloud progress and sessions. Local content is not affected until confirmed.",
       "deleteButton": "Delete account",
       "deleteConfirm": "Delete your cloud account and all synced progress? This cannot be undone.",
-      "sync": { "offline": "Local only", "idle": "Ready to sync", "syncing": "Syncing", "synced": "Synced", "error": "Sync error" }
+      "sync": {
+        "offline": "Local only",
+        "idle": "Ready to sync",
+        "syncing": "Syncing",
+        "synced": "Synced",
+        "error": "Sync error"
+      }
     }
-
   },
   "auth": {
     "kicker": "PRIVATE STUDIO ACCESS",
@@ -207,6 +217,58 @@
       "signInAfterCreate": "Account created, but automatic sign-in failed. Please log in.",
       "invalidLogin": "Invalid username or password."
     }
+  },
+  "grammar": {
+    "title": "Grammar",
+    "kicker": "SENTENCE LAB",
+    "heading": "Make meaning visible.",
+    "subtitle": "Follow an independent path through reading, sound, everyday language, and active sentence building.",
+    "categoriesLabel": "Grammar categories",
+    "trackLabel": "COURSE",
+    "lesson": "Lesson {{number}}",
+    "introduction": "Introduction",
+    "comingSoon": "Lessons will be added soon",
+    "backToGrammar": "Back to Grammar",
+    "backToLesson": "Back to lesson",
+    "notFoundTitle": "That lesson is not available",
+    "notFoundDescription": "Choose a course and lesson from the Grammar library to continue.",
+    "practiceKicker": "PRACTICE SETS",
+    "chooseSets": "Choose your exercises",
+    "chooseSetsDescription": "Select one or more patterns. You can return here and choose a different mix any time.",
+    "exerciseCount": "{{count}} questions",
+    "partLabel": "Part {{number}}",
+    "partsKicker": "LESSON MAP",
+    "partsIndex": "Parts",
+    "partQuestions": "{{count}} questions",
+    "selectedQuestions": "{{count}} questions selected",
+    "startExercises": "Start exercises",
+    "quizKicker": "GRAMMAR / RECALL",
+    "selectedSets": "Selected sets",
+    "question": "Question {{current}} / {{total}}",
+    "questionsRemaining": "{{count}} left",
+    "difficulty": {
+      "introductory": "Introductory",
+      "intermediate": "Intermediate",
+      "challenge": "Challenge"
+    },
+    "chooseParticle": "Choose the missing word or particle",
+    "correct": "Correct",
+    "incorrect": "Not quite",
+    "correctAnswer": "Correct answer: {{answer}}",
+    "next": "Next question",
+    "finish": "Finish lesson",
+    "quitQuiz": "Quit quiz",
+    "resultsTitle": "Lesson complete",
+    "resultsAccuracy": "You answered {{percent}}% correctly.",
+    "tryAgain": "Try again",
+    "noExercises": "No exercises are selected",
+    "grammarPath": "GRAMMAR PATH",
+    "exercisesMastered": "exercises mastered",
+    "mixedReview": "Mixed review",
+    "referenceKicker": "REFERENCE",
+    "kanaReference": "{{script}} reference chart",
+    "kanaReferenceDescription": "{{script}} characters with their romanized readings",
+    "kanaColumn": "Position {{position}}"
   },
   "quiz": {
     "title": "Practice session",
@@ -293,6 +355,10 @@
     "wordsPracticed": "{{count}} entries practiced",
     "vocabularyNoData": "Start a filtered vocabulary quiz to build entry-level progress.",
     "grammarProgress": "Grammar path",
+    "grammarPath": "GRAMMAR PATH",
+    "grammarExercisesMastered": "exercises mastered",
+    "grammarExercisesPracticed": "{{count}} exercises practiced",
+    "grammarNoData": "Start a Foundations lesson to build grammar progress.",
     "grammarComingSoon": "Grammar lessons will appear here when the course is ready.",
     "masteredShort": "mastered",
     "openDomain": "Open",
@@ -334,7 +400,7 @@
     "numbersTitle": "Train Numbers",
     "numbersDescription": "Practice a number direction before it gets rusty.",
     "grammarTitle": "Train Grammar",
-    "grammarDescription": "Grammar exercises will be available in a future course path."
+    "grammarDescription": "Build sentence patterns with a focused grammar lesson."
   },
   "kanji": {
     "title": "Kanji Compendium",
@@ -373,10 +439,13 @@
     "copyCharacter": "Copy this Kanji",
     "copyHint": "Click to copy",
     "copySuccess": "Kanji copied to clipboard",
-    "copyError": "Could not copy the Kanji"
-    ,"loadError": "This Kanji level could not be loaded"
-    ,"loading": "Loading the selected Kanji..."
-    ,"quiz": {"kicker": "KANJI PATH", "subtitle": "Practice meaning and readings from your selected JLPT set."}
+    "copyError": "Could not copy the Kanji",
+    "loadError": "This Kanji level could not be loaded",
+    "loading": "Loading the selected Kanji...",
+    "quiz": {
+      "kicker": "KANJI PATH",
+      "subtitle": "Practice meaning and readings from your selected JLPT set."
+    }
   },
   "practice": {
     "dakuon": "Dakuon (Voiced)",
@@ -589,11 +658,11 @@
     "prompt": "How do you read this number?",
     "promptChoice": "Which number is this?",
     "promptListening": "Listen and choose the number",
-  "modeTyping": "Type Answer",
-  "modeTypingDesc": "Write the Japanese reading yourself.",
-  "modeTextToNumber": "Text → Number",
-  "modeTextToNumberDesc": "Read the Japanese number and type its digits.",
-  "modeChoice": "Multiple Choice",
+    "modeTyping": "Type Answer",
+    "modeTypingDesc": "Write the Japanese reading yourself.",
+    "modeTextToNumber": "Text → Number",
+    "modeTextToNumberDesc": "Read the Japanese number and type its digits.",
+    "modeChoice": "Multiple Choice",
     "modeChoiceDesc": "Choose the correct number from four options.",
     "modeListening": "Listen",
     "modeListeningDesc": "Listen to Japanese and identify the number.",
@@ -601,8 +670,9 @@
     "range": "{{min}}–{{max}}",
     "playAudio": "Play Japanese audio",
     "audioUnavailable": "Audio is not available in this browser.",
-  "placeholder": "e.g. ni sen nana hyaku or にせんなな",
-  "numberPlaceholder": "e.g. 264412",
+    "promptTextToNumber": "Which number is this?",
+    "placeholder": "e.g. ni sen nana hyaku or にせんなな",
+    "numberPlaceholder": "e.g. 264412",
     "next": "Next Number",
     "skip": "Skip"
   }

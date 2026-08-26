@@ -254,7 +254,7 @@ export const getTrainingRecommendations = (now = Date.now()): TrainingRecommenda
     { domain: "kanji", actionPath: "/kanji", titleKey: "recommendations.kanjiTitle", descriptionKey: "recommendations.kanjiDescription", available: true },
     { domain: "vocabulary", actionPath: "/vocabulary", titleKey: "recommendations.vocabularyTitle", descriptionKey: "recommendations.vocabularyDescription", available: true },
     { domain: "numbers", actionPath: "/numbers", titleKey: "recommendations.numbersTitle", descriptionKey: "recommendations.numbersDescription", available: true },
-    { domain: "grammar", actionPath: "/grammar", titleKey: "recommendations.grammarTitle", descriptionKey: "recommendations.grammarDescription", available: false },
+    { domain: "grammar", actionPath: "/grammar", titleKey: "recommendations.grammarTitle", descriptionKey: "recommendations.grammarDescription", available: true },
   ];
 
   return activeDomains
