@@ -151,6 +151,7 @@ export const Home = () => {
               onClick={handleStartQuiz}
               onMouseEnter={() => prefetchRoute("/quiz")}
               onFocus={() => prefetchRoute("/quiz")}
+              onPointerDown={() => prefetchRoute("/quiz")}
               disabled={selectedChars.length < 3}
             >
               {t("home.controls.startQuiz")}{" "}

@@ -14,6 +14,13 @@
     "canvasClear": "Clear Canvas",
     "close": "Close"
   },
+  "loading": {
+    "page": "Loading {{title}}",
+    "chart": "Loading activity chart",
+    "errorTitle": "This page could not be loaded",
+    "errorDescription": "The local page bundle did not finish loading. Retry the route, or reload the application to refresh cached files.",
+    "reload": "Reload application"
+  },
   "index": {
     "titlePrefix": "日本語の",
     "titleSuffix": "Hub",

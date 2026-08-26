@@ -885,17 +885,7 @@
 }
 
 .vocabulary-shell .studio-main>.dictionary-container {
-  animation-name: dictionary-route-enter;
-}
-
-@keyframes dictionary-route-enter {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  animation: none;
 }
 
 .vocabulary-shell .dictionary-command {

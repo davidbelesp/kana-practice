@@ -14,6 +14,13 @@
     "canvasClear": "Limpiar Lienzo",
     "close": "Cerrar"
   },
+  "loading": {
+    "page": "Cargando {{title}}",
+    "chart": "Cargando gráfico de actividad",
+    "errorTitle": "No se pudo cargar esta página",
+    "errorDescription": "El paquete local de la página no terminó de cargar. Reintenta la ruta o recarga la aplicación para actualizar los archivos en caché.",
+    "reload": "Recargar aplicación"
+  },
   "index": {
     "titlePrefix": "日本語の",
     "titleSuffix": "Hub",

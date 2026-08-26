@@ -1,0 +1,337 @@
+.route-skeleton {
+  width: min(100%, 1500px);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+.route-skeleton-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.route-skeleton-hero {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  margin-bottom: 1.25rem;
+}
+
+.route-skeleton-line,
+.route-skeleton-block,
+.route-skeleton-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background: color-mix(in srgb, var(--studio-panel-raised) 88%, transparent);
+}
+
+.route-skeleton-line::after,
+.route-skeleton-block::after,
+.route-skeleton-panel::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, color-mix(in srgb, var(--accent-primary) 12%, transparent) 48%, transparent 76%);
+  transform: translateX(-100%);
+  animation: route-skeleton-shimmer 1.35s ease-in-out infinite;
+  content: "";
+}
+
+.route-skeleton-line {
+  width: min(620px, 82%);
+  height: 12px;
+  border: 0;
+  border-radius: 999px;
+}
+
+.route-skeleton-line-short {
+  width: 110px;
+  height: 9px;
+}
+
+.route-skeleton-line-title {
+  width: min(430px, 70%);
+  height: clamp(32px, 5vw, 54px);
+  border-radius: 12px;
+}
+
+.route-skeleton-panel {
+  border-radius: var(--radius-lg);
+}
+
+.route-skeleton-command {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: .8rem;
+  min-height: 76px;
+  margin-bottom: 1rem;
+  padding: .8rem;
+}
+
+.route-skeleton-command .route-skeleton-block {
+  min-height: 48px;
+  border-radius: 12px;
+}
+
+.route-skeleton-library {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.route-skeleton-filter {
+  min-height: 520px;
+  padding: 1rem;
+}
+
+.route-skeleton-filter .route-skeleton-block {
+  display: block;
+  height: 42px;
+  margin-bottom: .65rem;
+  border-radius: 10px;
+}
+
+.route-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .7rem;
+}
+
+.route-skeleton-card {
+  display: block;
+  min-height: 210px;
+}
+
+.route-skeleton-lesson {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  align-items: start;
+  gap: 1rem;
+}
+
+.route-skeleton-article {
+  min-height: 620px;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.route-skeleton-article .route-skeleton-block {
+  display: block;
+  width: 100%;
+  height: 14px;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+}
+
+.route-skeleton-article .route-skeleton-block:nth-child(4n + 1) {
+  width: 44%;
+  height: 30px;
+  border-radius: 9px;
+}
+
+.route-skeleton-index {
+  min-height: 280px;
+  padding: 1rem;
+}
+
+.route-skeleton-index .route-skeleton-block {
+  display: block;
+  height: 52px;
+  margin-bottom: .7rem;
+  border-radius: 10px;
+}
+
+.route-skeleton-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 1rem;
+}
+
+.route-skeleton-question {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 480px;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.route-skeleton-question .route-skeleton-block {
+  height: 64px;
+  border-radius: 12px;
+}
+
+.route-skeleton-question .route-skeleton-block:first-child {
+  height: 120px;
+}
+
+.route-skeleton-rail {
+  display: grid;
+  gap: .75rem;
+}
+
+.route-skeleton-rail .route-skeleton-block {
+  display: block;
+  min-height: 92px;
+}
+
+.route-skeleton-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .75rem;
+  margin-bottom: 1rem;
+}
+
+.route-skeleton-kpis .route-skeleton-block {
+  display: block;
+  min-height: 128px;
+}
+
+.route-skeleton-dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.route-skeleton-dashboard .route-skeleton-block {
+  display: block;
+  min-height: 300px;
+}
+
+.route-skeleton-canvas {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(250px, .6fr);
+  gap: 1rem;
+}
+
+.route-skeleton-canvas>* {
+  min-height: 560px;
+}
+
+.route-skeleton-canvas aside,
+.route-skeleton-form,
+.route-skeleton-standard {
+  padding: 1.5rem;
+}
+
+.route-skeleton-canvas .route-skeleton-block,
+.route-skeleton-form .route-skeleton-block,
+.route-skeleton-standard .route-skeleton-block {
+  display: block;
+  height: 48px;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+}
+
+.route-skeleton-form {
+  width: min(100%, 520px);
+  min-height: 480px;
+  margin: 3rem auto;
+}
+
+.route-skeleton-standard {
+  min-height: 480px;
+}
+
+.route-load-error {
+  width: min(calc(100% - 2rem), 620px);
+  margin: clamp(2rem, 8vh, 6rem) auto;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+}
+
+.route-load-error>span {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 1rem;
+  border: 1px solid var(--accent-secondary);
+  border-radius: 50%;
+  color: var(--accent-secondary);
+  font: 700 1.5rem "DM Mono", monospace;
+}
+
+.route-load-error p {
+  max-width: 46ch;
+  margin: .75rem auto 1.5rem;
+  color: var(--studio-muted);
+}
+
+.route-load-error div {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+@keyframes route-skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 900px) {
+  .route-skeleton {
+    padding: 1rem;
+  }
+
+  .route-skeleton-library,
+  .route-skeleton-lesson,
+  .route-skeleton-workspace,
+  .route-skeleton-canvas {
+    grid-template-columns: 1fr;
+  }
+
+  .route-skeleton-filter {
+    display: none;
+  }
+
+  .route-skeleton-index {
+    order: -1;
+    min-height: 170px;
+  }
+
+  .route-skeleton-rail {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .route-skeleton-rail .route-skeleton-block:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+
+  .route-skeleton-command,
+  .route-skeleton-dashboard,
+  .route-skeleton-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .route-skeleton-grid,
+  .route-skeleton-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem;
+  }
+
+  .route-skeleton-card {
+    min-height: 190px;
+  }
+
+  .route-skeleton-rail .route-skeleton-block:first-child {
+    grid-column: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .route-skeleton-line::after,
+  .route-skeleton-block::after,
+  .route-skeleton-panel::after {
+    animation: none;
+  }
+}

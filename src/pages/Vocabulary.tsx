@@ -286,6 +286,7 @@ export const Vocabulary: React.FC = () => {
         onClick={startVocabularyQuiz}
         onMouseEnter={() => prefetchRoute("/vocabulary-quiz")}
         onFocus={() => prefetchRoute("/vocabulary-quiz")}
+        onPointerDown={() => prefetchRoute("/vocabulary-quiz")}
         disabled={!canStartQuiz}
         title={canStartQuiz ? t("vocabulary.startQuiz") : t("vocabulary.quiz.minimumWords")}
         aria-label={canStartQuiz ? t("vocabulary.startQuiz") : t("vocabulary.quiz.minimumWords")}

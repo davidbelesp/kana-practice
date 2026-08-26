@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowUpRight, BarChart3, BookMarked, BookOpen, Brush, ChevronRight, Layers, Sparkles, Target, Trophy } from "lucide-react";
 import { hiraganaData, katakanaData } from "../data/kana";
@@ -8,6 +7,7 @@ import { getAggregates, getMasteredKana } from "../utils/statsManager";
 import { getTrainingRecommendations, useProgressSnapshot } from "../utils/progressRepository";
 import type { ProgressItem } from "../types/Progress";
 import { AppShell } from "../components/ui/AppShell";
+import { PrefetchLink } from "../components/ui/PrefetchLink";
 import "./Index.css";
 
 const sessions = [
@@ -66,7 +66,7 @@ export const Index: React.FC = () => {
             <div className="eyebrow"><span className="eyebrow-line" /> YOUR NEXT SESSION</div>
             <h1>Build your<br /><em>Japanese</em> rhythm.</h1>
             <p>{t("index.subtitle")}. A focused space for the characters, words, and patterns you want to keep.</p>
-            <div className="hero-actions"><Link to="/practice" className="hero-cta">{t("index.cards.practice")} <ArrowUpRight size={17} /></Link><Link to="/stats" className="hero-secondary">{t("common.stats")} <ChevronRight size={16} /></Link></div>
+            <div className="hero-actions"><PrefetchLink to="/practice" className="hero-cta">{t("index.cards.practice")} <ArrowUpRight size={17} /></PrefetchLink><PrefetchLink to="/stats" className="hero-secondary">{t("common.stats")} <ChevronRight size={16} /></PrefetchLink></div>
           </div>
           <div className="hero-visual" aria-hidden="true"><div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" /><span className="hero-kana hero-kana-main">あ</span><span className="hero-kana hero-kana-small kana-a">か</span><span className="hero-kana hero-kana-small kana-b">学</span><span className="hero-kana hero-kana-small kana-c">の</span><div className="hero-stamp">毎日<br /><span>まいにち</span></div></div>
         </section>
@@ -80,14 +80,14 @@ export const Index: React.FC = () => {
 
         <section className="session-section">
           <div className="section-heading"><div><span className="section-kicker">EXPLORE THE STUDIO</span><h2>Pick a direction.</h2></div><span className="section-count">{sessions.length.toString().padStart(2, "0")} tools</span></div>
-          <div className="session-grid">{sessions.map(({ to, eyebrow, titleKey, descKey, Icon, tone, glyph }) => <Link key={to} to={to} className={`session-card tone-${tone}`}><div className="session-card-top"><span>{eyebrow}</span><Icon size={18} strokeWidth={1.7} /></div><div className="session-glyph">{glyph}</div><div className="session-card-bottom"><div><h3>{t(titleKey)}</h3><p>{t(descKey)}</p></div><span className="round-arrow"><ArrowUpRight size={17} /></span></div></Link>)}</div>
+          <div className="session-grid">{sessions.map(({ to, eyebrow, titleKey, descKey, Icon, tone, glyph }) => <PrefetchLink key={to} to={to} className={`session-card tone-${tone}`}><div className="session-card-top"><span>{eyebrow}</span><Icon size={18} strokeWidth={1.7} /></div><div className="session-glyph">{glyph}</div><div className="session-card-bottom"><div><h3>{t(titleKey)}</h3><p>{t(descKey)}</p></div><span className="round-arrow"><ArrowUpRight size={17} /></span></div></PrefetchLink>)}</div>
         </section>
 
         <section className="bottom-grid">
-          <Link to="/stats" className="progress-panel"><div className="panel-heading"><div><span className="section-kicker">KEEP GOING</span><h2>Your progress</h2></div><ArrowUpRight size={18} /></div><div className="progress-bars">{progressRows.map(({ label, segments }) => { const masteredCount = segments.filter((state) => state === "mastered").length; return <div className="progress-item" key={label}><div><span>{label}</span><strong>{masteredCount}/{segments.length}</strong></div><div className={`progress-track progress-track-segmented ${segments.length > 200 ? "is-dense" : ""}`} aria-label={`${label}: ${masteredCount} mastered of ${segments.length}`}>{segments.map((state, index) => <span className={`progress-segment is-${state}`} key={`${label}-${index}`} aria-hidden="true" />)}</div></div>; })}</div></Link>
-          <Link to="/numbers" className="number-panel"><div className="number-panel-copy"><span className="section-kicker">NEW ROUTE</span><h2>Make numbers<br /><em>second nature.</em></h2><span className="text-link">Try numbers <ChevronRight size={15} /></span></div><div className="number-decoration" aria-hidden="true"><span>一</span><span>二</span><span>三</span></div></Link>
+          <PrefetchLink to="/stats" className="progress-panel"><div className="panel-heading"><div><span className="section-kicker">KEEP GOING</span><h2>Your progress</h2></div><ArrowUpRight size={18} /></div><div className="progress-bars">{progressRows.map(({ label, segments }) => { const masteredCount = segments.filter((state) => state === "mastered").length; return <div className="progress-item" key={label}><div><span>{label}</span><strong>{masteredCount}/{segments.length}</strong></div><div className={`progress-track progress-track-segmented ${segments.length > 200 ? "is-dense" : ""}`} aria-label={`${label}: ${masteredCount} mastered of ${segments.length}`}>{segments.map((state, index) => <span className={`progress-segment is-${state}`} key={`${label}-${index}`} aria-hidden="true" />)}</div></div>; })}</div></PrefetchLink>
+          <PrefetchLink to="/numbers" className="number-panel"><div className="number-panel-copy"><span className="section-kicker">NEW ROUTE</span><h2>Make numbers<br /><em>second nature.</em></h2><span className="text-link">Try numbers <ChevronRight size={15} /></span></div><div className="number-decoration" aria-hidden="true"><span>一</span><span>二</span><span>三</span></div></PrefetchLink>
         </section>
-        {recommendations[0] && <Link to={recommendations[0].actionPath} className="dashboard-recommendation"><div><span className="section-kicker">NEXT BEST SESSION</span><h2>{t(recommendations[0].titleKey)}</h2><p>{t(recommendations[0].descriptionKey)}</p></div><span className="dashboard-recommendation-arrow">↗</span></Link>}
+        {recommendations[0] && <PrefetchLink to={recommendations[0].actionPath} className="dashboard-recommendation"><div><span className="section-kicker">NEXT BEST SESSION</span><h2>{t(recommendations[0].titleKey)}</h2><p>{t(recommendations[0].descriptionKey)}</p></div><span className="dashboard-recommendation-arrow">↗</span></PrefetchLink>}
       </div>
     </AppShell>
   );

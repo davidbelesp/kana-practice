@@ -437,7 +437,7 @@ export const KanjiPage: React.FC = () => {
               <div className="selection-actions">
                 <span className="count">{t("home.controls.selected", { count: selectedChars.length })}</span>
                 <button type="button" className="btn-text" onClick={() => setSelectedChars([])}>{t("common.clear")}</button>
-                <button type="button" className="btn-primary start-btn kanji-start-btn" onClick={handleStartQuiz} onMouseEnter={() => prefetchRoute("/kanji-quiz")} onFocus={() => prefetchRoute("/kanji-quiz")} disabled={selectedChars.length < 3}>
+                <button type="button" className="btn-primary start-btn kanji-start-btn" onClick={handleStartQuiz} onMouseEnter={() => prefetchRoute("/kanji-quiz")} onFocus={() => prefetchRoute("/kanji-quiz")} onPointerDown={() => prefetchRoute("/kanji-quiz")} disabled={selectedChars.length < 3}>
                   {t("home.controls.startQuiz")} {selectedChars.length > 0 && `(${selectedChars.length})`}
                 </button>
               </div>

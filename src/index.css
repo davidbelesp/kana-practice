@@ -307,7 +307,11 @@ textarea:focus-visible {
 }
 
 .studio-main>* {
-  animation: studio-route-enter .38s cubic-bezier(.2, .8, .2, 1) both;
+  animation: studio-route-enter .2s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.studio-main>.route-skeleton {
+  animation: none;
 }
 
 button:active:not(:disabled),
@@ -318,12 +322,10 @@ button:active:not(:disabled),
 
 @keyframes studio-route-enter {
   from {
-    opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(5px);
   }
 
   to {
-    opacity: 1;
     transform: translateY(0);
   }
 }
