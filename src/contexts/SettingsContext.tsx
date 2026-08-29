@@ -8,6 +8,7 @@ import {
 } from "react";
 import i18n from "../i18n/config";
 import type { QuestionType } from "../types/QuizTypes";
+import { normalizeKanaMasteryThreshold } from "../utils/kanaMastery";
 
 export type Theme = "default" | "blue" | "green" | "orange" | "custom";
 
@@ -70,7 +71,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     border: "#3a403b",
   },
   animationsEnabled: true,
-  masteryThreshold: 100,
+  masteryThreshold: 50,
   weakestCharCount: 10,
   numbersMin: 1,
   numbersMax: 10000,
@@ -98,6 +99,7 @@ function loadSettings(): AppSettings {
       return {
         ...DEFAULT_SETTINGS,
         ...parsed,
+        masteryThreshold: normalizeKanaMasteryThreshold(Number(parsed.masteryThreshold ?? DEFAULT_SETTINGS.masteryThreshold)),
         customTheme: { ...DEFAULT_SETTINGS.customTheme, ...(parsed.customTheme ?? {}) },
       };
     }

@@ -134,7 +134,7 @@
   box-shadow: none;
 }
 
-.studio-shell .hiragana-card:hover,
+.studio-shell .hiragana-card:not(.is-mastered):hover,
 .studio-shell .kanji-cell:hover {
   border-color: var(--accent-primary);
   background: var(--studio-panel-raised);
@@ -151,7 +151,6 @@
   transform: translateY(-2px);
 }
 
-.studio-shell .hiragana-card.is-mastered,
 .studio-shell .kanji-cell.golden {
   border-color: color-mix(in srgb, var(--accent-secondary) 52%, var(--glass-border));
   background: color-mix(in srgb, var(--accent-secondary) 12%, var(--studio-panel));
@@ -159,7 +158,6 @@
   box-shadow: none;
 }
 
-.studio-shell .hiragana-card.is-selected.is-mastered,
 .studio-shell .kanji-cell.golden.selected {
   background: var(--accent-primary);
   color: var(--accent-foreground);

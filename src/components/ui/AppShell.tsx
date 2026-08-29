@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import "./AppShell.css";
 import "./StudioPrimitives.css";
+import "./KanaMastery.css";
 
 const NAV_LINKS = [
   { to: "/", labelKey: "common.home", Icon: Home },

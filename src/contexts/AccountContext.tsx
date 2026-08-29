@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { User } from "@supabase/supabase-js";
-import type { LearningSession, ProgressItem, ProgressSnapshot } from "../types/Progress";
-import { getProgressSnapshot, getProgressSyncBaseline, replaceProgressSnapshot, setProgressSyncBaseline, clearPendingProgressSync, exportProgress, clearLocalProgress } from "../utils/progressRepository";
+import type { GrammarCompletion, LearningSession, ProgressItem } from "../types/Progress";
+import { getProgressSnapshot, replaceProgressSnapshot, clearPendingProgressSync, exportProgress, clearLocalProgress, notifyProgressSnapshotChanged } from "../utils/progressRepository";
+import { mergeProgressSnapshots } from "../utils/progressSync";
 import { isSupabaseConfigured, supabase } from "../services/supabaseClient";
 
 export type SyncStatus = "offline" | "idle" | "syncing" | "synced" | "error";
@@ -23,42 +24,6 @@ interface AccountContextValue {
 
 const AccountContext = createContext<AccountContextValue | null>(null);
 
-const itemKey = (domain: string, itemId: string) => `${domain}:${itemId}`;
-
-const mergeSnapshots = (local: ProgressSnapshot, cloudItems: ProgressItem[], cloudSessions: LearningSession[]): ProgressSnapshot => {
-  const baseline = getProgressSyncBaseline();
-  const items = { ...local.items };
-  const cloudMap = new Map(cloudItems.map((item) => [itemKey(item.domain, item.itemId), item]));
-
-  cloudItems.forEach((cloud) => {
-    const key = itemKey(cloud.domain, cloud.itemId);
-    const localItem = local.items[key];
-    const baseItem = baseline?.items[key];
-    const localDeltaCorrect = Math.max(0, (localItem?.correct ?? 0) - (baseItem?.correct ?? 0));
-    const localDeltaIncorrect = Math.max(0, (localItem?.incorrect ?? 0) - (baseItem?.incorrect ?? 0));
-    const mergedCorrect = cloud.correct + localDeltaCorrect;
-    const mergedIncorrect = cloud.incorrect + localDeltaIncorrect;
-    items[key] = {
-      ...cloud,
-      correct: mergedCorrect,
-      incorrect: mergedIncorrect,
-      streak: (localItem?.lastTrainedAt ?? 0) >= (cloud.lastTrainedAt ?? 0) ? localItem?.streak ?? cloud.streak : cloud.streak,
-      masteryScore: Math.max(localItem?.masteryScore ?? 0, cloud.masteryScore ?? 0),
-      lastTrainedAt: Math.max(localItem?.lastTrainedAt ?? 0, cloud.lastTrainedAt ?? 0) || undefined,
-      masteredAt: Math.max(localItem?.masteredAt ?? 0, cloud.masteredAt ?? 0) || undefined,
-    };
-  });
-
-  Object.entries(local.items).forEach(([key, localItem]) => {
-    if (cloudMap.has(key)) return;
-    items[key] = localItem;
-  });
-
-  const sessions = { ...local.sessions };
-  cloudSessions.forEach((session) => { sessions[session.id] = session; });
-  return { version: 1, updatedAt: Date.now(), items, sessions };
-};
-
 const toItemRow = (userId: string, item: ProgressItem) => ({
   user_id: userId,
   domain: item.domain,
@@ -67,6 +32,7 @@ const toItemRow = (userId: string, item: ProgressItem) => ({
   incorrect: item.incorrect,
   streak: item.streak,
   mastery_score: item.masteryScore,
+  mastered: item.mastered ?? false,
   last_trained_at: item.lastTrainedAt ? new Date(item.lastTrainedAt).toISOString() : null,
   mastered_at: item.masteredAt ? new Date(item.masteredAt).toISOString() : null,
 });
@@ -78,6 +44,9 @@ const fromItemRow = (row: Record<string, unknown>): ProgressItem => ({
   incorrect: Number(row.incorrect ?? 0),
   streak: Number(row.streak ?? 0),
   masteryScore: Number(row.mastery_score ?? 0),
+  mastered: row.mastered === undefined
+    ? Number(row.mastery_score ?? 0) >= 100
+    : Boolean(row.mastered),
   lastTrainedAt: row.last_trained_at ? Date.parse(String(row.last_trained_at)) : undefined,
   masteredAt: row.mastered_at ? Date.parse(String(row.mastered_at)) : undefined,
 });
@@ -108,6 +77,24 @@ const fromSessionRow = (row: Record<string, unknown>): LearningSession => ({
   incorrect: Number(row.incorrect ?? 0),
   accuracy: Number(row.accuracy ?? 0),
 });
+
+const toGrammarCompletionRow = (userId: string, completion: GrammarCompletion) => ({
+  user_id: userId,
+  track_id: completion.trackId,
+  lesson_id: completion.lessonId,
+  part_id: completion.partId,
+  completed_at: new Date(completion.completedAt).toISOString(),
+});
+
+const fromGrammarCompletionRow = (row: Record<string, unknown>): GrammarCompletion => {
+  const completedAt = Date.parse(String(row.completed_at ?? ""));
+  return {
+    trackId: String(row.track_id),
+    lessonId: String(row.lesson_id),
+    partId: String(row.part_id),
+    completedAt: Number.isFinite(completedAt) ? completedAt : 0,
+  };
+};
 
 export const AccountProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -184,23 +171,25 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     setSyncStatus("syncing");
     setError(undefined);
     const local = getProgressSnapshot();
-    const [itemsResponse, sessionsResponse, settingsResponse] = await Promise.all([
+    const [itemsResponse, sessionsResponse, grammarCompletionsResponse, settingsResponse] = await Promise.all([
       supabase.from("progress_items").select("*").eq("user_id", user.id),
       supabase.from("learning_sessions").select("*").eq("user_id", user.id),
+      supabase.from("grammar_completions").select("*").eq("user_id", user.id),
       supabase.from("user_settings").select("settings").eq("user_id", user.id).maybeSingle(),
     ]);
-    if (itemsResponse.error || sessionsResponse.error || settingsResponse.error) { setSyncStatus("error"); setError(itemsResponse.error?.message ?? sessionsResponse.error?.message ?? settingsResponse.error?.message); return; }
-    const merged = mergeSnapshots(local, (itemsResponse.data ?? []).map((row) => fromItemRow(row as Record<string, unknown>)), (sessionsResponse.data ?? []).map((row) => fromSessionRow(row as Record<string, unknown>)));
+    if (itemsResponse.error || sessionsResponse.error || grammarCompletionsResponse.error || settingsResponse.error) { setSyncStatus("error"); setError(itemsResponse.error?.message ?? sessionsResponse.error?.message ?? grammarCompletionsResponse.error?.message ?? settingsResponse.error?.message); return; }
+    const merged = mergeProgressSnapshots(local, (itemsResponse.data ?? []).map((row) => fromItemRow(row as Record<string, unknown>)), (sessionsResponse.data ?? []).map((row) => fromSessionRow(row as Record<string, unknown>)), (grammarCompletionsResponse.data ?? []).map((row) => fromGrammarCompletionRow(row as Record<string, unknown>)));
     const itemRows = Object.values(merged.items).map((item) => toItemRow(user.id, item));
     const sessionRows = Object.values(merged.sessions).map((session) => toSessionRow(user.id, session));
+    const grammarCompletionRows = Object.values(merged.grammarCompletions).map((completion) => toGrammarCompletionRow(user.id, completion));
     const localSettings = window.localStorage.getItem("app_settings");
     const settingsPayload = localSettings ? JSON.parse(localSettings) as Record<string, unknown> : (settingsResponse.data?.settings as Record<string, unknown> | undefined) ?? {};
     if (!localSettings && settingsResponse.data?.settings) window.localStorage.setItem("app_settings", JSON.stringify(settingsResponse.data.settings));
-    const [itemUpsert, sessionUpsert, settingsUpsert] = await Promise.all([supabase.from("progress_items").upsert(itemRows, { onConflict: "user_id,domain,item_id" }), supabase.from("learning_sessions").upsert(sessionRows, { onConflict: "id" }), supabase.from("user_settings").upsert({ user_id: user.id, settings: settingsPayload, updated_at: new Date().toISOString() }, { onConflict: "user_id" })]);
-    if (itemUpsert.error || sessionUpsert.error || settingsUpsert.error) { setSyncStatus("error"); setError(itemUpsert.error?.message ?? sessionUpsert.error?.message ?? settingsUpsert.error?.message); return; }
+    const [itemUpsert, sessionUpsert, grammarCompletionUpsert, settingsUpsert] = await Promise.all([supabase.from("progress_items").upsert(itemRows, { onConflict: "user_id,domain,item_id" }), supabase.from("learning_sessions").upsert(sessionRows, { onConflict: "id" }), supabase.from("grammar_completions").upsert(grammarCompletionRows, { onConflict: "user_id,track_id,lesson_id,part_id" }), supabase.from("user_settings").upsert({ user_id: user.id, settings: settingsPayload, updated_at: new Date().toISOString() }, { onConflict: "user_id" })]);
+    if (itemUpsert.error || sessionUpsert.error || grammarCompletionUpsert.error || settingsUpsert.error) { setSyncStatus("error"); setError(itemUpsert.error?.message ?? sessionUpsert.error?.message ?? grammarCompletionUpsert.error?.message ?? settingsUpsert.error?.message); return; }
     replaceProgressSnapshot(merged, { emitChange: false });
-    setProgressSyncBaseline(merged);
     clearPendingProgressSync();
+    notifyProgressSnapshotChanged();
     setLastSyncedAt(Date.now());
     setSyncStatus("synced");
   }, [user]);

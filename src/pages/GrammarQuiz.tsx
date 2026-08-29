@@ -4,7 +4,8 @@ import { Link, Navigate, useLocation, useNavigate, useParams, useSearchParams } 
 import { useTranslation } from "react-i18next";
 import { QuizWorkspace } from "../components/quiz/QuizWorkspace";
 import { getGrammarLesson, getGrammarTrack, getLegacyGrammarRedirect, type GrammarExercise, type GrammarExerciseSetId, type GrammarLocale } from "../data/grammar";
-import { recordCompletedSession, recordItemResults } from "../utils/progressRepository";
+import { recordCompletedSession, recordGrammarPartCompletion, recordItemResults } from "../utils/progressRepository";
+import { isGrammarPassingScore } from "../utils/grammarCompletion";
 import "./GrammarQuiz.css";
 
 const localeFor = (language: string): GrammarLocale => language.toLowerCase().startsWith("es") ? "es" : "en";
@@ -85,6 +86,7 @@ export const GrammarQuiz = () => {
   const finish = () => {
     recordItemResults("grammar", answerResultsRef.current);
     recordCompletedSession({ id: sessionIdRef.current, domain: "grammar", mode: "multiple-choice", source: `/grammar/${track.id}/${lesson.id}?part=${activePart.id}`, startedAt: sessionStartedAtRef.current, total: deck.length, correct: score });
+    if (isGrammarPassingScore(score, deck.length)) recordGrammarPartCompletion(track.id, lesson.id, activePart.id);
     setFinished(true);
   };
 

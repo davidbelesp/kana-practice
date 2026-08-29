@@ -3,8 +3,10 @@ import { useTranslation } from "react-i18next";
 import { ArrowUpRight, BarChart3, BookMarked, BookOpen, Brush, ChevronRight, Layers, Sparkles, Target, Trophy } from "lucide-react";
 import { hiraganaData, katakanaData } from "../data/kana";
 import { totalKanjiCount } from "../data/kanjiManifest";
-import { getAggregates, getMasteredKana } from "../utils/statsManager";
+import { getAggregates, type KanaStat } from "../utils/statsManager";
 import { getTrainingRecommendations, useProgressSnapshot } from "../utils/progressRepository";
+import { isKanaMastered } from "../utils/kanaMastery";
+import { useSettings } from "../contexts/SettingsContext";
 import type { ProgressItem } from "../types/Progress";
 import { AppShell } from "../components/ui/AppShell";
 import { PrefetchLink } from "../components/ui/PrefetchLink";
@@ -29,10 +31,13 @@ const kanaCatalog = (data: typeof hiraganaData) => data.filter((item) => !item.i
 
 export const Index: React.FC = () => {
   const { t } = useTranslation();
+  const { settings } = useSettings();
   const aggregates = useMemo(() => getAggregates(), []);
   const progressSnapshot = useProgressSnapshot();
   const recommendations = useMemo(() => getTrainingRecommendations(), [progressSnapshot.updatedAt]);
-  const mastered = useMemo(() => getMasteredKana(), []);
+  const mastered = useMemo<KanaStat[]>(() => Object.values(progressSnapshot.items)
+    .filter((item) => item.domain === "kana" && isKanaMastered(item.masteryScore, settings.masteryThreshold))
+    .map((item) => ({ char: item.itemId, correct: item.correct, incorrect: item.incorrect, streak: item.streak, masteryScore: item.masteryScore, lastPlayed: item.lastTrainedAt })), [progressSnapshot.items, settings.masteryThreshold]);
   const totalAnswered = aggregates.totalCorrect + aggregates.totalWrong;
   const unifiedTotals = useMemo(() => Object.values(progressSnapshot.sessions).reduce((total, session) => ({ correct: total.correct + session.correct, incorrect: total.incorrect + session.incorrect }), { correct: 0, incorrect: 0 }), [progressSnapshot.sessions]);
   const trackedAnswered = unifiedTotals.correct + unifiedTotals.incorrect || totalAnswered;
@@ -43,7 +48,11 @@ export const Index: React.FC = () => {
     const items = Object.values(progressSnapshot.items);
     const progressMap = new Map(items.map((item) => [`${item.domain}:${item.itemId}`, item]));
     const buildKanaRow = (label: string, ids: string[]) => {
-      const segments = ids.map((id) => getSegmentState(progressMap.get(`kana:${id}`)));
+      const segments = ids.map((id) => {
+        const item = progressMap.get(`kana:${id}`);
+        if (!item || item.correct + item.incorrect === 0) return "left" as const;
+        return isKanaMastered(item.masteryScore, settings.masteryThreshold) ? "mastered" as const : "started" as const;
+      });
       return { label, segments };
     };
     const kanjiItems = items.filter((item) => item.domain === "kanji");
@@ -56,7 +65,7 @@ export const Index: React.FC = () => {
       buildKanaRow("Katakana", kanaCatalog(katakanaData)),
       { label: "Kanji", segments: kanjiSegments },
     ];
-  }, [progressSnapshot.items]);
+  }, [progressSnapshot.items, settings.masteryThreshold]);
 
   return (
     <AppShell title="Overview" className="index-container app-dashboard">

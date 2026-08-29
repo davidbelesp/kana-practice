@@ -1,8 +1,11 @@
+import { isKanaMastered, normalizeKanaMasteryThreshold } from "./kanaMastery";
+
 export interface KanaStat {
   char: string;
   correct: number;
   incorrect: number;
   streak: number;
+  masteryScore?: number;
   lastPlayed?: number;
 }
 
@@ -52,6 +55,22 @@ const writeStats = (stats: Record<string, KanaStat>) => {
 const writeMastered = (mastered: Record<string, boolean>) => {
   masteredCache = mastered;
   localStorage.setItem(MASTERED_KEY, JSON.stringify(mastered));
+};
+
+const kanaMasteryScore = (stat: KanaStat): number => {
+  if (stat.masteryScore !== undefined) return stat.masteryScore;
+  const attempts = stat.correct + stat.incorrect;
+  if (!attempts) return 0;
+  return Math.min(100, Math.round((stat.correct / attempts) * 70 + Math.min(stat.streak / 20, 1) * 30));
+};
+
+const getStoredMasteryThreshold = (): number => {
+  try {
+    const settings = JSON.parse(localStorage.getItem("app_settings") ?? "{}") as { masteryThreshold?: number };
+    return normalizeKanaMasteryThreshold(Number(settings.masteryThreshold ?? 100));
+  } catch {
+    return 100;
+  }
 };
 
 export const getKanaStats = (): Record<string, KanaStat> => readStats();
@@ -182,19 +201,21 @@ const getStatsAndMastered = (): { stats: Record<string, KanaStat>; mastered: Rec
 };
 
 export const getTopStreaks = (limit: number = 5): KanaStat[] => {
-  const { stats, mastered } = getStatsAndMastered();
+  const { stats } = getStatsAndMastered();
+  const threshold = getStoredMasteryThreshold();
   
   return Object.values(stats)
-    .filter((s) => s.streak > 0 && s.streak < 100 && !mastered[s.char])
+    .filter((s) => s.streak > 0 && !isKanaMastered(kanaMasteryScore(s), threshold))
     .sort((a, b) => b.streak - a.streak)
     .slice(0, limit);
 };
 
 export const getMasteredKana = (): KanaStat[] => {
-  const { stats, mastered } = getStatsAndMastered();
+  const { stats } = getStatsAndMastered();
+  const threshold = getStoredMasteryThreshold();
 
   return Object.values(stats)
-    .filter((s) => s.streak >= 100 || mastered[s.char])
+    .filter((s) => isKanaMastered(kanaMasteryScore(s), threshold))
     .sort((a, b) => b.streak - a.streak);
 };
 
@@ -233,9 +254,8 @@ export const saveNumberResult = (n: number, isCorrect: boolean): void => {
   localStorage.setItem(NUMBER_STATS_KEY, JSON.stringify(stats));
 };
 
-export const getWeakestChars = (limit: number = 10, filterChars?: string[]): string[] => {
-  const stats = getKanaStats();
-  let allStats = Object.values(stats);
+export const getWeakestChars = (limit: number = 10, filterChars?: string[], statsOverride?: Record<string, KanaStat>): string[] => {
+  let allStats = Object.values(statsOverride ?? getKanaStats());
 
   if (filterChars && filterChars.length > 0) {
     const filterSet = new Set(filterChars);

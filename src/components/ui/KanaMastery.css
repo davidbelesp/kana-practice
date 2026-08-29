@@ -1,0 +1,71 @@
+:root {
+  --kana-mastered-gradient: linear-gradient(135deg,
+    #f5d060 0%,
+    #d4920c 28%,
+    #efc030 52%,
+    #b87808 76%,
+    #f0cc40 100%
+  );
+  --kana-mastered-border: #7a5400;
+  --kana-mastered-text: #3d2000;
+}
+
+.hiragana-card.is-mastered,
+.heatmap-tile.is-mastered {
+  background: var(--kana-mastered-gradient);
+  border-color: var(--kana-mastered-border);
+  color: var(--kana-mastered-text);
+}
+
+.hiragana-card.is-mastered {
+  box-shadow: 2px 2px 0 0 var(--kana-mastered-border);
+}
+
+.heatmap-tile.is-mastered {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 2px 2px 0 0 var(--kana-mastered-border);
+}
+
+.hiragana-card.is-mastered:hover,
+.heatmap-tile.is-mastered:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--kana-mastered-border);
+}
+
+.hiragana-card.is-mastered::after,
+.heatmap-tile.is-mastered::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 75%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.45s ease;
+  pointer-events: none;
+}
+
+.hiragana-card.is-mastered:hover::after,
+.heatmap-tile.is-mastered:hover::after {
+  transform: translateX(130%);
+}
+
+.hiragana-card.is-mastered .card-progress-track {
+  background: rgba(61, 32, 0, 0.15);
+}
+
+.hiragana-card.is-mastered .card-progress-fill {
+  background: rgba(61, 32, 0, 0.45);
+}
+
+.heatmap-tile.is-mastered small {
+  color: rgba(61, 32, 0, 0.72);
+}
+
+.progress-track-segmented .progress-segment.is-mastered {
+  background: var(--kana-mastered-gradient);
+}

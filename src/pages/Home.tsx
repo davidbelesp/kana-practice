@@ -5,11 +5,11 @@ import { HiraganaTable } from "../components/HiraganaTable";
 import { hiraganaData, katakanaData } from "../data/kana";
 import {
   getWeakestChars,
-  getKanaStats,
-  getMasteredStatus,
-  saveMasteredStatus,
   type KanaStat,
 } from "../utils/statsManager";
+import { useProgressSnapshot } from "../utils/progressRepository";
+import { isKanaMastered } from "../utils/kanaMastery";
+import { useSettings } from "../contexts/SettingsContext";
 import { AppShell } from "../components/ui/AppShell";
 import { prefetchRoute } from "../utils/routePrefetch";
 import { IconButton } from "../components/ui/IconButton";
@@ -21,27 +21,29 @@ type Tab = "hiragana" | "katakana";
 
 export const Home = () => {
   const { t } = useTranslation();
+  const { settings } = useSettings();
   const [selectedChars, setSelectedChars] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>("hiragana");
   const [stats, setStats] = useState<Record<string, KanaStat>>({});
-  const [masteredKanas, setMasteredKanas] = useState<Record<string, boolean>>(
-    {},
-  );
+  const progressSnapshot = useProgressSnapshot();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const currentStats = getKanaStats();
-    setStats(currentStats);
-
-    // Backfill mastery for existing streaks
-    Object.values(currentStats).forEach((stat) => {
-      if (stat.streak >= 100) {
-        saveMasteredStatus(stat.char);
-      }
+    const currentStats: Record<string, KanaStat> = {};
+    Object.values(progressSnapshot.items)
+      .filter((item) => item.domain === "kana")
+      .forEach((item) => {
+        currentStats[item.itemId] = {
+          char: item.itemId,
+          correct: item.correct,
+          incorrect: item.incorrect,
+          streak: item.streak,
+          masteryScore: item.masteryScore,
+          lastPlayed: item.lastTrainedAt,
+        };
     });
-
-    setMasteredKanas(getMasteredStatus());
-  }, []);
+    setStats(currentStats);
+  }, [progressSnapshot.items, progressSnapshot.updatedAt, settings.masteryThreshold]);
 
   const currentData = useMemo(
     () => (activeTab === "hiragana" ? hiraganaData : katakanaData),
@@ -54,8 +56,8 @@ export const Home = () => {
   );
 
   const masteredCount = useMemo(
-    () => currentChars.filter((char) => masteredKanas[char] || (stats[char]?.streak ?? 0) >= 100).length,
-    [currentChars, masteredKanas, stats],
+    () => currentChars.filter((char) => isKanaMastered(stats[char]?.masteryScore ?? 0, settings.masteryThreshold)).length,
+    [currentChars, settings.masteryThreshold, stats],
   );
 
   const handleToggleChar = useCallback((char: string) => {
@@ -86,11 +88,11 @@ export const Home = () => {
   }, [currentChars]);
 
   const handleSelectWeakest = useCallback(() => {
-    const weakest = getWeakestChars(10, currentChars);
+    const weakest = getWeakestChars(10, currentChars, stats);
     if (weakest.length > 0) {
       setSelectedChars(weakest);
     }
-  }, [currentChars]);
+  }, [currentChars, stats]);
 
   const handleDeselectAll = useCallback(() => {
     setSelectedChars([]);
@@ -166,7 +168,7 @@ export const Home = () => {
           onToggleChar={handleToggleChar}
           onToggleGroup={handleToggleGroup}
           stats={stats}
-          masteredKanas={masteredKanas}
+          masteryThreshold={settings.masteryThreshold}
         />
       </div>
     </AppShell>

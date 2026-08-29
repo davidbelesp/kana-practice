@@ -808,7 +808,7 @@
 }
 
 .progress-track-segmented .progress-segment.is-mastered {
-    background: var(--accent-secondary);
+    background: var(--kana-mastered-gradient);
 }
 
 .progress-track-segmented .progress-segment.is-started {

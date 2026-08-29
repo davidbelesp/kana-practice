@@ -149,6 +149,30 @@
   transform: translateX(4px);
 }
 
+.grammar-lesson-row.is-completed,
+.grammar-part-row.is-completed {
+  color: var(--studio-muted);
+  filter: grayscale(.8);
+  opacity: .62;
+}
+
+.grammar-lesson-row.is-completed:hover,
+.grammar-part-row.is-completed:hover {
+  border-color: var(--accent-primary);
+  filter: grayscale(.55);
+  opacity: .82;
+}
+
+.grammar-lesson-row.is-completed strong,
+.grammar-part-row.is-completed strong {
+  color: var(--studio-muted);
+}
+
+.grammar-lesson-row.is-completed > svg,
+.grammar-completion-icon {
+  color: var(--accent-primary);
+}
+
 .grammar-lesson-row span {
   display: grid;
   gap: .2rem;
@@ -444,6 +468,11 @@
   background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
 }
 
+.grammar-part-row.is-completed.is-active {
+  border-color: color-mix(in srgb, var(--accent-primary) 45%, var(--glass-border));
+  background: color-mix(in srgb, var(--accent-primary) 6%, transparent);
+}
+
 .grammar-part-number {
   color: var(--studio-muted);
   font: .62rem "DM Mono", monospace;
@@ -460,12 +489,19 @@
 }
 
 .grammar-part-copy strong {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
   overflow: hidden;
   color: var(--studio-text);
   font-size: .78rem;
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.grammar-completion-icon {
+  flex: 0 0 auto;
 }
 
 .grammar-part-copy small {

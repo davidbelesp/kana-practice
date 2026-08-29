@@ -407,7 +407,7 @@ export const Settings = () => {
                     id="mastery-threshold"
                     type="range"
                     min={10}
-                    max={200}
+                    max={100}
                     step={10}
                     value={settings.masteryThreshold}
                     onChange={(e) =>

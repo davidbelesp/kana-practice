@@ -6,13 +6,14 @@ import { kanjiLevels } from "../data/kanjiManifest";
 import { getGrammarCatalogExerciseCount } from "../data/grammarCatalog";
 import { AppShell } from "../components/ui/AppShell";
 import { getTrainingRecommendations, useProgressSnapshot } from "../utils/progressRepository";
+import { getKanaMasteryState, isKanaMastered } from "../utils/kanaMastery";
+import { useSettings } from "../contexts/SettingsContext";
 import type { LearningDomain, ProgressItem } from "../types/Progress";
 import "./Stats.css";
 
 const NUMBER_GROUPS = ["1", "2", "3", "4", "5", "6", "7"];
 const dayLabel = (timestamp: number) => new Date(timestamp).toLocaleDateString(undefined, { month: "numeric", day: "numeric" });
 const StatsActivityChart = lazy(() => import("../components/stats/StatsActivityChart").then((module) => ({ default: module.StatsActivityChart })));
-const scoreClass = (score: number) => score >= 85 ? "level-4" : score >= 60 ? "level-3" : score >= 30 ? "level-2" : score > 0 ? "level-1" : "level-0";
 const domainLabelKey = (domain: LearningDomain) => `stats.domains.${domain}`;
 
 const groupSessionsByDay = (sessions: Array<{ completedAt: number; correct: number; incorrect: number }>) => {
@@ -32,6 +33,7 @@ const itemsFor = (items: ProgressItem[], domain: LearningDomain) => items.filter
 
 export const Stats = () => {
   const { t } = useTranslation();
+  const { settings } = useSettings();
   const snapshot = useProgressSnapshot();
   const recommendations = useMemo(() => getTrainingRecommendations(), [snapshot.updatedAt]);
   const items = Object.values(snapshot.items);
@@ -60,7 +62,7 @@ export const Stats = () => {
   const renderHeatmap = (label: string, characters: typeof allKanaData) => (
     <div className="progress-heatmap-group">
       <div className="progress-subheading"><span>{label}</span><span className="progress-count">{characters.filter((item) => (kanaMap.get(item.char)?.masteryScore ?? 0) > 0).length}/{characters.length}</span></div>
-      <div className="kana-heatmap" aria-label={label}>{characters.map((item) => { const score = kanaMap.get(item.char)?.masteryScore ?? 0; return <Link key={item.char} to={`/practice?char=${encodeURIComponent(item.char)}`} className={`heatmap-tile ${scoreClass(score)}`} title={`${item.char} · ${score}%`}><span>{item.char}</span><small>{item.romaji}</small></Link>; })}</div>
+      <div className="kana-heatmap" aria-label={label}>{characters.map((item) => { const score = kanaMap.get(item.char)?.masteryScore ?? 0; const masteryState = getKanaMasteryState(score, settings.masteryThreshold); return <Link key={item.char} to={`/practice?char=${encodeURIComponent(item.char)}`} className={`heatmap-tile ${masteryState === "mastered" ? "is-mastered" : masteryState}`} title={`${item.char} · ${score}%`}><span>{item.char}</span><small>{item.romaji}</small></Link>; })}</div>
     </div>
   );
 
@@ -73,7 +75,7 @@ export const Stats = () => {
         <section className="progress-recommendation-grid"><article className="progress-panel next-session-panel glass-panel"><div className="panel-heading"><div><span className="eyebrow">{t("stats.recommendation")}</span><h2>{t("stats.nextSession")}</h2></div><span className="recommendation-spark">✦</span></div>{recommendations[0] && <div className="next-session-content"><span className="recommendation-domain">{t(domainLabelKey(recommendations[0].domain))}</span><p>{t(recommendations[0].descriptionKey)}</p><Link className="btn-primary" to={recommendations[0].actionPath}>{t("stats.openRecommendation")}</Link></div>}</article><div className="recommendation-secondary">{recommendations.slice(1).map((recommendation) => <Link className="recommendation-row glass-panel" key={recommendation.domain} to={recommendation.actionPath}><span><strong>{t(recommendation.titleKey)}</strong><small>{t(recommendation.descriptionKey)}</small></span><span>→</span></Link>)}</div></section>
         <div className="progress-layout">
           <section className="progress-panel progress-chart-panel glass-panel"><div className="panel-heading"><div><span className="eyebrow">{t("stats.activityWindow")}</span><h2>{t("stats.recentActivity")}</h2></div></div><div className="progress-chart"><Suspense fallback={<div className="progress-chart-skeleton" role="status" aria-label={t("loading.chart")}><span /></div>}><StatsActivityChart activity={activity} /></Suspense></div></section>
-          <section className="progress-panel glass-panel domain-overview-panel"><div className="panel-heading"><div><span className="eyebrow">{t("stats.learningMap")}</span><h2>{t("stats.domainProgress")}</h2></div></div><div className="domain-progress-list">{(["kana", "kanji", "vocabulary", "numbers", "grammar"] as LearningDomain[]).map((domain) => { const domainItems = itemsFor(items, domain); const mastered = domainItems.filter((item) => item.masteryScore >= 85).length; const total = domain === "grammar" ? grammarTotal : domainItems.length; const domainSessions = sessions.filter((session) => session.domain === domain).length; return <Link to={domain === "kana" ? "/practice" : `/${domain}`} className="domain-progress-row" key={domain}><span className={`domain-dot domain-${domain}`} /><span><strong>{t(domainLabelKey(domain))}</strong><small>{mastered}/{total} {t("stats.masteredShort")} · {domainSessions} {t("stats.sessions")}</small></span><b>{total ? Math.round((mastered / total) * 100) : 0}%</b></Link>; })}</div></section>
+          <section className="progress-panel glass-panel domain-overview-panel"><div className="panel-heading"><div><span className="eyebrow">{t("stats.learningMap")}</span><h2>{t("stats.domainProgress")}</h2></div></div><div className="domain-progress-list">{(["kana", "kanji", "vocabulary", "numbers", "grammar"] as LearningDomain[]).map((domain) => { const domainItems = itemsFor(items, domain); const mastered = domain === "kana" ? domainItems.filter((item) => isKanaMastered(item.masteryScore, settings.masteryThreshold)).length : domainItems.filter((item) => item.masteryScore >= 85).length; const total = domain === "grammar" ? grammarTotal : domainItems.length; const domainSessions = sessions.filter((session) => session.domain === domain).length; return <Link to={domain === "kana" ? "/practice" : `/${domain}`} className="domain-progress-row" key={domain}><span className={`domain-dot domain-${domain}`} /><span><strong>{t(domainLabelKey(domain))}</strong><small>{mastered}/{total} {t("stats.masteredShort")} · {domainSessions} {t("stats.sessions")}</small></span><b>{total ? Math.round((mastered / total) * 100) : 0}%</b></Link>; })}</div></section>
           <section className="progress-panel glass-panel progress-wide-panel"><div className="panel-heading"><div><span className="eyebrow">{t("stats.characterMap")}</span><h2>{t("stats.kanaMastery")}</h2></div></div>{renderHeatmap(t("stats.hiragana"), hiragana)}{renderHeatmap(t("stats.katakana"), katakana)}</section>
           <section className="progress-panel glass-panel"><div className="panel-heading"><div><span className="eyebrow">{t("stats.jlptPath")}</span><h2>{t("stats.kanjiMastery")}</h2></div><Link className="btn-text" to="/kanji">{t("stats.openDomain")} →</Link></div><div className="level-progress-list">{kanjiLevels.map((level) => { const levelSet = new Set(level.characters); const mastered = kanjiItems.filter((item) => levelSet.has(item.itemId) && item.masteryScore >= 85).length; return <div className="level-progress-row" key={level.level}><span>{level.level}</span><div className="progress-track"><i style={{ width: `${level.count ? (mastered / level.count) * 100 : 0}%` }} /></div><strong>{mastered}/{level.count}</strong></div>; })}</div></section>
           <section className="progress-panel glass-panel"><div className="panel-heading"><div><span className="eyebrow">{t("stats.vocabularyHub")}</span><h2>{t("stats.vocabularyProgress")}</h2></div><Link className="btn-text" to="/vocabulary">{t("stats.openDomain")} →</Link></div><div className="domain-stat-large"><strong>{vocabularyItems.filter((item) => item.masteryScore >= 85).length}</strong><span>{t("stats.wordsMastered")}</span></div><p className="panel-muted">{vocabularyItems.length ? t("stats.wordsPracticed", { count: vocabularyItems.length }) : t("stats.vocabularyNoData")}</p></section>

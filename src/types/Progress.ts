@@ -7,6 +7,7 @@ export interface ProgressItem {
   incorrect: number;
   streak: number;
   masteryScore: number;
+  mastered?: boolean;
   lastTrainedAt?: number;
   masteredAt?: number;
 }
@@ -24,11 +25,19 @@ export interface LearningSession {
   accuracy: number;
 }
 
+export interface GrammarCompletion {
+  trackId: string;
+  lessonId: string;
+  partId: string;
+  completedAt: number;
+}
+
 export interface ProgressSnapshot {
   version: 1;
   updatedAt: number;
   items: Record<string, ProgressItem>;
   sessions: Record<string, LearningSession>;
+  grammarCompletions: Record<string, GrammarCompletion>;
 }
 
 export interface TrainingRecommendation {

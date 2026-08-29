@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import type {
+  GrammarCompletion,
   LearningDomain,
   LearningSession,
   ProgressExport,
@@ -7,10 +8,12 @@ import type {
   ProgressSnapshot,
   TrainingRecommendation,
 } from "../types/Progress";
+import { grammarCompletionEntry, grammarCompletionKey, isGrammarPartCompleted } from "./grammarCompletion";
 
 const STORAGE_KEY = "progress_snapshot_v1";
 const MIGRATION_KEY = "progress_snapshot_migrated_v1";
 const CHANGE_EVENT = "kana-progress-updated";
+const SNAPSHOT_CHANGE_EVENT = "progress-snapshot-updated";
 const PENDING_SYNC_KEY = "progress_sync_pending_v1";
 
 const EMPTY_SNAPSHOT = (): ProgressSnapshot => ({
@@ -18,6 +21,7 @@ const EMPTY_SNAPSHOT = (): ProgressSnapshot => ({
   updatedAt: Date.now(),
   items: {},
   sessions: {},
+  grammarCompletions: {},
 });
 
 let snapshotCache: ProgressSnapshot | null = null;
@@ -67,6 +71,7 @@ const migrateLegacy = (): ProgressSnapshot => {
       incorrect,
       streak,
       masteryScore: mastered[stat.char] ? 100 : masteryScore(correct, incorrect, streak),
+      mastered: Boolean(mastered[stat.char]),
       lastTrainedAt: stat.lastPlayed,
       masteredAt: mastered[stat.char] ? stat.lastPlayed : undefined,
     };
@@ -109,8 +114,8 @@ const readSnapshot = (): ProgressSnapshot => {
   if (snapshotCache) return snapshotCache;
   const stored = readJson<ProgressSnapshot | null>(STORAGE_KEY, null);
   if (stored?.version === 1 && stored.items && stored.sessions) {
-    snapshotCache = stored;
-    return stored;
+    snapshotCache = { ...stored, grammarCompletions: stored.grammarCompletions ?? {} };
+    return snapshotCache;
   }
 
   const migrated = migrateLegacy();
@@ -131,17 +136,16 @@ const writeSnapshot = (snapshot: ProgressSnapshot) => {
 export const getProgressSnapshot = (): ProgressSnapshot => readSnapshot();
 
 export const replaceProgressSnapshot = (snapshot: ProgressSnapshot, options?: { emitChange?: boolean }) => {
-  const next: ProgressSnapshot = { ...snapshot, version: 1, updatedAt: Date.now() };
+  const next: ProgressSnapshot = { ...snapshot, version: 1, updatedAt: Date.now(), grammarCompletions: snapshot.grammarCompletions ?? {} };
   snapshotCache = next;
   if (canUseStorage()) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   if (options?.emitChange !== false) emitChange();
 };
 
-const SYNC_BASELINE_KEY = "progress_sync_baseline_v1";
-export const getProgressSyncBaseline = (): ProgressSnapshot | null => readJson<ProgressSnapshot | null>(SYNC_BASELINE_KEY, null);
-export const setProgressSyncBaseline = (snapshot: ProgressSnapshot) => {
-  if (canUseStorage()) window.localStorage.setItem(SYNC_BASELINE_KEY, JSON.stringify(snapshot));
+export const notifyProgressSnapshotChanged = () => {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(SNAPSHOT_CHANGE_EVENT));
 };
+
 export const clearPendingProgressSync = () => {
   if (canUseStorage()) window.localStorage.removeItem(PENDING_SYNC_KEY);
 };
@@ -150,9 +154,11 @@ export const useProgressSnapshot = () => useSyncExternalStore(
   (onStoreChange) => {
     if (typeof window === "undefined") return () => undefined;
     window.addEventListener(CHANGE_EVENT, onStoreChange);
+    window.addEventListener(SNAPSHOT_CHANGE_EVENT, onStoreChange);
     window.addEventListener("storage", onStoreChange);
     return () => {
       window.removeEventListener(CHANGE_EVENT, onStoreChange);
+      window.removeEventListener(SNAPSHOT_CHANGE_EVENT, onStoreChange);
       window.removeEventListener("storage", onStoreChange);
     };
   },
@@ -180,6 +186,7 @@ export const recordItemProgress = (item: Omit<ProgressItem, "masteryScore"> & { 
         incorrect,
         streak,
         masteryScore: item.masteryScore ?? masteryScore(correct, incorrect, streak),
+        mastered: Boolean(previous?.mastered || item.mastered || (item.domain === "kana" && streak >= 100) || (item.domain !== "kana" && (item.masteryScore ?? 0) >= 85)),
         lastTrainedAt,
         masteredAt,
       },
@@ -208,6 +215,7 @@ export const recordItemResults = (
       incorrect: nextIncorrect,
       streak: nextStreak,
       masteryScore: nextMastery,
+      mastered: previous.mastered || (domain === "kana" ? nextStreak >= 100 : nextMastery >= 85),
       lastTrainedAt: trainedAt,
       masteredAt: nextMastery >= 85 ? previous.masteredAt ?? trainedAt : previous.masteredAt,
     };
@@ -242,6 +250,17 @@ export const recordCompletedSession = (args: {
     correct: args.correct,
     incorrect: Math.max(args.total - args.correct, 0),
     accuracy: args.total ? Math.round((args.correct / args.total) * 100) : 0,
+  });
+};
+
+export const recordGrammarPartCompletion = (trackId: string, lessonId: string, partId: string) => {
+  const snapshot = getProgressSnapshot();
+  if (isGrammarPartCompleted(snapshot, trackId, lessonId, partId)) return;
+  const key = grammarCompletionKey(trackId, lessonId, partId);
+  const completion: GrammarCompletion = grammarCompletionEntry(trackId, lessonId, partId);
+  writeSnapshot({
+    ...snapshot,
+    grammarCompletions: { ...snapshot.grammarCompletions, [key]: completion },
   });
 };
 
@@ -288,7 +307,7 @@ export const exportProgress = (): ProgressExport => ({
 
 export const clearLocalProgress = () => {
   if (!canUseStorage()) return;
-  [STORAGE_KEY, MIGRATION_KEY, SYNC_BASELINE_KEY, PENDING_SYNC_KEY, "kana_stats", "kanas_mastered", "quiz_history", "number_stats"].forEach((key) => window.localStorage.removeItem(key));
+  [STORAGE_KEY, MIGRATION_KEY, PENDING_SYNC_KEY, "kana_stats", "kanas_mastered", "quiz_history", "number_stats"].forEach((key) => window.localStorage.removeItem(key));
   snapshotCache = EMPTY_SNAPSHOT();
   emitChange();
   window.localStorage.removeItem(PENDING_SYNC_KEY);
