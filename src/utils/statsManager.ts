@@ -1,4 +1,4 @@
-import { isKanaMastered, normalizeKanaMasteryThreshold } from "./kanaMastery";
+import { getKanaProgressScore, isKanaMastered, normalizeKanaMasteryThreshold } from "./kanaMastery";
 
 export interface KanaStat {
   char: string;
@@ -57,19 +57,14 @@ const writeMastered = (mastered: Record<string, boolean>) => {
   localStorage.setItem(MASTERED_KEY, JSON.stringify(mastered));
 };
 
-const kanaMasteryScore = (stat: KanaStat): number => {
-  if (stat.masteryScore !== undefined) return stat.masteryScore;
-  const attempts = stat.correct + stat.incorrect;
-  if (!attempts) return 0;
-  return Math.min(100, Math.round((stat.correct / attempts) * 70 + Math.min(stat.streak / 20, 1) * 30));
-};
+const kanaMasteryScore = (stat: KanaStat): number => getKanaProgressScore(stat.streak);
 
 const getStoredMasteryThreshold = (): number => {
   try {
     const settings = JSON.parse(localStorage.getItem("app_settings") ?? "{}") as { masteryThreshold?: number };
-    return normalizeKanaMasteryThreshold(Number(settings.masteryThreshold ?? 100));
+    return normalizeKanaMasteryThreshold(Number(settings.masteryThreshold ?? 50));
   } catch {
-    return 100;
+    return 50;
   }
 };
 

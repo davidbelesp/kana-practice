@@ -8,7 +8,7 @@ import {
   type KanaStat,
 } from "../utils/statsManager";
 import { useProgressSnapshot } from "../utils/progressRepository";
-import { isKanaMastered } from "../utils/kanaMastery";
+import { getKanaProgressScore, isKanaMastered } from "../utils/kanaMastery";
 import { useSettings } from "../contexts/SettingsContext";
 import { AppShell } from "../components/ui/AppShell";
 import { prefetchRoute } from "../utils/routePrefetch";
@@ -56,7 +56,7 @@ export const Home = () => {
   );
 
   const masteredCount = useMemo(
-    () => currentChars.filter((char) => isKanaMastered(stats[char]?.masteryScore ?? 0, settings.masteryThreshold)).length,
+    () => currentChars.filter((char) => isKanaMastered(getKanaProgressScore(stats[char]?.streak ?? 0), settings.masteryThreshold)).length,
     [currentChars, settings.masteryThreshold, stats],
   );
 

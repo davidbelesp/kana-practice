@@ -5,7 +5,7 @@ import { hiraganaData, katakanaData } from "../data/kana";
 import { totalKanjiCount } from "../data/kanjiManifest";
 import { getAggregates, type KanaStat } from "../utils/statsManager";
 import { getTrainingRecommendations, useProgressSnapshot } from "../utils/progressRepository";
-import { isKanaMastered } from "../utils/kanaMastery";
+import { getKanaProgressScore, isKanaMastered } from "../utils/kanaMastery";
 import { useSettings } from "../contexts/SettingsContext";
 import type { ProgressItem } from "../types/Progress";
 import { AppShell } from "../components/ui/AppShell";
@@ -36,7 +36,7 @@ export const Index: React.FC = () => {
   const progressSnapshot = useProgressSnapshot();
   const recommendations = useMemo(() => getTrainingRecommendations(), [progressSnapshot.updatedAt]);
   const mastered = useMemo<KanaStat[]>(() => Object.values(progressSnapshot.items)
-    .filter((item) => item.domain === "kana" && isKanaMastered(item.masteryScore, settings.masteryThreshold))
+    .filter((item) => item.domain === "kana" && isKanaMastered(getKanaProgressScore(item.streak), settings.masteryThreshold))
     .map((item) => ({ char: item.itemId, correct: item.correct, incorrect: item.incorrect, streak: item.streak, masteryScore: item.masteryScore, lastPlayed: item.lastTrainedAt })), [progressSnapshot.items, settings.masteryThreshold]);
   const totalAnswered = aggregates.totalCorrect + aggregates.totalWrong;
   const unifiedTotals = useMemo(() => Object.values(progressSnapshot.sessions).reduce((total, session) => ({ correct: total.correct + session.correct, incorrect: total.incorrect + session.incorrect }), { correct: 0, incorrect: 0 }), [progressSnapshot.sessions]);
@@ -51,7 +51,7 @@ export const Index: React.FC = () => {
       const segments = ids.map((id) => {
         const item = progressMap.get(`kana:${id}`);
         if (!item || item.correct + item.incorrect === 0) return "left" as const;
-        return isKanaMastered(item.masteryScore, settings.masteryThreshold) ? "mastered" as const : "started" as const;
+        return isKanaMastered(getKanaProgressScore(item.streak), settings.masteryThreshold) ? "mastered" as const : "started" as const;
       });
       return { label, segments };
     };

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { KanaChar } from "../data/hiragana";
 import type { KanaStat } from "../utils/statsManager";
 import { HiraganaCard } from "./HiraganaCard";
-import { isKanaMastered } from "../utils/kanaMastery";
+import { getKanaProgressScore, isKanaMastered } from "../utils/kanaMastery";
 import "./HiraganaTable.css";
 
 interface HiraganaTableProps {
@@ -84,7 +84,8 @@ export const HiraganaTable = ({
                       isSelected={selectedSet.has(kana.char)}
                       onToggle={onToggleChar}
                       streak={stats[kana.char]?.streak || 0}
-                      isMastered={isKanaMastered(stats[kana.char]?.masteryScore ?? 0, masteryThreshold)}
+                      masteryThreshold={masteryThreshold}
+                      isMastered={isKanaMastered(getKanaProgressScore(stats[kana.char]?.streak ?? 0), masteryThreshold)}
                     />
                   ))}
                 </div>

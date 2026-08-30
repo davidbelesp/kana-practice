@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import type { KanaChar } from "../data/hiragana";
+import { getKanaProgressPercent } from "../utils/kanaMastery";
 import "./HiraganaCard.css";
 
 interface HiraganaCardProps {
@@ -9,6 +10,7 @@ interface HiraganaCardProps {
   isSelected: boolean;
   onToggle: (char: string) => void;
   streak?: number;
+  masteryThreshold: number;
   isMastered?: boolean;
 }
 
@@ -17,6 +19,7 @@ export const HiraganaCard = React.memo(({
   isSelected,
   onToggle,
   streak,
+  masteryThreshold,
   isMastered,
 }: HiraganaCardProps) => {
   const { t } = useTranslation();
@@ -40,7 +43,7 @@ export const HiraganaCard = React.memo(({
         <div className="card-progress-track">
           <div
             className="card-progress-fill"
-            style={{ width: `${Math.min(streak, 100)}%` }}
+            style={{ width: `${getKanaProgressPercent(streak, masteryThreshold)}%` }}
           />
         </div>
       )}
