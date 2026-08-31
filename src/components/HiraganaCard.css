@@ -20,7 +20,7 @@
     background 0.1s ease;
 }
 
-.hiragana-card:not(.is-mastered):hover {
+.hiragana-card:not(.is-mastered):not(.is-selected):hover {
   background: var(--paper-card-hover);
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 0 var(--ink-black);

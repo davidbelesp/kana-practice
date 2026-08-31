@@ -134,7 +134,7 @@
   box-shadow: none;
 }
 
-.studio-shell .hiragana-card:not(.is-mastered):hover,
+.studio-shell .hiragana-card:not(.is-mastered):not(.is-selected):hover,
 .studio-shell .kanji-cell:hover {
   border-color: var(--accent-primary);
   background: var(--studio-panel-raised);
